@@ -3,8 +3,8 @@ package kg.attractor.jobsearch.models;
 import lombok.Data;
 
 @Data
-public class Categories {
+public class Category {
     private String name;
     private int parentId;
-    private int id;
+    private Long id;
 }

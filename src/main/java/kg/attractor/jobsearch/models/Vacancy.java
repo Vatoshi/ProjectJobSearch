@@ -1,20 +1,19 @@
 package kg.attractor.jobsearch.models;
 
 import lombok.Data;
-
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
-public class Vacancies {
+public class Vacancy {
     private String name;
     private String description;
-    private int categoryId;
+    private Long categoryId;
     private double salary;
     private int expFrom;
     private int expTo;
     private boolean isActive;
     private int authorId;
-    private LocalDate createdDate;
-    private LocalDate updatedTime;
-    private int id;
+    private LocalDateTime createdDate;
+    private LocalDateTime updatedTime;
+    private Long id;
 }
