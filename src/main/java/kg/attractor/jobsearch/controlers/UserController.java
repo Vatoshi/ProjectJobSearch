@@ -11,8 +11,9 @@
     public class UserController {
 
         @PostMapping("create")
-        public void createUser() {
-
+        public ResponseEntity createUser() {
+            System.out.println("something");
+            return ResponseEntity.created(null).build();
         }
 
         @PostMapping("{userId}/create")
