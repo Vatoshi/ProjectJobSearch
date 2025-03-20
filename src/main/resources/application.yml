@@ -1,0 +1,9 @@
+
+server:
+    port: 8090
+spring:
+  datasource:
+    url: jdbc:h2:./db/test; AUTO_SERVER=TRUE
+    username: eric
+    password: 1234
+    driver-class-name: org.h2.Driver
