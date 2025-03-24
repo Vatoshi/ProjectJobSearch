@@ -1,9 +1,6 @@
 package kg.attractor.jobsearch.mapper;
-
 import kg.attractor.jobsearch.models.User;
 import org.springframework.jdbc.core.RowMapper;
-
-import javax.swing.tree.TreePath;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 

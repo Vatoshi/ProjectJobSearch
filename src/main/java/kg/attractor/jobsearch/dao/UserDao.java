@@ -5,10 +5,9 @@ import kg.attractor.jobsearch.models.User;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.support.DataAccessUtils;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -19,18 +18,23 @@ import java.util.Optional;
 public class UserDao {
     private final JdbcTemplate jdbcTemplate;
 
-    public List<User> getUsers() {
-        String sql = "select * from users";
-        return jdbcTemplate.query(sql, new UserMapper());
-    }
-
-    public Optional<User> getUserById(int id) {
-        String sql = "select * from users where id = ?";
+    public Optional<User> findByEmail(String email) {
+        String sql = "SELECT * FROM users WHERE email = ?";
         return Optional.ofNullable(
                 DataAccessUtils.singleResult(
-                        jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class))
+                        jdbcTemplate.query(sql, new UserMapper(), email)
                 )
         );
+    }
+
+    public List<User> findByName(String name) {
+        String sql = "SELECT * FROM users WHERE name ILIKE ?";
+        return jdbcTemplate.query(sql, new UserMapper(), "%" + name + "%");
+    }
+
+    public List<User> findByPhone(String phone) {
+        String sql = "SELECT * FROM users WHERE phone_number = ?";
+        return jdbcTemplate.query(sql, new UserMapper(), phone);
     }
 }
 
