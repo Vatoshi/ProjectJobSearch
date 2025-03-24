@@ -3,7 +3,8 @@ package kg.attractor.jobsearch.models;
 import lombok.Data;
 
 @Data
-public class Users {
+public class User {
+    private Long id;
     private String name;
     private String surname;
     private int age;
@@ -12,5 +13,4 @@ public class Users {
     private String phoneNumber;
     private String avatar;
     private String accountType;
-    private int id;
 }

@@ -1,0 +1,40 @@
+package kg.attractor.jobsearch.dao;
+
+import kg.attractor.jobsearch.mapper.UserMapper;
+import kg.attractor.jobsearch.models.User;
+import lombok.Builder;
+import lombok.RequiredArgsConstructor;
+import org.springframework.dao.support.DataAccessUtils;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
+
+
+import java.util.List;
+import java.util.Optional;
+
+@Component
+@RequiredArgsConstructor
+@Builder
+public class UserDao {
+    private final JdbcTemplate jdbcTemplate;
+
+    public Optional<User> findByEmail(String email) {
+        String sql = "SELECT * FROM users WHERE email = ?";
+        return Optional.ofNullable(
+                DataAccessUtils.singleResult(
+                        jdbcTemplate.query(sql, new UserMapper(), email)
+                )
+        );
+    }
+
+    public List<User> findByName(String name) {
+        String sql = "SELECT * FROM users WHERE name ILIKE ?";
+        return jdbcTemplate.query(sql, new UserMapper(), "%" + name + "%");
+    }
+
+    public List<User> findByPhone(String phone) {
+        String sql = "SELECT * FROM users WHERE phone_number = ?";
+        return jdbcTemplate.query(sql, new UserMapper(), phone);
+    }
+}
+

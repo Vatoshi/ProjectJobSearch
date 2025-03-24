@@ -3,7 +3,7 @@ package kg.attractor.jobsearch.models;
 import lombok.Data;
 
 @Data
-public class ContactTypes {
+public class ContactType {
     private String type;
-    private int id;
+    private Long id;
 }
