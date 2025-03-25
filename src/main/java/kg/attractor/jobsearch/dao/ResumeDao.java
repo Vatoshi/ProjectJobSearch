@@ -1,20 +1,27 @@
 package kg.attractor.jobsearch.dao;
 
-import kg.attractor.jobsearch.models.Category;
 import kg.attractor.jobsearch.models.Resume;
-import kg.attractor.jobsearch.models.Vacancy;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
 public class ResumeDao {
     private final JdbcTemplate jdbcTemplate;
+
+    public Optional<Resume> findResumeById(Long resumeId) {
+        String sql = "SELECT * FROM resumes WHERE id = ?";
+        return Optional.ofNullable(
+                DataAccessUtils.singleResult(
+                        jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Resume.class), resumeId)));
+    }
 
     public List<Resume> findByCategory(String name) {
         String sqlCategoryIds = "SELECT id FROM categories WHERE name = ?";
