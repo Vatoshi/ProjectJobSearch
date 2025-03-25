@@ -4,10 +4,9 @@ import kg.attractor.jobsearch.dto.CategoriesDto;
 import kg.attractor.jobsearch.dto.ResumeDto;
 import kg.attractor.jobsearch.servise.ResumeService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -17,6 +16,21 @@ import java.util.List;
 public class ResumeController {
     private final ResumeService resumeService;
 
+    @DeleteMapping("delete/{resumeId}")
+    public HttpStatus deleteResume(@PathVariable Long resumeId) {
+        return resumeService.deleteResume(resumeId);
+    }
+
+    @PostMapping("create")
+    public ResponseEntity<ResumeDto> createResume(@RequestBody ResumeDto resumeDto) {
+    return resumeService.createResume(resumeDto);
+    }
+
+    @PutMapping("edit/{resumeId}")
+    public ResponseEntity<ResumeDto> editResume(@PathVariable Long resumeId, @RequestBody ResumeDto resumeDto) {
+        return resumeService.updateResume(resumeId, resumeDto);
+    }
+
     @GetMapping("category/{categoryName}")
     public List<ResumeDto> getResumesByCategory(@PathVariable String categoryName) {
         return resumeService.getResumesById(categoryName);
@@ -25,5 +39,10 @@ public class ResumeController {
     @GetMapping("by-user/{userId}")
     public List<ResumeDto> getResumesByUserId(@PathVariable Long userId) {
         return resumeService.getResumesByAplicant(userId);
+    }
+
+    @GetMapping("id/{resumeId}")
+    public ResumeDto getResume(@PathVariable Long resumeId) {
+        return resumeService.getResumeById(resumeId);
     }
 }

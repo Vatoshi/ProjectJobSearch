@@ -51,7 +51,7 @@ public class VacancyDao {
         );
     }
     public List<Vacancy> getAllVacancies() {
-        String sql = "SELECT id FROM vacancies";
+        String sql = "SELECT * FROM vacancies";
         return jdbcTemplate.query(sql,new BeanPropertyRowMapper<>(Vacancy.class));
     }
 
