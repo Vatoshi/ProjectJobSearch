@@ -162,6 +162,7 @@ databaseChangeLog:
               - column:
                   name: category_id
                   type: bigint
+                  defaultValue: 1
               - column:
                   name: salary
                   type: double
