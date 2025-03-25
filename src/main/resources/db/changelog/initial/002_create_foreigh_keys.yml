@@ -1,0 +1,93 @@
+databaseChangeLog:
+  - changeSet:
+      id: add_foreign_keys
+      author: eric
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: categories
+            baseColumnNames: parent_id
+            referencedTableName: categories
+            referencedColumnNames: id
+            constraintName: fk_parent_category
+            onDelete: SET NULL
+        - addForeignKeyConstraint:
+            baseTableName: vacancies
+            baseColumnNames: category_id
+            referencedTableName: categories
+            referencedColumnNames: id
+            constraintName: fk_vacancy_category
+            onDelete: SET NULL
+        - addForeignKeyConstraint:
+            baseTableName: vacancies
+            baseColumnNames: author_id
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_vacancy_author
+            onDelete: CASCADE
+
+        - addForeignKeyConstraint:
+            baseTableName: resumes
+            baseColumnNames: applicant_id
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_resume_applicant
+            onDelete: CASCADE
+        - addForeignKeyConstraint:
+            baseTableName: resumes
+            baseColumnNames: category_id
+            referencedTableName: categories
+            referencedColumnNames: id
+            constraintName: fk_resume_category
+            onDelete: SET NULL
+
+        - addForeignKeyConstraint:
+            baseTableName: contacts_info
+            baseColumnNames: type_id
+            referencedTableName: contact_types
+            referencedColumnNames: id
+            constraintName: fk_contact_type
+        - addForeignKeyConstraint:
+            baseTableName: contacts_info
+            baseColumnNames: resume_id
+            referencedTableName: resumes
+            referencedColumnNames: id
+            constraintName: fk_contact_resume
+
+        - addForeignKeyConstraint:
+            baseTableName: responded_applicants
+            baseColumnNames: resume_id
+            referencedTableName: resumes
+            referencedColumnNames: id
+            constraintName: fk_responded_resume
+            onDelete: CASCADE
+        - addForeignKeyConstraint:
+            baseTableName: responded_applicants
+            baseColumnNames: vacancy_id
+            referencedTableName: vacancies
+            referencedColumnNames: id
+            constraintName: fk_responded_vacancy
+            onDelete: CASCADE
+
+        - addForeignKeyConstraint:
+            baseTableName: messages
+            baseColumnNames: responded_applicant_id
+            referencedTableName: responded_applicants
+            referencedColumnNames: id
+            constraintName: fk_message_response
+            onDelete: CASCADE
+
+        - addForeignKeyConstraint:
+            baseTableName: education_info
+            baseColumnNames: resume_id
+            referencedTableName: resumes
+            referencedColumnNames: id
+            constraintName: fk_education_resume
+            onDelete: CASCADE
+
+        - addForeignKeyConstraint:
+            baseTableName: work_experience_info
+            baseColumnNames: resume_id
+            referencedTableName: resumes
+            referencedColumnNames: id
+            constraintName: fk_work_experience_resume
+            onDelete: CASCADE

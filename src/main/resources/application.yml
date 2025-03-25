@@ -11,4 +11,5 @@ spring:
 #    init:
 #      mode: always
   liquibase:
-    change-log: classpath:/db/changelog/db.changelog-master.yml
+    change-log: classpath:/db/changelog/master.yml
+    drop-first: true

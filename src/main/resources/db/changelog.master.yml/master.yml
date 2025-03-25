@@ -1,3 +1,0 @@
-databaseChangeLog:
-  - includeAll:
-      file: db/changeLog/initial/001_create_table.yml
