@@ -13,6 +13,6 @@ public class Resume {
     private double salary;
     private boolean isActive;
     private LocalDateTime createdDate;
-    private LocalDateTime updatedTime;
+    private LocalDateTime updateTime;
     private Long id;
 }

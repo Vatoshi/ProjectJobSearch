@@ -58,9 +58,12 @@ public class ResumeService {
             return ResponseEntity.badRequest().body(resumeDto);
         }
 
-        if (resumeDto.getSalary() < 0) {
+        if (resumeDto.getSalary() < 1) {
             return ResponseEntity.badRequest().body(resumeDto);
         }
+
+        resumeDto.setCreatedDate(LocalDateTime.now());
+        resumeDto.setUpdateTime(LocalDateTime.now());
 
         Resume resume = Resume.builder()
                 .applicantId(1L)
@@ -68,7 +71,8 @@ public class ResumeService {
                 .categoryId(resumeDto.getCategoryId())
                 .salary(resumeDto.getSalary())
                 .isActive(resumeDto.isActive())
-                .createdDate(LocalDateTime.now())
+                .createdDate(resumeDto.getCreatedDate())
+                .updateTime(resumeDto.getUpdateTime())
                 .build();
 
         String sqltype = "select account_type from users where id = ?";
@@ -115,8 +119,12 @@ public class ResumeService {
                 resumeDto.setSalary(oldSalary);
             }
 
-            String sql = "update resumes set name = ?, category_id = ?, salary = ?, is_active = ? where id = ?";
-            jdbcTemplate.update(sql,resumeDto.getName(), resumeDto.getCategoryId(), resumeDto.getSalary(), resumeDto.isActive(), resumeId);
+            LocalDateTime oldCreatedDate = jdbcTemplate.queryForObject("select created_date from resumes where id = ?", LocalDateTime.class, resumeId);
+            resumeDto.setCreatedDate(oldCreatedDate);
+            resumeDto.setUpdateTime(LocalDateTime.now());
+
+            String sql = "update resumes set name = ?, category_id = ?, salary = ?, is_active = ?, update_time = ? where id = ?";
+            jdbcTemplate.update(sql,resumeDto.getName(), resumeDto.getCategoryId(), resumeDto.getSalary(), resumeDto.isActive(), resumeDto.getUpdateTime(), resumeId);
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(resumeDto);
         }
 }
