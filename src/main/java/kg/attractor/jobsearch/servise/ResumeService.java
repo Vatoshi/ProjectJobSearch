@@ -26,6 +26,8 @@ public class ResumeService {
                         .categoryId(resume.getCategoryId())
                         .salary(resume.getSalary())
                         .isActive(resume.isActive())
+                        .updateTime(resume.getUpdateTime())
+                        .createdDate(resume.getCreatedDate())
                         .build())
                 .toList();
     }
@@ -38,6 +40,8 @@ public class ResumeService {
                         .categoryId(resume.getCategoryId())
                         .salary(resume.getSalary())
                         .isActive(resume.isActive())
+                        .updateTime(resume.getUpdateTime())
+                        .createdDate(resume.getCreatedDate())
                         .build())
                 .toList();
     }
@@ -50,6 +54,8 @@ public class ResumeService {
                 .categoryId(resume.getCategoryId())
                 .salary(resume.getSalary())
                 .isActive(resume.isActive())
+                .updateTime(resume.getUpdateTime())
+                .createdDate(resume.getCreatedDate())
                 .build();
     }
 
@@ -65,15 +71,15 @@ public class ResumeService {
         resumeDto.setCreatedDate(LocalDateTime.now());
         resumeDto.setUpdateTime(LocalDateTime.now());
 
-        Resume resume = Resume.builder()
-                .applicantId(1L)
-                .name(resumeDto.getName())
-                .categoryId(resumeDto.getCategoryId())
-                .salary(resumeDto.getSalary())
-                .isActive(resumeDto.isActive())
-                .createdDate(resumeDto.getCreatedDate())
-                .updateTime(resumeDto.getUpdateTime())
-                .build();
+        Resume resume = new Resume();
+        resume.setName(resumeDto.getName());
+        resume.setCategoryId(resumeDto.getCategoryId());
+        resume.setSalary(resumeDto.getSalary());
+        resume.setActive(resumeDto.isActive());
+        resume.setUpdateTime(resumeDto.getUpdateTime());
+        resume.setCreatedDate(LocalDateTime.now());
+        resume.setApplicantId(1L);
+        // у меня builder ломает предыдущие методы
 
         String sqltype = "select account_type from users where id = ?";
         String typename = jdbcTemplate.queryForObject(sqltype, String.class, resume.getApplicantId());

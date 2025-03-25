@@ -9,14 +9,14 @@ databaseChangeLog:
             referencedTableName: categories
             referencedColumnNames: id
             constraintName: fk_parent_category
-            onDelete: SET NULL
+            onDelete: CASCADE
         - addForeignKeyConstraint:
             baseTableName: vacancies
             baseColumnNames: category_id
             referencedTableName: categories
             referencedColumnNames: id
             constraintName: fk_vacancy_category
-            onDelete: SET NULL
+            onDelete: CASCADE
         - addForeignKeyConstraint:
             baseTableName: vacancies
             baseColumnNames: author_id
@@ -38,7 +38,7 @@ databaseChangeLog:
             referencedTableName: categories
             referencedColumnNames: id
             constraintName: fk_resume_category
-            onDelete: SET NULL
+            onDelete: CASCADE
 
         - addForeignKeyConstraint:
             baseTableName: contacts_info
@@ -46,12 +46,14 @@ databaseChangeLog:
             referencedTableName: contact_types
             referencedColumnNames: id
             constraintName: fk_contact_type
+            onDelete: CASCADE
         - addForeignKeyConstraint:
             baseTableName: contacts_info
             baseColumnNames: resume_id
             referencedTableName: resumes
             referencedColumnNames: id
             constraintName: fk_contact_resume
+            onDelete: CASCADE
 
         - addForeignKeyConstraint:
             baseTableName: responded_applicants

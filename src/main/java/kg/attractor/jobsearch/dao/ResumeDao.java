@@ -24,7 +24,7 @@ public class ResumeDao {
     }
 
     public List<Resume> findByCategory(String name) {
-        String sqlCategoryIds = "SELECT id FROM categories WHERE name = ?";
+        String sqlCategoryIds = "SELECT * FROM categories WHERE name = ?";
         List<Integer> categoryIds = jdbcTemplate.queryForList(sqlCategoryIds, Integer.class, name
         );
 
