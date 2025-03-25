@@ -15,15 +15,21 @@ import java.util.List;
 @RequestMapping("resume")
 public class ResumeController {
     private final ResumeService resumeService;
-//    @DeleteMapping("delete")
+
+    @DeleteMapping("delete/{resumeId}")
+    public HttpStatus deleteResume(@PathVariable Long resumeId) {
+        return resumeService.deleteResume(resumeId);
+    }
 
     @PostMapping("create")
     public ResponseEntity<ResumeDto> createResume(@RequestBody ResumeDto resumeDto) {
     return resumeService.createResume(resumeDto);
     }
 
-//    @PutMapping("change/{resumeId}")
-
+    @PutMapping("edit/{resumeId}")
+    public ResponseEntity<ResumeDto> editResume(@PathVariable Long resumeId, @RequestBody ResumeDto resumeDto) {
+        return resumeService.updateResume(resumeId, resumeDto);
+    }
 
     @GetMapping("category/{categoryName}")
     public List<ResumeDto> getResumesByCategory(@PathVariable String categoryName) {

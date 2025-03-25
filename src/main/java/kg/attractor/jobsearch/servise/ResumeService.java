@@ -4,15 +4,13 @@ import kg.attractor.jobsearch.dto.ResumeDto;
 import kg.attractor.jobsearch.models.Resume;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
-import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
+
 
 @Service
 @RequiredArgsConstructor
@@ -59,6 +57,11 @@ public class ResumeService {
         if (resumeDto.getName() == null || resumeDto.getName().isBlank()) {
             return ResponseEntity.badRequest().body(resumeDto);
         }
+
+        if (resumeDto.getSalary() < 0) {
+            return ResponseEntity.badRequest().body(resumeDto);
+        }
+
         Resume resume = Resume.builder()
                 .applicantId(1L)
                 .name(resumeDto.getName())
@@ -88,5 +91,32 @@ public class ResumeService {
             } catch (DataAccessException e) {
                 throw new RuntimeException("Ошибка при добавлении резюме: " + e.getMessage(), e);
             }
+        }
+
+        public HttpStatus deleteResume(Long resumeId) {
+            String sql = "delete from resumes where id = ?";
+            jdbcTemplate.update(sql, resumeId);
+            return HttpStatus.resolve(410);
+        }
+
+        public ResponseEntity<ResumeDto> updateResume(Long resumeId, ResumeDto resumeDto) {
+            if (resumeDto.getName() == null || resumeDto.getName().isBlank()) {
+                String oldName = jdbcTemplate.queryForObject("select name from resumes where id = ?", String.class, resumeId);
+                resumeDto.setName(oldName);
+            }
+
+            if (resumeDto.getCategoryId() == 0 || resumeDto.getCategoryId() < 0) {
+                int oldId = jdbcTemplate.queryForObject("select category_id from resumes where id = ?", Integer.class, resumeId);
+                resumeDto.setCategoryId(oldId);
+            }
+
+            if (resumeDto.getSalary() == 0 || resumeDto.getSalary() < 0) {
+                Double oldSalary = jdbcTemplate.queryForObject("select salary from resumes where id = ?", Double.class, resumeId);
+                resumeDto.setSalary(oldSalary);
+            }
+
+            String sql = "update resumes set name = ?, category_id = ?, salary = ?, is_active = ? where id = ?";
+            jdbcTemplate.update(sql,resumeDto.getName(), resumeDto.getCategoryId(), resumeDto.getSalary(), resumeDto.isActive(), resumeId);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(resumeDto);
         }
 }
