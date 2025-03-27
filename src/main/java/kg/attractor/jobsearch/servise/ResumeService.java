@@ -60,14 +60,6 @@ public class ResumeService {
     }
 
     public ResponseEntity<ResumeDto> createResume(ResumeDto resumeDto) {
-        if (resumeDto.getName() == null || resumeDto.getName().isBlank()) {
-            return ResponseEntity.badRequest().body(resumeDto);
-        }
-
-        if (resumeDto.getSalary() < 1) {
-            return ResponseEntity.badRequest().body(resumeDto);
-        }
-
         resumeDto.setCreatedDate(LocalDateTime.now());
         resumeDto.setUpdateTime(LocalDateTime.now());
 
