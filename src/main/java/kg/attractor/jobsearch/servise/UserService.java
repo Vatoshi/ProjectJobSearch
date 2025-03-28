@@ -69,6 +69,8 @@ public class UserService {
     }
 
     public String saveImage(ImageDto imageDto) {
+        User user = userDao.findById(imageDto.getUserId())
+                .orElseThrow(UsernameNotFound::new);
         String filename = fileUtil.saveUploadFile(imageDto.getImage(), "images/");
         userDao.save(filename,imageDto.getUserId());
         return filename;
