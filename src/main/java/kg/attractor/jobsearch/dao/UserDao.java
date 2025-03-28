@@ -37,6 +37,15 @@ public class UserDao {
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class), phone);
     }
 
+    public Optional<User> findById(Long id) {
+        String sql = "SELECT * FROM users WHERE id = ?";
+        return Optional.ofNullable(
+                DataAccessUtils.singleResult(
+                        jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class), id)
+                )
+        );
+    }
+
     public void save(String filename, Long userId) {
         String finduser = "select id from users where id = ?";
             List<Integer> id = jdbcTemplate.queryForList(finduser, Integer.class, userId);
