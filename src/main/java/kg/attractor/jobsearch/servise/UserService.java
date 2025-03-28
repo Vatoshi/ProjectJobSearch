@@ -8,11 +8,8 @@ import kg.attractor.jobsearch.exeptions.UsernameNotFound;
 import kg.attractor.jobsearch.models.User;
 import kg.attractor.jobsearch.util.FileUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.awt.*;
 import java.util.List;
 
 @Service

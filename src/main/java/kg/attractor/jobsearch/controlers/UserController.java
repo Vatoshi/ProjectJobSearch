@@ -1,5 +1,6 @@
     package kg.attractor.jobsearch.controlers;
 
+    import jakarta.validation.Valid;
     import kg.attractor.jobsearch.dto.ImageDto;
     import kg.attractor.jobsearch.servise.UserService;
     import lombok.RequiredArgsConstructor;
@@ -81,7 +82,7 @@
         }
 
         @PostMapping("add-avatar")
-        public String uploadImage(ImageDto ImageDto) {
+        public String uploadImage(@Valid ImageDto ImageDto) {
             return userService.saveImage(ImageDto);
         }
     }
