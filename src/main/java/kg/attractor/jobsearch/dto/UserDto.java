@@ -23,7 +23,7 @@ public class UserDto {
     @Email(message = "неправильный формат")
     private String email;
 //    @Pattern(regexp = "\\+996\\s?\\d{3}\\s?\\d{3}\\s?\\d{3}", message = "Некорректный номер. Формат: +996 000 000 000")
-
+    private String avatar;
     private String phone;
     private AccountType accountType;
 

@@ -35,5 +35,11 @@ public class UserDao {
         String sql = "SELECT * FROM users WHERE phone_number = ?";
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class), phone);
     }
+
+    public void save(String filename, Long userId) {
+        String sql = "update users set avatar = ? where id = ?";
+        jdbcTemplate.update(sql, filename, userId);
+    }
+
 }
 

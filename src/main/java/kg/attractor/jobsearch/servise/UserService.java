@@ -1,19 +1,25 @@
 package kg.attractor.jobsearch.servise;
 
+import kg.attractor.jobsearch.dto.ImageDto;
 import kg.attractor.jobsearch.dto.UserDto;
 import kg.attractor.jobsearch.dao.UserDao;
 import kg.attractor.jobsearch.exeptions.NotFound;
 import kg.attractor.jobsearch.exeptions.UsernameNotFound;
 import kg.attractor.jobsearch.models.User;
+import kg.attractor.jobsearch.util.FileUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.awt.*;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
     public final UserDao userDao;
+    private final FileUtil fileUtil;
 
     public UserDto getEmail(String email) {
         User user = userDao.findByEmail(email)
@@ -65,7 +71,11 @@ public class UserService {
                 .toList();
     }
 
-
+    public String saveImage(ImageDto imageDto) {
+        String filename = fileUtil.saveUploadFile(imageDto.getImage(), "images/");
+        userDao.save(filename,imageDto.getUserId());
+        return filename;
+    }
 }
 
 

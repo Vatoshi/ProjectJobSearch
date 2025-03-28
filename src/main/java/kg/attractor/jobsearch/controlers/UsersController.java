@@ -1,5 +1,6 @@
 package kg.attractor.jobsearch.controlers;
 
+import kg.attractor.jobsearch.dto.ImageDto;
 import kg.attractor.jobsearch.dto.UserDto;
 import kg.attractor.jobsearch.servise.UserService;
 import lombok.RequiredArgsConstructor;
