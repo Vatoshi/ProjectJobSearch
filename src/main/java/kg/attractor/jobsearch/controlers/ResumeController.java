@@ -1,5 +1,6 @@
 package kg.attractor.jobsearch.controlers;
 
+import jakarta.validation.Valid;
 import kg.attractor.jobsearch.dto.CategoriesDto;
 import kg.attractor.jobsearch.dto.ResumeDto;
 import kg.attractor.jobsearch.servise.ResumeService;
@@ -22,12 +23,12 @@ public class ResumeController {
     }
 
     @PostMapping("create")
-    public ResponseEntity<ResumeDto> createResume(@RequestBody ResumeDto resumeDto) {
+    public ResponseEntity<ResumeDto> createResume(@RequestBody @Valid ResumeDto resumeDto) {
     return resumeService.createResume(resumeDto);
     }
 
     @PutMapping("edit/{resumeId}")
-    public ResponseEntity<ResumeDto> editResume(@PathVariable Long resumeId, @RequestBody ResumeDto resumeDto) {
+    public ResponseEntity<ResumeDto> editResume(@PathVariable Long resumeId, @RequestBody @Valid ResumeDto resumeDto) {
         return resumeService.updateResume(resumeId, resumeDto);
     }
 

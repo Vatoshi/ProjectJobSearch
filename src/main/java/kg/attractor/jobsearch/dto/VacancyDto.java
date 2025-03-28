@@ -1,5 +1,6 @@
 package kg.attractor.jobsearch.dto;
 
+import jakarta.validation.constraints.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,15 +11,23 @@ import java.time.LocalDateTime;
 @Setter
 @Builder
 public class VacancyDto {
+    @NotNull(message = "имя не должно быть пустым")
+    @Size(min = 3, max = 30, message = "имя должно содержать от 1 - 30 символов")
+    @Pattern(regexp = ".*\\p{L}.*", message = "Название не может состоять только из цифр")
     private String name;
     private String description;
     private Long categoryId;
+    @PositiveOrZero
     private double salary;
+    @PositiveOrZero
     private int expFrom;
+    @PositiveOrZero
     private int expTo;
     private boolean isActive;
     private int authorId;
+    @PastOrPresent
     private LocalDateTime createdDate;
+    @PastOrPresent
     private LocalDateTime updatedTime;
     private Long id;
 }

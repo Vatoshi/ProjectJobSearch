@@ -1,4 +1,6 @@
 package kg.attractor.jobsearch.dao;
+import kg.attractor.jobsearch.exeptions.NotFound;
+import kg.attractor.jobsearch.exeptions.ResumeFromUserNotFound;
 import kg.attractor.jobsearch.models.User;
 import kg.attractor.jobsearch.models.Vacancy;
 import lombok.Builder;
@@ -25,7 +27,7 @@ public class VacancyDao {
         );
 
         if (resumeIds.isEmpty()) {
-            return Collections.emptyList();
+            throw new NotFound("resumes not found");
         }
 
         String sql2 = "SELECT DISTINCT applicant_id FROM resumes WHERE id IN (" +
@@ -38,7 +40,7 @@ public class VacancyDao {
         );
 
         if (applicantIds.isEmpty()) {
-            return Collections.emptyList();
+            throw new NotFound("applicants not found");
         }
 
         String sql3 = "SELECT * FROM users WHERE id IN (" +
@@ -50,6 +52,7 @@ public class VacancyDao {
                 applicantIds.toArray()
         );
     }
+
     public List<Vacancy> getAllVacancies() {
         String sql = "SELECT * FROM vacancies";
         return jdbcTemplate.query(sql,new BeanPropertyRowMapper<>(Vacancy.class));
@@ -61,7 +64,7 @@ public class VacancyDao {
         );
 
         if (categoryIds.isEmpty()) {
-            return Collections.emptyList();
+            throw new NotFound("vacancy not found");
         }
 
         String placeholders = String.join(",", Collections.nCopies(categoryIds.size(), "?"));
@@ -74,13 +77,13 @@ public class VacancyDao {
     public List<Vacancy> getVacanciesResponses(Long userId) {
         String checkResumeSql = "SELECT COUNT(*) FROM resumes WHERE applicant_id = ?";
         Integer resumeCount = jdbcTemplate.queryForObject(checkResumeSql, Integer.class, userId);
-        if (resumeCount == 0) throw new IllegalArgumentException("У пользователя нет резюме");
+        if (resumeCount == 0) throw new ResumeFromUserNotFound();
 
         String getResumesSql = "SELECT id FROM resumes WHERE applicant_id = ?";
         List<Long> resumeIds = jdbcTemplate.queryForList(getResumesSql, Long.class, userId);
 
         if (resumeIds.isEmpty()) {
-            return Collections.emptyList();
+            throw new NotFound("resume not found");
         }
 
         String sql = "SELECT * " +

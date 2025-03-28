@@ -1,10 +1,10 @@
 package kg.attractor.jobsearch.servise;
 
-import kg.attractor.jobsearch.dao.UserDao;
 import kg.attractor.jobsearch.dao.VacancyDao;
 import kg.attractor.jobsearch.dto.UserDto;
 import kg.attractor.jobsearch.dto.VacancyDto;
-import kg.attractor.jobsearch.models.Vacancy;
+import kg.attractor.jobsearch.exeptions.NotFound;
+import kg.attractor.jobsearch.exeptions.ResumeFromUserNotFound;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +15,7 @@ import java.util.List;
 public class VacancyService {
     private final VacancyDao vacancyDao;
 
-    public List<UserDto> getResponedUsers(Long vacancyId) {
+    public List<UserDto> getResponedUsers(Long vacancyId) throws IllegalArgumentException {
         return vacancyDao.getRespondedUsersOnVacancy(vacancyId)
                 .stream()
                 .map(user -> UserDto.builder()
@@ -30,7 +30,7 @@ public class VacancyService {
                 .toList();
     }
 
-    public List<VacancyDto> getVacancyByCategory(String category) {
+    public List<VacancyDto> getVacancyByCategory(String category) throws NotFound {
         return vacancyDao.findByCategory(category)
                 .stream()
                 .map(vacancy -> VacancyDto.builder()
@@ -49,7 +49,7 @@ public class VacancyService {
                 .toList();
     }
 
-    public List<VacancyDto> getAllVacancies() {
+    public List<VacancyDto> getAllVacancies() throws NotFound {
        return vacancyDao.getAllVacancies()
                .stream()
                .map(vacancy -> VacancyDto.builder()
@@ -68,7 +68,7 @@ public class VacancyService {
                .toList();
     }
 
-    public List<VacancyDto> getApplicantsForVacancy(Long user) {
+    public List<VacancyDto> getApplicantsForVacancy(Long user) throws NotFound {
         return vacancyDao.getVacanciesResponses(user)
                 .stream()
                 .map(vacancy -> VacancyDto.builder()

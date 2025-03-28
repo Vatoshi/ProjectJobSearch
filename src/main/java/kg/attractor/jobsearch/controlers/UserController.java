@@ -1,5 +1,8 @@
     package kg.attractor.jobsearch.controlers;
 
+    import jakarta.validation.Valid;
+    import kg.attractor.jobsearch.dto.ImageDto;
+    import kg.attractor.jobsearch.servise.UserService;
     import lombok.RequiredArgsConstructor;
     import org.springframework.http.HttpStatus;
     import org.springframework.http.ResponseEntity;
@@ -9,6 +12,7 @@
     @RequiredArgsConstructor
     @RequestMapping("user")
     public class UserController {
+        private final UserService userService;
 
         @PostMapping("create")
         public ResponseEntity createUser() {
@@ -75,6 +79,11 @@
         public HttpStatus findUser(@PathVariable String userName) {
             // искать юзера работодателя или соискателя по типу пользователя,
             return HttpStatus.OK;
+        }
+
+        @PostMapping("add-avatar")
+        public String uploadImage(@Valid ImageDto ImageDto) {
+            return userService.saveImage(ImageDto);
         }
     }
 
