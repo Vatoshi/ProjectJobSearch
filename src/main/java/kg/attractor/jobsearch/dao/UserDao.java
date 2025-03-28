@@ -1,4 +1,5 @@
 package kg.attractor.jobsearch.dao;
+import kg.attractor.jobsearch.exeptions.NotFound;
 import kg.attractor.jobsearch.models.User;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +38,11 @@ public class UserDao {
     }
 
     public void save(String filename, Long userId) {
+        String finduser = "select id from users where id = ?";
+            List<Integer> id = jdbcTemplate.queryForList(finduser, Integer.class, userId);
+        if (id.isEmpty()) {
+            throw new NotFound("User for upload file not found");
+        }
         String sql = "update users set avatar = ? where id = ?";
         jdbcTemplate.update(sql, filename, userId);
     }
