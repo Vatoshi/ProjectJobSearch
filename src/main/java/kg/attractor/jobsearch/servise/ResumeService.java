@@ -3,6 +3,7 @@ import kg.attractor.jobsearch.dao.ResumeDao;
 import kg.attractor.jobsearch.dto.ResumeDto;
 import kg.attractor.jobsearch.exeptions.EntityForDeleteNotFound;
 import kg.attractor.jobsearch.exeptions.NotFound;
+import kg.attractor.jobsearch.exeptions.UserStatusExeption;
 import kg.attractor.jobsearch.models.Resume;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
@@ -81,7 +82,7 @@ public class ResumeService {
         String sqltype = "select account_type from users where id = ?";
         String typename = jdbcTemplate.queryForObject(sqltype, String.class, resume.getApplicantId());
         if (typename == null || !typename.equalsIgnoreCase("applicant")) {
-            return ResponseEntity.badRequest().body(resumeDto);
+            throw new UserStatusExeption("wrong user status");
         }
 
             try {

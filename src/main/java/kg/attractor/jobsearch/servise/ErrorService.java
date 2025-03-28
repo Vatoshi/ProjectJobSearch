@@ -20,23 +20,25 @@ public class ErrorService {
         return ErrorResponseBody.builder()
                 .title(msg)
                 .status(status.value())
-                .responce(Map.of("errors", List.of(e.getMessage())))
+                .response(Map.of("errors", List.of(e.getMessage())))
         .build();
     }
 
-    public ErrorResponseBody makeResponse (BindingResult bindingResult) {
+    public ErrorResponseBody makeResponse(BindingResult bindingResult) {
         Map<String, List<String>> reasons = new HashMap<>();
+
         bindingResult.getFieldErrors().stream()
                 .filter(err -> err.getDefaultMessage() != null)
                 .forEach(err -> {
-                    List<String> errors = new ArrayList<>();
+                    List<String> errors = reasons.computeIfAbsent(err.getField(), k -> new ArrayList<>());
                     errors.add(err.getDefaultMessage());
-                    if (!reasons.containsKey(err.getField())) {
-                        reasons.put(err.getField(), errors);
-                    }
                 });
+
         return ErrorResponseBody.builder()
                 .title("Validation Error")
+                .response(reasons)
+                .status(HttpStatus.BAD_REQUEST.value())
                 .build();
     }
+
 }

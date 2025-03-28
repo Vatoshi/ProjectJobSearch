@@ -15,6 +15,6 @@ import java.util.Map;
 @AllArgsConstructor
 public class ErrorResponseBody {
     private String title;
-    private Map<String, List<String>> responce;
+    private Map<String, List<String>> response;
     private int status;
 }

@@ -16,6 +16,7 @@ public class ResumeDto {
     @Pattern(regexp = ".*\\p{L}.*", message = "Название не может состоять только из цифр")
     private String name;
     private int categoryId;
+    @PositiveOrZero
     private double salary;
     private boolean isActive;
     @PastOrPresent

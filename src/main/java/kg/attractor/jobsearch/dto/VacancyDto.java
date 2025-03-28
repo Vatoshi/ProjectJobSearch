@@ -17,8 +17,11 @@ public class VacancyDto {
     private String name;
     private String description;
     private Long categoryId;
+    @PositiveOrZero
     private double salary;
+    @PositiveOrZero
     private int expFrom;
+    @PositiveOrZero
     private int expTo;
     private boolean isActive;
     private int authorId;

@@ -1,9 +1,6 @@
 package kg.attractor.jobsearch.exeptions.advice;
 
-import kg.attractor.jobsearch.exeptions.EntityForDeleteNotFound;
-import kg.attractor.jobsearch.exeptions.ErrorResponseBody;
-import kg.attractor.jobsearch.exeptions.NotFound;
-import kg.attractor.jobsearch.exeptions.UsernameNotFound;
+import kg.attractor.jobsearch.exeptions.*;
 import kg.attractor.jobsearch.servise.ErrorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,4 +47,11 @@ public class GlobalControllerAdvice {
     private ResponseEntity<ErrorResponseBody> userNotFoundHandler(UsernameNotFound e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorService.makeResponse(e, "user not found", HttpStatus.NOT_FOUND));
     }
+
+    @ExceptionHandler(UserStatusExeption.class)
+    private ResponseEntity<ErrorResponseBody> userStatusExeptionHandler(UserStatusExeption e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorService.makeResponse(e, "not enough rights", HttpStatus.BAD_REQUEST));
+    }
+
+
 }
