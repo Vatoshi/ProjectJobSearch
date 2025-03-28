@@ -13,12 +13,10 @@ import java.time.LocalDateTime;
 public class ResumeDto {
     @NotNull(message = "Имя не должно быть пустым")
     @Size(min = 1, max = 30, message = "название от 1 до 30")
+    @Pattern(regexp = ".*\\p{L}.*", message = "Название не может состоять только из цифр")
     private String name;
     private int categoryId;
-    @NotNull
-    @Min(value = 10,message = "не должно быть пустным")
     private double salary;
-    @AssertTrue
     private boolean isActive;
     @PastOrPresent
     private LocalDateTime createdDate;

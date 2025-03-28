@@ -2,14 +2,13 @@ package kg.attractor.jobsearch.servise;
 
 import kg.attractor.jobsearch.dto.UserDto;
 import kg.attractor.jobsearch.dao.UserDao;
+import kg.attractor.jobsearch.exeptions.NotFound;
 import kg.attractor.jobsearch.exeptions.UsernameNotFound;
 import kg.attractor.jobsearch.models.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +31,9 @@ public class UserService {
 
     public List<UserDto> getUsersByName(String name) {
         List<User> users = userDao.findByName(name);
+        if (users.isEmpty()) {
+            throw new NotFound("Users with name " + name + " not found");
+        }
         return users.stream()
                 .map(user -> UserDto.builder()
                         .id(user.getId())
@@ -47,6 +49,9 @@ public class UserService {
 
     public List<UserDto> getUsersByPhone(String phone) {
         List<User> users = userDao.findByPhone(phone);
+        if (users.isEmpty()) {
+            throw new NotFound("Users with phone " + phone + " not found");
+        }
         return users.stream()
                 .map(user -> UserDto.builder()
                         .id(user.getId())

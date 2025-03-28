@@ -9,17 +9,21 @@ import lombok.Data;
 @Builder
 public class UserDto {
     private Long id;
+    @Pattern(regexp = "^\\p{L}+$", message = "Имя должно содержать только буквы")
     @NotNull(message = "Имя не должно быть пустым")
-    @Size(min = 3,max = 20)
+    @Size(min = 1,max = 20, message = "символы от 1 до 20")
     private String name;
     @NotNull(message = "Фамилия не должна быть пустой")
+    @Pattern(regexp = "^\\p{L}+$", message = "Имя должно содержать только буквы")
+    @Size(min = 1,max = 20, message = "символы от 1 до 20")
     private String surname;
-    @NotNull
-    @Size(min = 14,max = 120)
+    @NotNull(message = "возраст не может быть 0")
+    @Size(min = 14,max = 120, message = "возраст от 14 до 120")
     private int age;
-    @Email
+    @Email(message = "неправильный формат")
     private String email;
-    @Pattern(regexp = "\\+996\\s?\\d{3}\\s?\\d{3}\\s?\\d{3}", message = "Некорректный номер. Формат: +996 000 000 000")
+//    @Pattern(regexp = "\\+996\\s?\\d{3}\\s?\\d{3}\\s?\\d{3}", message = "Некорректный номер. Формат: +996 000 000 000")
+
     private String phone;
     private AccountType accountType;
 

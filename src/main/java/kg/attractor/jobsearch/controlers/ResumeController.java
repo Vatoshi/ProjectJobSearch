@@ -28,7 +28,7 @@ public class ResumeController {
     }
 
     @PutMapping("edit/{resumeId}")
-    public ResponseEntity<ResumeDto> editResume(@PathVariable Long resumeId, @RequestBody ResumeDto resumeDto) {
+    public ResponseEntity<ResumeDto> editResume(@PathVariable Long resumeId, @RequestBody @Valid ResumeDto resumeDto) {
         return resumeService.updateResume(resumeId, resumeDto);
     }
 

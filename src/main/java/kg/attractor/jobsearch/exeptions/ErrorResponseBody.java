@@ -1,0 +1,20 @@
+package kg.attractor.jobsearch.exeptions;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.http.HttpStatus;
+
+import java.util.List;
+import java.util.Map;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class ErrorResponseBody {
+    private String title;
+    private Map<String, List<String>> responce;
+    private int status;
+}

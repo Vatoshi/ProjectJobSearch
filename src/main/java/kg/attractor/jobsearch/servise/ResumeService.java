@@ -1,6 +1,8 @@
 package kg.attractor.jobsearch.servise;
 import kg.attractor.jobsearch.dao.ResumeDao;
 import kg.attractor.jobsearch.dto.ResumeDto;
+import kg.attractor.jobsearch.exeptions.EntityForDeleteNotFound;
+import kg.attractor.jobsearch.exeptions.NotFound;
 import kg.attractor.jobsearch.models.Resume;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
@@ -18,7 +20,7 @@ public class ResumeService {
     private final ResumeDao resumeDao;
     private final JdbcTemplate jdbcTemplate;
 
-    public List<ResumeDto> getResumesById(String categoryName) {
+    public List<ResumeDto> getResumesById(String categoryName) throws NotFound {
         List<Resume> resumes = resumeDao.findByCategory(categoryName);
         return resumes.stream()
                 .map(resume -> ResumeDto.builder()
@@ -34,6 +36,9 @@ public class ResumeService {
 
     public List<ResumeDto> getResumesByAplicant(Long userId) {
         List<Resume> resumes = resumeDao.findByUser(userId);
+        if (resumes.isEmpty()) {
+            throw new NotFound("resume not found");
+        }
         return resumes.stream()
                 .map(resume -> ResumeDto.builder()
                         .name(resume.getName())
@@ -48,7 +53,7 @@ public class ResumeService {
 
     public ResumeDto getResumeById(Long resumeId) {
         Resume resume = resumeDao.findResumeById(resumeId)
-                .orElseThrow(() -> new RuntimeException("Could not find resume with id: " + resumeId));
+                .orElseThrow(() -> new NotFound("Could not find resume with id: " + resumeId));
         return ResumeDto.builder()
                 .name(resume.getName())
                 .categoryId(resume.getCategoryId())
@@ -59,7 +64,7 @@ public class ResumeService {
                 .build();
     }
 
-    public ResponseEntity<ResumeDto> createResume(ResumeDto resumeDto) {
+    public ResponseEntity<ResumeDto> createResume(ResumeDto resumeDto) throws IllegalArgumentException {
         resumeDto.setCreatedDate(LocalDateTime.now());
         resumeDto.setUpdateTime(LocalDateTime.now());
 
@@ -97,8 +102,12 @@ public class ResumeService {
 
         public HttpStatus deleteResume(Long resumeId) {
             String sql = "delete from resumes where id = ?";
-            jdbcTemplate.update(sql, resumeId);
-            return HttpStatus.resolve(410);
+            int resumefound = jdbcTemplate.update(sql, resumeId);
+
+            if (resumefound == 0) {
+                throw new EntityForDeleteNotFound("resume not found");
+            }
+            return HttpStatus.ACCEPTED;
         }
 
         public ResponseEntity<ResumeDto> updateResume(Long resumeId, ResumeDto resumeDto) {
