@@ -19,7 +19,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ResumeService {
     private final ResumeDao resumeDao;
-    private final JdbcTemplate jdbcTemplate;
 
     public List<ResumeDto> getResumesById(String categoryName) throws NotFound {
         List<Resume> resumes = resumeDao.findByCategory(categoryName);
@@ -69,70 +68,43 @@ public class ResumeService {
         resumeDto.setCreatedDate(LocalDateTime.now());
         resumeDto.setUpdateTime(LocalDateTime.now());
 
-        Resume resume = new Resume();
-        resume.setName(resumeDto.getName());
-        resume.setCategoryId(resumeDto.getCategoryId());
-        resume.setSalary(resumeDto.getSalary());
-        resume.setActive(resumeDto.isActive());
-        resume.setUpdateTime(resumeDto.getUpdateTime());
-        resume.setCreatedDate(LocalDateTime.now());
-        resume.setApplicantId(1L);
-        // у меня builder ломает предыдущие методы
+        Resume resume = Resume.builder()
+                .applicantId(1L)
+                .name(resumeDto.getName())
+                .categoryId(resumeDto.getCategoryId())
+                .salary(resumeDto.getSalary())
+                .isActive(resumeDto.isActive())
+                .updateTime(resumeDto.getUpdateTime())
+                .createdDate(resumeDto.getCreatedDate())
+                .build();
 
-        String sqltype = "select account_type from users where id = ?";
-        String typename = jdbcTemplate.queryForObject(sqltype, String.class, resume.getApplicantId());
-        if (typename == null || !typename.equalsIgnoreCase("applicant")) {
-            throw new UserStatusExeption("wrong user status");
-        }
-
-            try {
-                String sql = "insert into resumes(applicant_id, name, category_id, salary, is_active, created_date) values(?, ?, ?, ?, ?, ?)";
-                jdbcTemplate.update(sql,
-                        resume.getApplicantId(),
-                        resume.getName(),
-                        resume.getCategoryId(),
-                        resume.getSalary(),
-                        resume.isActive(),
-                        resume.getCreatedDate()
-                );
-                return ResponseEntity.status(HttpStatus.CREATED).body(resumeDto);
-            } catch (DataAccessException e) {
-                throw new RuntimeException("Ошибка при добавлении резюме: " + e.getMessage(), e);
-            }
-        }
+        resumeDao.createResume(resumeDto, resume);
+        return ResponseEntity.status(HttpStatus.CREATED).body(resumeDto);
+    }
 
         public HttpStatus deleteResume(Long resumeId) {
-            String sql = "delete from resumes where id = ?";
-            int resumefound = jdbcTemplate.update(sql, resumeId);
-
-            if (resumefound == 0) {
-                throw new EntityForDeleteNotFound("resume not found");
-            }
-            return HttpStatus.ACCEPTED;
+            return resumeDao.deleteResume(resumeId);
         }
 
         public ResponseEntity<ResumeDto> updateResume(Long resumeId, ResumeDto resumeDto) {
             if (resumeDto.getName() == null || resumeDto.getName().isBlank()) {
-                String oldName = jdbcTemplate.queryForObject("select name from resumes where id = ?", String.class, resumeId);
+                String oldName = resumeDao.getName(resumeId);
                 resumeDto.setName(oldName);
             }
 
             if (resumeDto.getCategoryId() == 0 || resumeDto.getCategoryId() < 0) {
-                int oldId = jdbcTemplate.queryForObject("select category_id from resumes where id = ?", Integer.class, resumeId);
+                int oldId = resumeDao.getCategoryId(resumeId);
                 resumeDto.setCategoryId(oldId);
             }
 
             if (resumeDto.getSalary() == 0 || resumeDto.getSalary() < 0) {
-                Double oldSalary = jdbcTemplate.queryForObject("select salary from resumes where id = ?", Double.class, resumeId);
+                Double oldSalary = resumeDao.getSalary(resumeId);
                 resumeDto.setSalary(oldSalary);
             }
 
-            LocalDateTime oldCreatedDate = jdbcTemplate.queryForObject("select created_date from resumes where id = ?", LocalDateTime.class, resumeId);
+            LocalDateTime oldCreatedDate = resumeDao.getCreatedDate(resumeId);
             resumeDto.setCreatedDate(oldCreatedDate);
             resumeDto.setUpdateTime(LocalDateTime.now());
-
-            String sql = "update resumes set name = ?, category_id = ?, salary = ?, is_active = ?, update_time = ? where id = ?";
-            jdbcTemplate.update(sql,resumeDto.getName(), resumeDto.getCategoryId(), resumeDto.getSalary(), resumeDto.isActive(), resumeDto.getUpdateTime(), resumeId);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(resumeDto);
+            return resumeDao.updateResume(resumeDto,resumeId);
         }
 }

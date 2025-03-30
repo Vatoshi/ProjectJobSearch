@@ -24,7 +24,7 @@ public class VacancyDto {
     @PositiveOrZero
     private int expTo;
     private boolean isActive;
-    private int authorId;
+    private Integer authorId;
     @PastOrPresent
     private LocalDateTime createdDate;
     @PastOrPresent
