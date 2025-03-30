@@ -1,5 +1,6 @@
 package kg.attractor.jobsearch.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,8 +20,10 @@ public class ResumeDto {
     @PositiveOrZero
     private Double salary;
     private boolean isActive;
+    @JsonIgnore
     @PastOrPresent
     private LocalDateTime createdDate;
+    @JsonIgnore
     @PastOrPresent
     private LocalDateTime updateTime;
 }
