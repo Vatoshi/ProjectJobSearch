@@ -1,15 +1,13 @@
 package kg.attractor.jobsearch.servise;
 import kg.attractor.jobsearch.dao.ResumeDao;
+import kg.attractor.jobsearch.dto.EducationInfoDto;
 import kg.attractor.jobsearch.dto.ResumeDto;
-import kg.attractor.jobsearch.exeptions.EntityForDeleteNotFound;
+import kg.attractor.jobsearch.dto.WorkExperienceInfoDto;
 import kg.attractor.jobsearch.exeptions.NotFound;
-import kg.attractor.jobsearch.exeptions.UserStatusExeption;
 import kg.attractor.jobsearch.models.Resume;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -65,8 +63,8 @@ public class ResumeService {
     }
 
     public ResponseEntity<ResumeDto> createResume(ResumeDto resumeDto) throws IllegalArgumentException {
-        resumeDto.setCreatedDate(LocalDateTime.now());
-        resumeDto.setUpdateTime(LocalDateTime.now());
+            resumeDto.setCreatedDate(LocalDateTime.now());
+            resumeDto.setUpdateTime(LocalDateTime.now());
 
         Resume resume = Resume.builder()
                 .applicantId(1L)
@@ -78,8 +76,8 @@ public class ResumeService {
                 .createdDate(resumeDto.getCreatedDate())
                 .build();
 
-        resumeDao.createResume(resumeDto, resume);
-        return ResponseEntity.status(HttpStatus.CREATED).body(resumeDto);
+            resumeDao.createResume(resumeDto, resume);
+            return ResponseEntity.status(HttpStatus.CREATED).body(resumeDto);
     }
 
         public HttpStatus deleteResume(Long resumeId) {
