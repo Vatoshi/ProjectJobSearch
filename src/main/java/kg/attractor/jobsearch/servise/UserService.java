@@ -94,12 +94,16 @@ public class UserService {
                 .phoneNumber(u.getPhone())
                 .accountType(u.getAccountType())
                 .enabled(true)
-                .roleId(3L)
+                .roleId(u.getAccountType() == null ? 2L : 3L)
                 .build();
 
         userDao.createAcc(newUser);
         return u;
     }
+
+//    public UserFormDto editAcc(UserFormDto u) {
+//
+//    }
 }
 
 

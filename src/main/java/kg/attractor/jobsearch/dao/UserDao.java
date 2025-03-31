@@ -61,7 +61,12 @@ public class UserDao {
     public void createAcc(User u) {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         String hashedPassword = encoder.encode(u.getPassword());
-        String accountType = u.getAccountType().name();
+        String accountType = "";
+        if (u.getAccountType() == null) {
+            accountType = "none";
+        } else {
+            accountType = u.getAccountType().name();
+        }
         String sql = "insert into users (name, surname, age, email, password, phone_number, avatar, account_type, enabled, role_id)" +
                 " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql,u.getName(),u.getSurname(),u.getAge(),u.getEmail(),hashedPassword,u.getPhoneNumber(),u.getAvatar(),accountType,u.isEnabled(),u.getRoleId());
