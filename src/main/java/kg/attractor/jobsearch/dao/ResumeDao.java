@@ -1,10 +1,14 @@
 package kg.attractor.jobsearch.dao;
 
+import kg.attractor.jobsearch.dto.EducationInfoDto;
 import kg.attractor.jobsearch.dto.ResumeDto;
+import kg.attractor.jobsearch.dto.WorkExperienceInfoDto;
 import kg.attractor.jobsearch.exeptions.EntityForDeleteNotFound;
 import kg.attractor.jobsearch.exeptions.NotFound;
 import kg.attractor.jobsearch.exeptions.UserStatusExeption;
+import kg.attractor.jobsearch.models.EducationInfo;
 import kg.attractor.jobsearch.models.Resume;
+import kg.attractor.jobsearch.models.WorkExperienceInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.support.DataAccessUtils;
@@ -88,19 +92,64 @@ public class ResumeDao {
             throw new RuntimeException("Failed to retrieve resume ID");
         }
         Long resumeId = key.longValue();
-        updateEducation(resumeId);
-        updateWorkExperience(resumeId);
+
+        if (resumeDto.getEducationInfo() == null) {
+            createSingleEducation(resumeId);
+        } else {
+            EducationInfoDto educDto = resumeDto.getEducationInfo().getFirst();
+            createEducation(resumeId,educDto);
+        }
+
+        if (resumeDto.getWorkExperienceInfo() == null) {
+            createSingleWorkExperience(resumeId);
+        } else {
+            WorkExperienceInfoDto workDto = resumeDto.getWorkExperienceInfo().getFirst();
+            createWorkExperience(resumeId,workDto);
+        }
+
         return resumeDto;
     }
 
-    public void updateEducation(Long resumeId) {
+    public void createEducation(Long resumeId, EducationInfoDto e) {
+        String sqlEducation = "insert into education_info(resume_id, institution, program, start_date, end_date,degree) values(?,?,?,?,?,?)";
+        jdbcTemplate.update(sqlEducation, resumeId, e.getInstitution(), e.getProgram(), e.getStartDate(), e.getEndDate(), e.getDegree());
+    }
+
+    public void createWorkExperience(Long resumeId, WorkExperienceInfoDto w) {
+        String sql = "insert into work_experience_info(resume_id, years, company_name,position,responsibilities) values(?,?,?,?,?)";
+        jdbcTemplate.update(sql, resumeId, w.getYears(), w.getCompanyName(), w.getPosition(), w.getResponsibilities());
+    }
+
+    public void createSingleEducation(Long resumeId) {
         String sqlEducation = "insert into education_info(resume_id) values(?)";
         jdbcTemplate.update(sqlEducation, resumeId);
     }
 
-    public void updateWorkExperience(Long resumeId) {
+    public void createSingleWorkExperience(Long resumeId) {
         String sqlWork = "insert into work_experience_info(resume_id) values(?)";
         jdbcTemplate.update(sqlWork, resumeId);
+    }
+
+    public EducationInfoDto getEducationInfo(Long resumeId) {
+        String sql = "select resume_id, institution, program, start_date, end_date, degree from education_info where resume_id = ?";
+        List<EducationInfoDto> results = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(EducationInfoDto.class), resumeId);
+        return results.isEmpty() ? new EducationInfoDto() : results.get(0);
+    }
+
+    public WorkExperienceInfoDto getWorkExperienceInfo(Long resumeId) {
+        String sql = "select resume_id, years, company_name, position, responsibilities from work_experience_info where resume_id = ?";
+        List<WorkExperienceInfoDto> results = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(WorkExperienceInfoDto.class), resumeId);
+        return results.isEmpty() ? new WorkExperienceInfoDto() : results.get(0);
+    }
+
+    public void updateWorkExperienceInfo(Long resumeId, WorkExperienceInfoDto w) {
+        String sql = "update work_experience_info set years = ?, company_name = ?, position = ?, responsibilities = ? where resume_id = ?";
+        jdbcTemplate.update(sql,w.getYears(), w.getCompanyName(), w.getPosition(), w.getResponsibilities(), resumeId);
+    }
+
+    public void updateEducationInfo(Long resumeId, EducationInfoDto e) {
+        String sql = "update education_info set institution = ?, program = ?, start_date = ?, end_date = ? where resume_id = ?";
+        jdbcTemplate.update(sql, e.getInstitution(), e.getProgram(), e.getStartDate(), e.getEndDate(), resumeId);
     }
 
     public HttpStatus deleteResume(Long resumeId) {
@@ -113,25 +162,9 @@ public class ResumeDao {
             return HttpStatus.ACCEPTED;
         }
 
-        public String getName(Long resumeId) {
-            return jdbcTemplate.queryForObject("select name from resumes where id = ?", String.class,resumeId);
-        }
-
-        public int getCategoryId(Long resumeId) {
-            return jdbcTemplate.queryForObject("select category_id from resumes where id = ?", Integer.class, resumeId);
-        }
-
-        public Double getSalary(Long resumeId) {
-            return jdbcTemplate.queryForObject("select salary from resumes where id = ?", Double.class, resumeId);
-        }
-
-        public LocalDateTime getCreatedDate(Long resumeId) {
-         return jdbcTemplate.queryForObject("select created_date from resumes where id = ?", LocalDateTime.class, resumeId);
-        }
-
-        public ResponseEntity<ResumeDto> updateResume(ResumeDto resumeDto, Long resumeId) {
+        public ResumeDto updateResume(ResumeDto resumeDto, Long resumeId) {
             String sql = "update resumes set name = ?, category_id = ?, salary = ?, is_active = ?, update_time = ? where id = ?";
             jdbcTemplate.update(sql,resumeDto.getName(), resumeDto.getCategoryId(), resumeDto.getSalary(), resumeDto.isActive(), resumeDto.getUpdateTime(), resumeId);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(resumeDto);
+            return resumeDto;
         }
 }

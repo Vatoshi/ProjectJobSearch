@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: 012 insert some users
+      author: er
+      changes:
+        - sql:
+            #            dbms: any
+            sql: |
+              insert into editusers(email, username, password, enabled, role_id)
+              values('qwe@qwe.qwe', 'qwe', '$2a$12$WB2YUbFcCN0tm44SBcKUjua9yiFBsfB3vW02IjuwzY7HGtlQIKzy2', TRUE, (select id from role where role = 'ADMIN')),
+              ('ewq@ewq.ewq', 'ewq', '$2a$12$WB2YUbFcCN0tm44SBcKUjua9yiFBsfB3vW02IjuwzY7HGtlQIKzy2', TRUE, (select id from role where role = 'GUEST'));

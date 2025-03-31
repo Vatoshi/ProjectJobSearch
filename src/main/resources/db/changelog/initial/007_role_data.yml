@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: 007 insert some data into role table
+      author: er
+      changes:
+        - sql:
+            #            dbms: any
+            comment: Insert data into role table
+            sql: |
+              insert into role(role, authority_id)
+              values('ADMIN', (select id from authority where authority = 'FULL')),
+              ('GUEST', (select id from authority where authority = 'READ_ONLY'));

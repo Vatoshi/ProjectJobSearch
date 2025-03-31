@@ -4,8 +4,11 @@ import kg.attractor.jobsearch.dto.EducationInfoDto;
 import kg.attractor.jobsearch.dto.ResumeDto;
 import kg.attractor.jobsearch.dto.WorkExperienceInfoDto;
 import kg.attractor.jobsearch.exeptions.NotFound;
+import kg.attractor.jobsearch.models.EducationInfo;
 import kg.attractor.jobsearch.models.Resume;
+import kg.attractor.jobsearch.models.WorkExperienceInfo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -16,6 +19,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ResumeService {
+    private final UserService dao;
     private final ResumeDao resumeDao;
 
     public List<ResumeDto> getResumesById(String categoryName) throws NotFound {
@@ -59,6 +63,8 @@ public class ResumeService {
                 .isActive(resume.isActive())
                 .updateTime(resume.getUpdateTime())
                 .createdDate(resume.getCreatedDate())
+                .educationInfo(List.of(resumeDao.getEducationInfo(resumeId)))
+                .workExperienceInfo(List.of(resumeDao.getWorkExperienceInfo(resumeId)))
                 .build();
     }
 
@@ -85,24 +91,40 @@ public class ResumeService {
         }
 
         public ResponseEntity<ResumeDto> updateResume(Long resumeId, ResumeDto resumeDto) {
+            Resume oldResume = resumeDao.findResumeById(resumeId)
+                    .orElseThrow(() -> new NotFound("Could not find resume with id: " + resumeId));
+
             if (resumeDto.getName() == null || resumeDto.getName().isBlank()) {
-                String oldName = resumeDao.getName(resumeId);
-                resumeDto.setName(oldName);
+                resumeDto.setName(oldResume.getName());
             }
-
             if (resumeDto.getCategoryId() == 0 || resumeDto.getCategoryId() < 0) {
-                int oldId = resumeDao.getCategoryId(resumeId);
-                resumeDto.setCategoryId(oldId);
+                resumeDto.setCategoryId(oldResume.getCategoryId());
             }
-
             if (resumeDto.getSalary() == 0 || resumeDto.getSalary() < 0) {
-                Double oldSalary = resumeDao.getSalary(resumeId);
-                resumeDto.setSalary(oldSalary);
+                resumeDto.setSalary(oldResume.getSalary());
             }
 
-            LocalDateTime oldCreatedDate = resumeDao.getCreatedDate(resumeId);
+            if (resumeDto.getEducationInfo() == null) {
+                EducationInfoDto oldEduc = resumeDao.getEducationInfo(oldResume.getId());
+                resumeDto.setEducationInfo(List.of(oldEduc));
+                resumeDao.updateEducationInfo(resumeId, oldEduc);
+            } else {
+                EducationInfoDto educDto = resumeDto.getEducationInfo().getFirst();
+                resumeDao.updateEducationInfo(resumeId, educDto);
+            }
+            if (resumeDto.getWorkExperienceInfo() == null) {
+                WorkExperienceInfoDto oldWorkExperience = resumeDao.getWorkExperienceInfo(oldResume.getId());
+                resumeDto.setWorkExperienceInfo(List.of(oldWorkExperience));
+                resumeDao.updateWorkExperienceInfo(resumeId, oldWorkExperience);
+            } else {
+                WorkExperienceInfoDto workDto = resumeDto.getWorkExperienceInfo().getFirst();
+                resumeDao.updateWorkExperienceInfo(resumeId, workDto);
+            }
+
+            LocalDateTime oldCreatedDate = oldResume.getCreatedDate();
             resumeDto.setCreatedDate(oldCreatedDate);
             resumeDto.setUpdateTime(LocalDateTime.now());
-            return resumeDao.updateResume(resumeDto,resumeId);
+            resumeDao.updateResume(resumeDto,resumeId);
+            return ResponseEntity.status(HttpStatus.OK).body(resumeDto);
         }
 }

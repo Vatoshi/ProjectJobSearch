@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -26,4 +27,6 @@ public class ResumeDto {
     @JsonIgnore
     @PastOrPresent
     private LocalDateTime updateTime;
+    List<WorkExperienceInfoDto> workExperienceInfo;
+    List<EducationInfoDto> educationInfo;
 }

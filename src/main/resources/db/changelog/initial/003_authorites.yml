@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: 003 create table authority
+      author: er
+      changes:
+        - createTable:
+            tableName: authority
+            columns:
+              - column:
+                  name: id
+                  type: long
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+              - column:
+                  name: authority
+                  type: varchar(50)
+                  constraints:
+                    nullable: false

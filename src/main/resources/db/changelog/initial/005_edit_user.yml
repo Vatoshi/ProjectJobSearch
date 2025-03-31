@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: 005 add column to table users
+      author: er
+      changes:
+        - addColumn:
+            tableName: editusers
+            columns:
+              - column:
+                  name: enabled
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: role_id
+                  type: long
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_role_id
+                    references: role(id)

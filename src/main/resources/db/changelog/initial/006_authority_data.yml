@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: 006 insert some authorities
+      author: er
+      changes:
+        - sql:
+            #            dbms: any
+            comment: Insert data into authority table
+            sql: |
+              insert into authority(authority)
+              values('FULL'), ('READ_ONLY');

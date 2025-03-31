@@ -34,10 +34,11 @@
         }
 
         @DeleteMapping("{userId}/delete/{id}")
-        public ResponseEntity deleteContent(@PathVariable long userId) {
+        public ResponseEntity deleteContent(@PathVariable Long userId) {
             // искать резюме либо вакансию по типу аккаунта и удалить его
             return ResponseEntity.noContent().build();
         }
+
 
         @GetMapping("{userId}/resumes")
         public HttpStatus getAllResumes() {
