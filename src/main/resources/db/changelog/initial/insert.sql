@@ -6,11 +6,6 @@ values
     ('it', (select id from categories where name = 'основные категории')),
     ('маркетинг', (select id from categories where name = 'основные категории'));
 
-insert into users (name, surname, age, email, password, phone_number, avatar, account_type)
-values
-    ('иван', 'иванов', 30, 'ivan@example.com', 'password123', '+1234567890', 'avatar1.png', 'applicant'),
-    ('петр', 'петров', 40, 'petr@example.com', 'password456', '+0987654321', 'avatar2.png', 'employer');
-
 insert into resumes (applicant_id, name, category_id, salary, is_active, created_date, update_time)
 select
     (select id from users where email = 'ivan@example.com'),

@@ -9,4 +9,5 @@ databaseChangeLog:
             sql: |
               insert into role(role, authority_id)
               values('ADMIN', (select id from authority where authority = 'FULL')),
-              ('GUEST', (select id from authority where authority = 'READ_ONLY'));
+              ('GUEST', (select id from authority where authority = 'READ_ONLY')),
+              ('USER', (select id from authority where authority = 'EDIT'));
