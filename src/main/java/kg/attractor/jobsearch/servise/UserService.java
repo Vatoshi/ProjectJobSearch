@@ -3,6 +3,8 @@ package kg.attractor.jobsearch.servise;
 import kg.attractor.jobsearch.dto.ImageDto;
 import kg.attractor.jobsearch.dto.UserDto;
 import kg.attractor.jobsearch.dao.UserDao;
+import kg.attractor.jobsearch.dto.UserFormDto;
+import kg.attractor.jobsearch.exeptions.AlreadyExists;
 import kg.attractor.jobsearch.exeptions.NotFound;
 import kg.attractor.jobsearch.exeptions.UsernameNotFound;
 import kg.attractor.jobsearch.models.User;
@@ -74,6 +76,29 @@ public class UserService {
         String filename = fileUtil.saveUploadFile(imageDto.getImage(), "images/");
         userDao.save(filename,imageDto.getUserId());
         return filename;
+    }
+
+    public UserFormDto createAcc(UserFormDto u) {
+        String gmail = u.getEmail();
+        if (u.getEmail() == null || gmail.equals(userDao.getExistEmail(u.getEmail()))) {
+            throw new AlreadyExists("User with email " + u.getEmail() + " already exists");
+        }
+
+        User newUser = User.builder()
+                .name(u.getName())
+                .surname(u.getSurname())
+                .age(u.getAge())
+                .avatar(u.getAvatar())
+                .email(u.getEmail())
+                .password(u.getPassword())
+                .phoneNumber(u.getPhone())
+                .accountType(u.getAccountType())
+                .enabled(true)
+                .roleId(3L)
+                .build();
+
+        userDao.createAcc(newUser);
+        return u;
     }
 }
 

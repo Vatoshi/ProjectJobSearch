@@ -53,4 +53,8 @@ public class GlobalControllerAdvice {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorService.makeResponse(e, "not enough rights", HttpStatus.BAD_REQUEST));
     }
 
+    @ExceptionHandler(AlreadyExists.class)
+    private ResponseEntity<ErrorResponseBody> alreadyExist (AlreadyExists e){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorService.makeResponse(e, "already exists", HttpStatus.BAD_REQUEST));
+    }
 }

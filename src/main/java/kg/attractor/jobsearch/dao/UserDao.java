@@ -3,9 +3,11 @@ import kg.attractor.jobsearch.exeptions.NotFound;
 import kg.attractor.jobsearch.models.User;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 
@@ -46,8 +48,6 @@ public class UserDao {
         );
     }
 
-
-
     public void save(String filename, Long userId) {
         String finduser = "select id from users where id = ?";
             List<Integer> id = jdbcTemplate.queryForList(finduser, Integer.class, userId);
@@ -56,6 +56,25 @@ public class UserDao {
         }
         String sql = "update users set avatar = ? where id = ?";
         jdbcTemplate.update(sql, filename, userId);
+    }
+
+    public void createAcc(User u) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String hashedPassword = encoder.encode(u.getPassword());
+        String accountType = u.getAccountType().name();
+        String sql = "insert into users (name, surname, age, email, password, phone_number, avatar, account_type, enabled, role_id)" +
+                " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        jdbcTemplate.update(sql,u.getName(),u.getSurname(),u.getAge(),u.getEmail(),hashedPassword,u.getPhoneNumber(),u.getAvatar(),accountType,u.isEnabled(),u.getRoleId());
+    }
+
+    public String getExistEmail(String email) {
+        String sql = "select email from users where email = ?";
+        try {
+            return jdbcTemplate.queryForObject(sql, String.class, email);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+
     }
 
 }
