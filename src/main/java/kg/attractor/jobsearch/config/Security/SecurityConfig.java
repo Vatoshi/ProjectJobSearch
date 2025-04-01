@@ -1,4 +1,4 @@
-package kg.attractor.jobsearch.config;
+package kg.attractor.jobsearch.config.Security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +53,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-//                        .requestMatchers("/user/**").fullyAuthenticated()
+                        .requestMatchers("/vacancy/create","/vacancy/edit/","vacancy/delete/", "/user/add-avatar").hasAnyAuthority("USER", "ADMIN")
                         .requestMatchers("/resume/**").hasAnyAuthority("USER", "ADMIN")
                         .anyRequest().permitAll());
 

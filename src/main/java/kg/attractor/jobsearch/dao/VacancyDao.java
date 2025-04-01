@@ -79,7 +79,7 @@ public class VacancyDao {
 
         String placeholders = String.join(",", Collections.nCopies(categoryIds.size(), "?"));
         String sqlVacancies = String.format(
-                "SELECT * FROM vacancies WHERE category_id IN (%s)", placeholders);
+                "SELECT * FROM vacancies WHERE category_id IN (%s", placeholders);
 
         return jdbcTemplate.query(sqlVacancies, new BeanPropertyRowMapper<>(Vacancy.class), categoryIds.toArray());
     }
@@ -114,7 +114,7 @@ public class VacancyDao {
 
         String sql = "insert into vacancies (name,description,category_id,salary,exp_from, exp_to,is_active,author_id,created_date,update_time)" +
                 " values (?,?,?,?,?,?,?,?,?,?)";
-        jdbcTemplate.update(sql,vacancy.getName(),vacancy.getDescription(),vacancy.getCategoryId(),vacancy.getSalary(),vacancy.getExpFrom(),vacancy.getExpTo(),vacancy.isActive(),vacancy.getAuthorId(),vacancy.getCreatedDate(),vacancy.getUpdateTime());
+        jdbcTemplate.update(sql,vacancy.getName(),vacancy.getDescription(),vacancy.getCategoryId(),vacancy.getSalary(),vacancy.getExpFrom(),vacancy.getExpTo(),vacancy.getIsActive(),vacancy.getAuthorId(),vacancy.getCreatedDate(),vacancy.getUpdateTime());
         return vacancyDto;
     }
 
@@ -134,7 +134,7 @@ public class VacancyDao {
 
     public VacancyDto updateVacancy(VacancyDto vacancyDto, Long vacancyId) {
         String sql = "update vacancies set name = ?, description = ?, category_id = ?, salary = ?, exp_from = ?, exp_to = ?, is_active = ?, update_time = ? where id = ?";
-        jdbcTemplate.update(sql,vacancyDto.getName(), vacancyDto.getDescription(),vacancyDto.getCategoryId(),vacancyDto.getSalary(), vacancyDto.getExpFrom(), vacancyDto.getExpTo(), vacancyDto.isActive(), vacancyDto.getUpdateTime(), vacancyId);
+        jdbcTemplate.update(sql,vacancyDto.getName(), vacancyDto.getDescription(),vacancyDto.getCategoryId(),vacancyDto.getSalary(), vacancyDto.getExpFrom(), vacancyDto.getExpTo(), vacancyDto.getIsActive(), vacancyDto.getUpdateTime(), vacancyId);
         return vacancyDto;
     }
 }

@@ -19,6 +19,27 @@ select
 insert into resumes (applicant_id, name, category_id, salary, is_active, created_date, update_time)
 select
     (select id from users where email = 'ivan@example.com'),
+    'резюме ивана (it) - неактивное',
+    (select id from categories where name = 'it'),
+    50000.00,
+    false,
+    current_timestamp,
+    current_timestamp;
+
+insert into resumes (applicant_id, name, category_id, salary, is_active, created_date, update_time)
+select
+    (select id from users where email = 'ivan@example.com'),
+    'резюме ивана (маркетинг) - неактивное',
+    (select id from categories where name = 'маркетинг'),
+    60000.00,
+    false,
+    current_timestamp,
+    current_timestamp;
+
+
+insert into resumes (applicant_id, name, category_id, salary, is_active, created_date, update_time)
+select
+    (select id from users where email = 'ivan@example.com'),
     'резюме ивана (маркетинг)',
     (select id from categories where name = 'маркетинг'),
     60000.00,
@@ -38,6 +59,33 @@ select
     (select id from users where email = 'petr@example.com'),
     current_timestamp,
     current_timestamp;
+
+insert into vacancies (name, description, category_id, salary, exp_from, exp_to, is_active, author_id, created_date, update_time)
+select
+    'вакансия 1 (it) - неактивная',
+    'описание вакансии 1 (неактивная)',
+    (select id from categories where name = 'it'),
+    70000.00,
+    2,
+    5,
+    false,
+    (select id from users where email = 'petr@example.com'),
+    current_timestamp,
+    current_timestamp;
+
+insert into vacancies (name, description, category_id, salary, exp_from, exp_to, is_active, author_id, created_date, update_time)
+select
+    'вакансия 2 (маркетинг) - неактивная',
+    'описание вакансии 2 (неактивная)',
+    (select id from categories where name = 'маркетинг'),
+    80000.00,
+    3,
+    6,
+    false,
+    (select id from users where email = 'petr@example.com'),
+    current_timestamp,
+    current_timestamp;
+
 
 insert into vacancies (name, description, category_id, salary, exp_from, exp_to, is_active, author_id, created_date, update_time)
 select

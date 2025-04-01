@@ -1,6 +1,7 @@
 package kg.attractor.jobsearch.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,11 +25,10 @@ public class VacancyDto {
     private int expFrom;
     @PositiveOrZero
     private int expTo;
-    private boolean isActive;
-    @JsonIgnore
+    @JsonProperty("isActive")
+    private Boolean isActive;
     @PastOrPresent
     private LocalDateTime createdDate;
-    @JsonIgnore
     @PastOrPresent
     private LocalDateTime updateTime;
 }

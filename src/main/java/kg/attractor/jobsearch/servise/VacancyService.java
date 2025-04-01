@@ -12,7 +12,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -47,9 +49,10 @@ public class VacancyService {
                         .categoryId(vacancy.getCategoryId())
                         .createdDate(vacancy.getCreatedDate())
                         .updateTime(vacancy.getUpdateTime())
-                        .isActive(vacancy.isActive())
+                        .isActive(vacancy.getIsActive())
                         .salary(vacancy.getSalary())
                         .build())
+                .filter(VacancyDto::getIsActive)
                 .toList();
     }
 
@@ -64,9 +67,10 @@ public class VacancyService {
                        .categoryId(vacancy.getCategoryId())
                        .createdDate(vacancy.getCreatedDate())
                        .updateTime(vacancy.getUpdateTime())
-                       .isActive(vacancy.isActive())
+                       .isActive(vacancy.getIsActive())
                        .salary(vacancy.getSalary())
                        .build())
+               .filter(VacancyDto::getIsActive)
                .toList();
     }
 
@@ -81,9 +85,10 @@ public class VacancyService {
                         .categoryId(vacancy.getCategoryId())
                         .createdDate(vacancy.getCreatedDate())
                         .updateTime(vacancy.getUpdateTime())
-                        .isActive(vacancy.isActive())
+                        .isActive(vacancy.getIsActive())
                         .salary(vacancy.getSalary())
                         .build())
+                .filter(VacancyDto::getIsActive)
                 .toList();
     }
 
@@ -96,7 +101,7 @@ public class VacancyService {
                 .name(vacancyDto.getName())
                 .categoryId(vacancyDto.getCategoryId())
                 .salary(vacancyDto.getSalary())
-                .isActive(vacancyDto.isActive())
+                .isActive(vacancyDto.getIsActive())
                 .updateTime(vacancyDto.getUpdateTime())
                 .createdDate(vacancyDto.getCreatedDate())
                 .expFrom(vacancyDto.getExpFrom())

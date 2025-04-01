@@ -29,7 +29,8 @@ public class UserFormDto {
     @Pattern(regexp = "^(?=.*\\d).{5,}$", message = "длина должна быть минимум 5 символов и иметь хотя бы одну цифру")
     private String password;
     private String avatar;
-    @Pattern(regexp = "^\\d{10}$\n", message = "10 цифр")
+    @NotNull(message = "ввод телефона обязателен")
+    @Pattern(regexp = "^\\d{10}$", message = "10 цифр")
     private String phone;
     private AccountType accountType;
 }

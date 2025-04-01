@@ -37,7 +37,7 @@ public class ResumeDao {
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     public Optional<Resume> findResumeById(Long resumeId) {
-        String sql = "SELECT * FROM resumes WHERE id = ?";
+        String sql = "SELECT * FROM resumes WHERE id = ? and is_active = true";
         return Optional.ofNullable(
                 DataAccessUtils.singleResult(
                         jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Resume.class), resumeId)));
@@ -82,7 +82,7 @@ public class ResumeDao {
             ps.setString(2, resume.getName());
             ps.setInt(3, resume.getCategoryId());
             ps.setDouble(4, resume.getSalary());
-            ps.setBoolean(5, resume.isActive());
+            ps.setBoolean(5, resume.getIsActive());
             ps.setTimestamp(6, Timestamp.valueOf(resume.getCreatedDate()));
             return ps;
         }, keyHolder);
@@ -164,7 +164,7 @@ public class ResumeDao {
 
         public ResumeDto updateResume(ResumeDto resumeDto, Long resumeId) {
             String sql = "update resumes set name = ?, category_id = ?, salary = ?, is_active = ?, update_time = ? where id = ?";
-            jdbcTemplate.update(sql,resumeDto.getName(), resumeDto.getCategoryId(), resumeDto.getSalary(), resumeDto.isActive(), resumeDto.getUpdateTime(), resumeId);
+            jdbcTemplate.update(sql,resumeDto.getName(), resumeDto.getCategoryId(), resumeDto.getSalary(), resumeDto.getIsActive(), resumeDto.getUpdateTime(), resumeId);
             return resumeDto;
         }
 }

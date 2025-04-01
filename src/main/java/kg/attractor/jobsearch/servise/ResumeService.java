@@ -23,13 +23,13 @@ public class ResumeService {
     private final ResumeDao resumeDao;
 
     public List<ResumeDto> getResumesById(String categoryName) throws NotFound {
-        List<Resume> resumes = resumeDao.findByCategory(categoryName);
+        List<Resume> resumes = resumeDao.findByCategory(categoryName).stream().filter(Resume::getIsActive).toList();
         return resumes.stream()
                 .map(resume -> ResumeDto.builder()
                         .name(resume.getName())
                         .categoryId(resume.getCategoryId())
                         .salary(resume.getSalary())
-                        .isActive(resume.isActive())
+                        .isActive(resume.getIsActive())
                         .updateTime(resume.getUpdateTime())
                         .createdDate(resume.getCreatedDate())
                         .build())
@@ -37,16 +37,17 @@ public class ResumeService {
     }
 
     public List<ResumeDto> getResumesByAplicant(Long userId) {
-        List<Resume> resumes = resumeDao.findByUser(userId);
+        List<Resume> resumes = resumeDao.findByUser(userId).stream().filter(Resume::getIsActive).toList();
         if (resumes.isEmpty()) {
             throw new NotFound("resume not found");
         }
+
         return resumes.stream()
                 .map(resume -> ResumeDto.builder()
                         .name(resume.getName())
                         .categoryId(resume.getCategoryId())
                         .salary(resume.getSalary())
-                        .isActive(resume.isActive())
+                        .isActive(resume.getIsActive())
                         .updateTime(resume.getUpdateTime())
                         .createdDate(resume.getCreatedDate())
                         .build())
@@ -60,7 +61,7 @@ public class ResumeService {
                 .name(resume.getName())
                 .categoryId(resume.getCategoryId())
                 .salary(resume.getSalary())
-                .isActive(resume.isActive())
+                .isActive(resume.getIsActive())
                 .updateTime(resume.getUpdateTime())
                 .createdDate(resume.getCreatedDate())
                 .educationInfo(List.of(resumeDao.getEducationInfo(resumeId)))
@@ -77,7 +78,7 @@ public class ResumeService {
                 .name(resumeDto.getName())
                 .categoryId(resumeDto.getCategoryId())
                 .salary(resumeDto.getSalary())
-                .isActive(resumeDto.isActive())
+                .isActive(resumeDto.getIsActive())
                 .updateTime(resumeDto.getUpdateTime())
                 .createdDate(resumeDto.getCreatedDate())
                 .build();

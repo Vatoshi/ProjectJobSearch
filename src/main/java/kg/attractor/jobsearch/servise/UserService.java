@@ -83,6 +83,9 @@ public class UserService {
         if (u.getEmail() == null || gmail.equals(userDao.getExistEmail(u.getEmail()))) {
             throw new AlreadyExists("User with email " + u.getEmail() + " already exists");
         }
+        if (u.getAvatar() == null) {
+            u.setAvatar("Default.png");
+        }
 
         User newUser = User.builder()
                 .name(u.getName())
@@ -100,7 +103,7 @@ public class UserService {
         userDao.createAcc(newUser);
         return u;
     }
-
+//
 //    public UserFormDto editAcc(UserFormDto u) {
 //
 //    }
