@@ -80,9 +80,9 @@ public class ResumeDao {
             );
             ps.setLong(1, resume.getApplicantId());
             ps.setString(2, resume.getName());
-            ps.setInt(3, resume.getCategoryId());
-            ps.setDouble(4, resume.getSalary());
-            ps.setBoolean(5, resume.getIsActive());
+            ps.setInt(3, resume.getCategoryId() != null ? resume.getCategoryId() : 1);
+            ps.setDouble(4, resume.getSalary() != null ? resume.getSalary() : 0);
+            ps.setBoolean(5, resume.getIsActive() != null ? resume.getIsActive() : false);
             ps.setTimestamp(6, Timestamp.valueOf(resume.getCreatedDate()));
             return ps;
         }, keyHolder);

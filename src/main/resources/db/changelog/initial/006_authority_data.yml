@@ -8,4 +8,4 @@ databaseChangeLog:
             comment: Insert data into authority table
             sql: |
               insert into authority(authority)
-              values('FULL'), ('EDIT'), ('READ_ONLY');
+              values('FULL'), ('APPLICANT'), ('EMPLOYER'), ('READ_ONLY');
