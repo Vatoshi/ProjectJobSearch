@@ -5,12 +5,12 @@ databaseChangeLog:
       changes:
         - sql:
             #            dbms: any
-            sql: |
+            sql: | 
               insert into users(name, surname, age, email, password, phone_number, avatar, account_type, enabled, role_id)
               values ('Иван', 'Иванов', 30, 'ivan@example.com', '$2a$12$WB2YUbFcCN0tm44SBcKUjua9yiFBsfB3vW02IjuwzY7HGtlQIKzy2', '+1234567890', 'avatar1.png', 'APPLICANT', true, (select id from role where role = 'ADMIN')),
               ('Петр', 'Петров', 40, 'petr@example.com', '$2a$12$WB2YUbFcCN0tm44SBcKUjua9yiFBsfB3vW02IjuwzY7HGtlQIKzy2', '+0987654321', 'avatar2.png', 'EMPLOYER', true, (select id from role where role = 'USER')),
               ('Эмир', 'Кадыров', 16, 'emirchik@gmail.com', '$2a$12$WB2YUbFcCN0tm44SBcKUjua9yiFBsfB3vW02IjuwzY7HGtlQIKzy2', '+1231342345', '', '', true, (select id from role where role = 'GUEST'));
-              
+#              пароль для всех qwe , эмир бесправный пользователь
         
           
 
