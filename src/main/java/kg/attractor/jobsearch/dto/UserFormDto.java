@@ -1,5 +1,6 @@
 package kg.attractor.jobsearch.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.*;
 import kg.attractor.jobsearch.enums.AccountType;
 import lombok.AllArgsConstructor;
@@ -34,4 +35,6 @@ public class UserFormDto {
     private String phoneNumber;
     @NotNull(message = "notnull")
     private AccountType accountType;
+    @JsonIgnore
+    private Long roleId;
 }

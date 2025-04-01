@@ -69,9 +69,15 @@ public class UserDao {
         } else {
             accountType = u.getAccountType().name();
         }
+        Integer roleId;
+        if (u.getAccountType() == AccountType.APPLICANT){
+            roleId = 3;
+        } else {
+            roleId = 4;
+        }
         String sql = "insert into users (name, surname, age, email, password, phone_number, avatar, account_type, enabled, role_id)" +
                 " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        jdbcTemplate.update(sql,u.getName(),u.getSurname(),u.getAge(),u.getEmail(),hashedPassword,u.getPhoneNumber(),u.getAvatar(),accountType,u.getEnabled(),u.getRoleId());
+        jdbcTemplate.update(sql,u.getName(),u.getSurname(),u.getAge(),u.getEmail(),hashedPassword,u.getPhoneNumber(),u.getAvatar(),accountType,u.getEnabled(),roleId);
     }
 
     public void updateUser(UserEditDto u, Long userId) {

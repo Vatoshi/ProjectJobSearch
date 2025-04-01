@@ -10,4 +10,5 @@ databaseChangeLog:
               insert into role(role, authority_id)
               values('ADMIN', (select id from authority where authority = 'FULL')),
               ('GUEST', (select id from authority where authority = 'READ_ONLY')),
-              ('USER', (select id from authority where authority = 'EDIT'));
+              ('USER-APPLICANT', (select id from authority where authority = 'APPLICANT')),
+              ('USER-EMPLOYER', (select id from authority where authority = 'EMPLOYER'));
