@@ -80,7 +80,7 @@ public class VacancyDao {
 
         String placeholders = String.join(",", Collections.nCopies(categoryIds.size(), "?"));
         String sqlVacancies = String.format(
-                "SELECT * FROM vacancies WHERE category_id IN (%s", placeholders);
+                "SELECT * FROM vacancies WHERE category_id IN (%s)", placeholders);
 
         return jdbcTemplate.query(sqlVacancies, new BeanPropertyRowMapper<>(Vacancy.class), categoryIds.toArray());
     }
