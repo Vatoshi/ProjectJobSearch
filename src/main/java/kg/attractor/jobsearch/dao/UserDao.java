@@ -1,4 +1,5 @@
 package kg.attractor.jobsearch.dao;
+import kg.attractor.jobsearch.dto.UserEditDto;
 import kg.attractor.jobsearch.exeptions.NotFound;
 import kg.attractor.jobsearch.models.User;
 import lombok.Builder;
@@ -70,6 +71,28 @@ public class UserDao {
         String sql = "insert into users (name, surname, age, email, password, phone_number, avatar, account_type, enabled, role_id)" +
                 " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql,u.getName(),u.getSurname(),u.getAge(),u.getEmail(),hashedPassword,u.getPhoneNumber(),u.getAvatar(),accountType,u.isEnabled(),u.getRoleId());
+    }
+
+    public void updateUser(UserEditDto u, Long userId) {
+        String accountType = u.getAccountType().name();
+        String sql = "update users set name = ?," +
+                " surname = ?," +
+                " age = ?," +
+                " email = ?," +
+                " password = ?," +
+                " avatar = ?," +
+                " phone_number = ?," +
+                " account_type = ?" +
+                " where id = ?";
+        jdbcTemplate.update(sql,u.getName(),
+                u.getSurname(),
+                u.getAge(),
+                u.getEmail(),
+                u.getPassword(),
+                u.getAvatar(),
+                u.getPhoneNumber(),
+                accountType,
+                userId);
     }
 
     public String getExistEmail(String email) {

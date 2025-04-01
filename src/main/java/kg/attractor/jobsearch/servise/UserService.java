@@ -3,6 +3,7 @@ package kg.attractor.jobsearch.servise;
 import kg.attractor.jobsearch.dto.ImageDto;
 import kg.attractor.jobsearch.dto.UserDto;
 import kg.attractor.jobsearch.dao.UserDao;
+import kg.attractor.jobsearch.dto.UserEditDto;
 import kg.attractor.jobsearch.dto.UserFormDto;
 import kg.attractor.jobsearch.exeptions.AlreadyExists;
 import kg.attractor.jobsearch.exeptions.NotFound;
@@ -27,7 +28,7 @@ public class UserService {
                 .id(user.getId())
                 .age(user.getAge())
                 .surname(user.getSurname())
-                .phone(user.getPhoneNumber())
+                .phoneNumber(user.getPhoneNumber())
                 .accountType(user.getAccountType())
                 .name(user.getName())
                 .email(user.getEmail())
@@ -44,7 +45,7 @@ public class UserService {
                         .id(user.getId())
                         .age(user.getAge())
                         .surname(user.getSurname())
-                        .phone(user.getPhoneNumber())
+                        .phoneNumber(user.getPhoneNumber())
                         .accountType(user.getAccountType())
                         .name(user.getName())
                         .email(user.getEmail())
@@ -62,7 +63,7 @@ public class UserService {
                         .id(user.getId())
                         .age(user.getAge())
                         .surname(user.getSurname())
-                        .phone(user.getPhoneNumber())
+                        .phoneNumber(user.getPhoneNumber())
                         .accountType(user.getAccountType())
                         .name(user.getName())
                         .email(user.getEmail())
@@ -103,10 +104,24 @@ public class UserService {
         userDao.createAcc(newUser);
         return u;
     }
-//
-//    public UserFormDto editAcc(UserFormDto u) {
-//
-//    }
+
+    public UserEditDto editAcc(UserEditDto u, Long userId) {
+        User oldUser = userDao.findById(userId).orElseThrow(UsernameNotFound::new);
+        if (u.getName() == null) {u.setName(oldUser.getName());}
+        if (u.getSurname() == null) {u.setSurname(oldUser.getSurname());}
+        if (u.getAge() == null || u.getAge() < 14 || u.getAge() > 120) {u.setAge(oldUser.getAge());}
+        if (u.getEmail() == null || u.getEmail().equals(oldUser.getEmail())) {u.setEmail(oldUser.getEmail());} else {
+            if (userDao.getExistEmail(u.getEmail()).equals(u.getEmail())){
+                throw new AlreadyExists("User with email " + u.getEmail() + " already exists");}}
+        u.setPassword(oldUser.getPassword()); //сапорт сказал пароль тяжко будет менять из за BCrypt
+        if (u.getAvatar() == null) {u.setAvatar(oldUser.getAvatar());}
+        if (u.getPhoneNumber() == null) {u.setPhoneNumber(oldUser.getPhoneNumber());}
+        u.setAccountType(oldUser.getAccountType());
+
+        userDao.updateUser(u,userId);
+
+        return u;
+    }
 }
 
 

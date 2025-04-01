@@ -14,6 +14,6 @@ public class UserDto {
     private int age;
     private String email;
     private String avatar;
-    private String phone;
+    private String phoneNumber;
     private AccountType accountType;
 }

@@ -3,6 +3,7 @@
     import jakarta.validation.Valid;
     import kg.attractor.jobsearch.dto.ImageDto;
     import kg.attractor.jobsearch.dto.UserDto;
+    import kg.attractor.jobsearch.dto.UserEditDto;
     import kg.attractor.jobsearch.dto.UserFormDto;
     import kg.attractor.jobsearch.servise.UserService;
     import lombok.RequiredArgsConstructor;
@@ -23,6 +24,12 @@
         public ResponseEntity<UserFormDto> createUser(@Valid @RequestBody UserFormDto userFormDto) {
             userService.createAcc(userFormDto);
             return ResponseEntity.status(HttpStatus.CREATED).body(userFormDto);
+        }
+
+        @PostMapping("edit/{userId}")
+        public ResponseEntity<UserEditDto> editUser(@Valid @RequestBody UserEditDto userEditDto, @PathVariable Long userId) {
+            userService.editAcc(userEditDto, userId);
+            return ResponseEntity.status(HttpStatus.OK).body(userEditDto);
         }
 
         @PostMapping("add-avatar")

@@ -30,7 +30,7 @@ public class VacancyService {
                         .id(user.getId())
                         .age(user.getAge())
                         .surname(user.getSurname())
-                        .phone(user.getPhoneNumber())
+                        .phoneNumber(user.getPhoneNumber())
                         .accountType(user.getAccountType())
                         .name(user.getName())
                         .email(user.getEmail())
