@@ -31,6 +31,7 @@ public class UserFormDto {
     private String avatar;
     @NotNull(message = "ввод телефона обязателен")
     @Pattern(regexp = "^\\d{10}$", message = "10 цифр")
-    private String phone;
+    private String phoneNumber;
+    @NotNull(message = "notnull")
     private AccountType accountType;
 }

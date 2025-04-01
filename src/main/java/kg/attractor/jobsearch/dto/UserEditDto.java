@@ -1,5 +1,6 @@
 package kg.attractor.jobsearch.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.*;
 import kg.attractor.jobsearch.enums.AccountType;
 import lombok.AllArgsConstructor;
@@ -26,5 +27,4 @@ public class UserEditDto {
     private String avatar;
     @Pattern(regexp = "^\\d{10}$", message = "10 цифр")
     private String phoneNumber;
-    private AccountType accountType;
 }

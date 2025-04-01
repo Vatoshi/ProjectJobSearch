@@ -1,5 +1,6 @@
 package kg.attractor.jobsearch.dao;
 import kg.attractor.jobsearch.dto.UserEditDto;
+import kg.attractor.jobsearch.enums.AccountType;
 import kg.attractor.jobsearch.exeptions.NotFound;
 import kg.attractor.jobsearch.models.User;
 import lombok.Builder;
@@ -74,15 +75,13 @@ public class UserDao {
     }
 
     public void updateUser(UserEditDto u, Long userId) {
-        String accountType = u.getAccountType().name();
         String sql = "update users set name = ?," +
                 " surname = ?," +
                 " age = ?," +
                 " email = ?," +
                 " password = ?," +
                 " avatar = ?," +
-                " phone_number = ?," +
-                " account_type = ?" +
+                " phone_number = ?" +
                 " where id = ?";
         jdbcTemplate.update(sql,u.getName(),
                 u.getSurname(),
@@ -91,7 +90,6 @@ public class UserDao {
                 u.getPassword(),
                 u.getAvatar(),
                 u.getPhoneNumber(),
-                accountType,
                 userId);
     }
 

@@ -5,12 +5,14 @@ import kg.attractor.jobsearch.dto.UserDto;
 import kg.attractor.jobsearch.dao.UserDao;
 import kg.attractor.jobsearch.dto.UserEditDto;
 import kg.attractor.jobsearch.dto.UserFormDto;
+import kg.attractor.jobsearch.enums.AccountType;
 import kg.attractor.jobsearch.exeptions.AlreadyExists;
 import kg.attractor.jobsearch.exeptions.NotFound;
 import kg.attractor.jobsearch.exeptions.UsernameNotFound;
 import kg.attractor.jobsearch.models.User;
 import kg.attractor.jobsearch.util.FileUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -79,7 +81,7 @@ public class UserService {
         return filename;
     }
 
-    public UserFormDto createAcc(UserFormDto u) {
+    public UserFormDto createAcc(UserFormDto u)  throws HttpMessageNotReadableException  {
         String gmail = u.getEmail();
         if (u.getEmail() == null || gmail.equals(userDao.getExistEmail(u.getEmail()))) {
             throw new AlreadyExists("User with email " + u.getEmail() + " already exists");
@@ -87,7 +89,6 @@ public class UserService {
         if (u.getAvatar() == null) {
             u.setAvatar("Default.png");
         }
-
         User newUser = User.builder()
                 .name(u.getName())
                 .surname(u.getSurname())
@@ -95,7 +96,7 @@ public class UserService {
                 .avatar(u.getAvatar())
                 .email(u.getEmail())
                 .password(u.getPassword())
-                .phoneNumber(u.getPhone())
+                .phoneNumber(u.getPhoneNumber())
                 .accountType(u.getAccountType())
                 .enabled(true)
                 .roleId(u.getAccountType() == null ? 2L : 3L)
@@ -105,21 +106,19 @@ public class UserService {
         return u;
     }
 
-    public UserEditDto editAcc(UserEditDto u, Long userId) {
+    public UserEditDto editAcc(UserEditDto u, Long userId) throws HttpMessageNotReadableException {
         User oldUser = userDao.findById(userId).orElseThrow(UsernameNotFound::new);
         if (u.getName() == null) {u.setName(oldUser.getName());}
         if (u.getSurname() == null) {u.setSurname(oldUser.getSurname());}
         if (u.getAge() == null || u.getAge() < 14 || u.getAge() > 120) {u.setAge(oldUser.getAge());}
-        if (u.getEmail() == null || u.getEmail().equals(oldUser.getEmail())) {u.setEmail(oldUser.getEmail());} else {
-            if (userDao.getExistEmail(u.getEmail()).equals(u.getEmail())){
-                throw new AlreadyExists("User with email " + u.getEmail() + " already exists");}}
+
+        if (userDao.getExistEmail(u.getEmail()) != null) { throw new AlreadyExists("User with email " + u.getEmail() + " already exists");}
+        if (u.getEmail() == null) {u.setEmail(oldUser.getEmail());}
         u.setPassword(oldUser.getPassword()); //сапорт сказал пароль тяжко будет менять из за BCrypt
         if (u.getAvatar() == null) {u.setAvatar(oldUser.getAvatar());}
         if (u.getPhoneNumber() == null) {u.setPhoneNumber(oldUser.getPhoneNumber());}
-        u.setAccountType(oldUser.getAccountType());
 
         userDao.updateUser(u,userId);
-
         return u;
     }
 }
