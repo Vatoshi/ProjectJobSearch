@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 public class Category {
     private String name;
-    private int parentId;
+    private Long parentId;
     private Long id;
 }

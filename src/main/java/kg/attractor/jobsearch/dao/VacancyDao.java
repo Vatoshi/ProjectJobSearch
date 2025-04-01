@@ -1,6 +1,7 @@
 package kg.attractor.jobsearch.dao;
 import kg.attractor.jobsearch.dto.ResumeDto;
 import kg.attractor.jobsearch.dto.VacancyDto;
+import kg.attractor.jobsearch.dto.VacancyEditDto;
 import kg.attractor.jobsearch.exeptions.EntityForDeleteNotFound;
 import kg.attractor.jobsearch.exeptions.NotFound;
 import kg.attractor.jobsearch.exeptions.ResumeFromUserNotFound;
@@ -132,7 +133,7 @@ public class VacancyDao {
         return Optional.ofNullable(DataAccessUtils.singleResult(jdbcTemplate.query("select * from vacancies where id = ?", new BeanPropertyRowMapper<>(Vacancy.class), vacancyId)));
     }
 
-    public VacancyDto updateVacancy(VacancyDto vacancyDto, Long vacancyId) {
+    public VacancyEditDto updateVacancy(VacancyEditDto vacancyDto, Long vacancyId) {
         String sql = "update vacancies set name = ?, description = ?, category_id = ?, salary = ?, exp_from = ?, exp_to = ?, is_active = ?, update_time = ? where id = ?";
         jdbcTemplate.update(sql,vacancyDto.getName(), vacancyDto.getDescription(),vacancyDto.getCategoryId(),vacancyDto.getSalary(), vacancyDto.getExpFrom(), vacancyDto.getExpTo(), vacancyDto.getIsActive(), vacancyDto.getUpdateTime(), vacancyId);
         return vacancyDto;

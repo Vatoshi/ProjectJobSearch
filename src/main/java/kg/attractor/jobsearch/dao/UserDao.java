@@ -71,7 +71,7 @@ public class UserDao {
         }
         String sql = "insert into users (name, surname, age, email, password, phone_number, avatar, account_type, enabled, role_id)" +
                 " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        jdbcTemplate.update(sql,u.getName(),u.getSurname(),u.getAge(),u.getEmail(),hashedPassword,u.getPhoneNumber(),u.getAvatar(),accountType,u.isEnabled(),u.getRoleId());
+        jdbcTemplate.update(sql,u.getName(),u.getSurname(),u.getAge(),u.getEmail(),hashedPassword,u.getPhoneNumber(),u.getAvatar(),accountType,u.getEnabled(),u.getRoleId());
     }
 
     public void updateUser(UserEditDto u, Long userId) {

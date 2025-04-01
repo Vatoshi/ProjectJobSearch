@@ -14,8 +14,8 @@ import java.time.LocalDateTime;
 public class Resume {
     private Long applicantId;
     private String name;
-    private int categoryId;
-    private double salary;
+    private Integer categoryId;
+    private Double salary;
     private Boolean isActive;
     private LocalDateTime createdDate;
     private LocalDateTime updateTime;

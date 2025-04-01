@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import kg.attractor.jobsearch.dao.VacancyDao;
 import kg.attractor.jobsearch.dto.UserDto;
 import kg.attractor.jobsearch.dto.VacancyDto;
+import kg.attractor.jobsearch.dto.VacancyEditDto;
 import kg.attractor.jobsearch.exeptions.NotFound;
 import kg.attractor.jobsearch.models.Vacancy;
 import kg.attractor.jobsearch.servise.VacancyService;
@@ -48,7 +49,7 @@ public class VacancyController {
     }
 
     @PostMapping("edit/{resumeId}")
-    public ResponseEntity<VacancyDto> editVacancy(@PathVariable Long resumeId, @RequestBody VacancyDto vacancyDto) {
+    public ResponseEntity<VacancyEditDto> editVacancy(@PathVariable Long resumeId, @RequestBody VacancyEditDto vacancyDto) {
         return vacancyService.updateResume(resumeId, vacancyDto);
     }
 

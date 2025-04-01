@@ -15,9 +15,9 @@ public class Vacancy {
     private String name;
     private String description;
     private Long categoryId;
-    private double salary;
-    private int expFrom;
-    private int expTo;
+    private Double salary;
+    private Integer expFrom;
+    private Integer expTo;
     private Boolean isActive;
     private Long authorId;
     private LocalDateTime createdDate;

@@ -4,6 +4,7 @@ import kg.attractor.jobsearch.dao.VacancyDao;
 import kg.attractor.jobsearch.dto.ResumeDto;
 import kg.attractor.jobsearch.dto.UserDto;
 import kg.attractor.jobsearch.dto.VacancyDto;
+import kg.attractor.jobsearch.dto.VacancyEditDto;
 import kg.attractor.jobsearch.exeptions.NotFound;
 import kg.attractor.jobsearch.exeptions.ResumeFromUserNotFound;
 import kg.attractor.jobsearch.models.Resume;
@@ -57,21 +58,21 @@ public class VacancyService {
     }
 
     public List<VacancyDto> getAllVacancies() throws NotFound {
-       return vacancyDao.getAllVacancies()
-               .stream()
-               .map(vacancy -> VacancyDto.builder()
-                       .name(vacancy.getName())
-                       .description(vacancy.getDescription())
-                       .expFrom(vacancy.getExpFrom())
-                       .expTo(vacancy.getExpTo())
-                       .categoryId(vacancy.getCategoryId())
-                       .createdDate(vacancy.getCreatedDate())
-                       .updateTime(vacancy.getUpdateTime())
-                       .isActive(vacancy.getIsActive())
-                       .salary(vacancy.getSalary())
-                       .build())
-               .filter(VacancyDto::getIsActive)
-               .toList();
+        return vacancyDao.getAllVacancies()
+                .stream()
+                .map(vacancy -> VacancyDto.builder()
+                        .name(vacancy.getName())
+                        .description(vacancy.getDescription())
+                        .expFrom(vacancy.getExpFrom())
+                        .expTo(vacancy.getExpTo())
+                        .categoryId(vacancy.getCategoryId())
+                        .createdDate(vacancy.getCreatedDate())
+                        .updateTime(vacancy.getUpdateTime())
+                        .isActive(vacancy.getIsActive())
+                        .salary(vacancy.getSalary())
+                        .build())
+                .filter(VacancyDto::getIsActive)
+                .toList();
     }
 
     public List<VacancyDto> getApplicantsForVacancy(Long user) throws NotFound {
@@ -117,24 +118,26 @@ public class VacancyService {
         return vacancyDao.deleteVacancy(vacancyId);
     }
 
-    public ResponseEntity<VacancyDto> updateResume(Long vacancyId, VacancyDto vacancyDto) throws NotFound {
+    public ResponseEntity<VacancyEditDto> updateResume(Long vacancyId, VacancyEditDto vacancyDto) throws NotFound {
         Vacancy oldVacancy = vacancyDao.getVacancy(vacancyId)
                 .orElseThrow(() -> new NotFound("Vacancy not found"));
-
-        if (vacancyDto.getName().equalsIgnoreCase("") || vacancyDto.getName().isEmpty()) {
-            vacancyDto.setName(oldVacancy.getName());
-        }
-        if (vacancyDto.getDescription().equalsIgnoreCase("") || vacancyDto.getDescription().isEmpty()) {
-            vacancyDto.setDescription(oldVacancy.getDescription());
-        }
+        if (vacancyDto.getName() == null) {
+            vacancyDto.setName(oldVacancy.getName());}
+        if (vacancyDto.getDescription() == null) {
+            vacancyDto.setDescription(oldVacancy.getDescription());}
         if (vacancyDto.getCategoryId() == null) {
-            vacancyDto.setCategoryId(oldVacancy.getCategoryId());
-        }
-
-        LocalDateTime oldCreatedDate = oldVacancy.getCreatedDate();
-        vacancyDto.setCreatedDate(oldCreatedDate);
+            vacancyDto.setCategoryId(oldVacancy.getCategoryId());}
+        if (vacancyDto.getSalary() == null || vacancyDto.getSalary() < 0) {
+            vacancyDto.setSalary(oldVacancy.getSalary());}
+        if (vacancyDto.getExpFrom() == null || vacancyDto.getExpFrom() < 0) {
+            vacancyDto.setExpFrom(oldVacancy.getExpFrom());}
+        if (vacancyDto.getExpTo() == null || vacancyDto.getExpTo() < 0) {
+            vacancyDto.setExpTo(oldVacancy.getExpTo());}
+        if (vacancyDto.getIsActive() == null || vacancyDto.getIsActive()) {vacancyDto.setIsActive(oldVacancy.getIsActive());}
+        vacancyDto.setCreatedDate(oldVacancy.getCreatedDate());
         vacancyDto.setUpdateTime(LocalDateTime.now());
-        vacancyDao.updateVacancy(vacancyDto,vacancyId);
+        vacancyDao.updateVacancy(vacancyDto, vacancyId);
+
         return ResponseEntity.status(HttpStatus.OK).body(vacancyDto);
     }
 }

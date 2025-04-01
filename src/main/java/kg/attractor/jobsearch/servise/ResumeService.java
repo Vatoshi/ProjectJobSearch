@@ -96,14 +96,13 @@ public class ResumeService {
                     .orElseThrow(() -> new NotFound("Could not find resume with id: " + resumeId));
 
             if (resumeDto.getName() == null || resumeDto.getName().isBlank()) {
-                resumeDto.setName(oldResume.getName());
-            }
-            if (resumeDto.getCategoryId() == 0 || resumeDto.getCategoryId() < 0) {
-                resumeDto.setCategoryId(oldResume.getCategoryId());
-            }
-            if (resumeDto.getSalary() == 0 || resumeDto.getSalary() < 0) {
-                resumeDto.setSalary(oldResume.getSalary());
-            }
+                resumeDto.setName(oldResume.getName());}
+            if (resumeDto.getCategoryId() == null || resumeDto.getCategoryId() <= 0) {
+                resumeDto.setCategoryId(oldResume.getCategoryId());}
+            if (resumeDto.getSalary() == null || resumeDto.getSalary() <= 0) {
+                resumeDto.setSalary(oldResume.getSalary());}
+            if (resumeDto.getIsActive() == null || resumeDto.getIsActive()) {
+                resumeDto.setIsActive(oldResume.getIsActive());}
 
             if (resumeDto.getEducationInfo() == null) {
                 EducationInfoDto oldEduc = resumeDao.getEducationInfo(oldResume.getId());
@@ -111,16 +110,14 @@ public class ResumeService {
                 resumeDao.updateEducationInfo(resumeId, oldEduc);
             } else {
                 EducationInfoDto educDto = resumeDto.getEducationInfo().getFirst();
-                resumeDao.updateEducationInfo(resumeId, educDto);
-            }
+                resumeDao.updateEducationInfo(resumeId, educDto);}
             if (resumeDto.getWorkExperienceInfo() == null) {
                 WorkExperienceInfoDto oldWorkExperience = resumeDao.getWorkExperienceInfo(oldResume.getId());
                 resumeDto.setWorkExperienceInfo(List.of(oldWorkExperience));
                 resumeDao.updateWorkExperienceInfo(resumeId, oldWorkExperience);
             } else {
                 WorkExperienceInfoDto workDto = resumeDto.getWorkExperienceInfo().getFirst();
-                resumeDao.updateWorkExperienceInfo(resumeId, workDto);
-            }
+                resumeDao.updateWorkExperienceInfo(resumeId, workDto);}
 
             LocalDateTime oldCreatedDate = oldResume.getCreatedDate();
             resumeDto.setCreatedDate(oldCreatedDate);
