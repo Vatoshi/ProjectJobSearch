@@ -3,11 +3,16 @@ package kg.attractor.jobsearch.servise;
 import kg.attractor.jobsearch.dto.ImageDto;
 import kg.attractor.jobsearch.dto.UserDto;
 import kg.attractor.jobsearch.dao.UserDao;
+import kg.attractor.jobsearch.dto.UserEditDto;
+import kg.attractor.jobsearch.dto.UserFormDto;
+import kg.attractor.jobsearch.enums.AccountType;
+import kg.attractor.jobsearch.exeptions.AlreadyExists;
 import kg.attractor.jobsearch.exeptions.NotFound;
 import kg.attractor.jobsearch.exeptions.UsernameNotFound;
 import kg.attractor.jobsearch.models.User;
 import kg.attractor.jobsearch.util.FileUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,7 +30,7 @@ public class UserService {
                 .id(user.getId())
                 .age(user.getAge())
                 .surname(user.getSurname())
-                .phone(user.getPhoneNumber())
+                .phoneNumber(user.getPhoneNumber())
                 .accountType(user.getAccountType())
                 .name(user.getName())
                 .email(user.getEmail())
@@ -42,7 +47,7 @@ public class UserService {
                         .id(user.getId())
                         .age(user.getAge())
                         .surname(user.getSurname())
-                        .phone(user.getPhoneNumber())
+                        .phoneNumber(user.getPhoneNumber())
                         .accountType(user.getAccountType())
                         .name(user.getName())
                         .email(user.getEmail())
@@ -60,7 +65,7 @@ public class UserService {
                         .id(user.getId())
                         .age(user.getAge())
                         .surname(user.getSurname())
-                        .phone(user.getPhoneNumber())
+                        .phoneNumber(user.getPhoneNumber())
                         .accountType(user.getAccountType())
                         .name(user.getName())
                         .email(user.getEmail())
@@ -74,6 +79,47 @@ public class UserService {
         String filename = fileUtil.saveUploadFile(imageDto.getImage(), "images/");
         userDao.save(filename,imageDto.getUserId());
         return filename;
+    }
+
+    public UserFormDto createAcc(UserFormDto u)  throws HttpMessageNotReadableException  {
+        String gmail = u.getEmail();
+        if (u.getEmail() == null || gmail.equals(userDao.getExistEmail(u.getEmail()))) {
+            throw new AlreadyExists("User with email " + u.getEmail() + " already exists");
+        }
+        if (u.getAvatar() == null) {
+            u.setAvatar("Default.png");
+        }
+        User newUser = User.builder()
+                .name(u.getName())
+                .surname(u.getSurname())
+                .age(u.getAge())
+                .avatar(u.getAvatar())
+                .email(u.getEmail())
+                .password(u.getPassword())
+                .phoneNumber(u.getPhoneNumber())
+                .accountType(u.getAccountType())
+                .enabled(true)
+                .roleId(u.getAccountType() == null ? 2L : 3L)
+                .build();
+
+        userDao.createAcc(newUser);
+        return u;
+    }
+
+    public UserEditDto editAcc(UserEditDto u, Long userId) throws HttpMessageNotReadableException {
+        User oldUser = userDao.findById(userId).orElseThrow(UsernameNotFound::new);
+        if (u.getName() == null) {u.setName(oldUser.getName());}
+        if (u.getSurname() == null) {u.setSurname(oldUser.getSurname());}
+        if (u.getAge() == null || u.getAge() < 14 || u.getAge() > 120) {u.setAge(oldUser.getAge());}
+
+        if (userDao.getExistEmail(u.getEmail()) != null) { throw new AlreadyExists("User with email " + u.getEmail() + " already exists");}
+        if (u.getEmail() == null) {u.setEmail(oldUser.getEmail());}
+        u.setPassword(oldUser.getPassword()); //сапорт сказал пароль тяжко будет менять из за BCrypt
+        if (u.getAvatar() == null) {u.setAvatar(oldUser.getAvatar());}
+        if (u.getPhoneNumber() == null) {u.setPhoneNumber(oldUser.getPhoneNumber());}
+
+        userDao.updateUser(u,userId);
+        return u;
     }
 }
 

@@ -1,15 +1,16 @@
 package kg.attractor.jobsearch.servise;
 import kg.attractor.jobsearch.dao.ResumeDao;
+import kg.attractor.jobsearch.dto.EducationInfoDto;
 import kg.attractor.jobsearch.dto.ResumeDto;
-import kg.attractor.jobsearch.exeptions.EntityForDeleteNotFound;
+import kg.attractor.jobsearch.dto.WorkExperienceInfoDto;
 import kg.attractor.jobsearch.exeptions.NotFound;
-import kg.attractor.jobsearch.exeptions.UserStatusExeption;
+import kg.attractor.jobsearch.models.EducationInfo;
 import kg.attractor.jobsearch.models.Resume;
+import kg.attractor.jobsearch.models.WorkExperienceInfo;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataAccessException;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,17 +19,17 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ResumeService {
+    private final UserService dao;
     private final ResumeDao resumeDao;
-    private final JdbcTemplate jdbcTemplate;
 
     public List<ResumeDto> getResumesById(String categoryName) throws NotFound {
-        List<Resume> resumes = resumeDao.findByCategory(categoryName);
+        List<Resume> resumes = resumeDao.findByCategory(categoryName).stream().filter(Resume::getIsActive).toList();
         return resumes.stream()
                 .map(resume -> ResumeDto.builder()
                         .name(resume.getName())
                         .categoryId(resume.getCategoryId())
                         .salary(resume.getSalary())
-                        .isActive(resume.isActive())
+                        .isActive(resume.getIsActive())
                         .updateTime(resume.getUpdateTime())
                         .createdDate(resume.getCreatedDate())
                         .build())
@@ -36,16 +37,17 @@ public class ResumeService {
     }
 
     public List<ResumeDto> getResumesByAplicant(Long userId) {
-        List<Resume> resumes = resumeDao.findByUser(userId);
+        List<Resume> resumes = resumeDao.findByUser(userId).stream().filter(Resume::getIsActive).toList();
         if (resumes.isEmpty()) {
             throw new NotFound("resume not found");
         }
+
         return resumes.stream()
                 .map(resume -> ResumeDto.builder()
                         .name(resume.getName())
                         .categoryId(resume.getCategoryId())
                         .salary(resume.getSalary())
-                        .isActive(resume.isActive())
+                        .isActive(resume.getIsActive())
                         .updateTime(resume.getUpdateTime())
                         .createdDate(resume.getCreatedDate())
                         .build())
@@ -59,80 +61,68 @@ public class ResumeService {
                 .name(resume.getName())
                 .categoryId(resume.getCategoryId())
                 .salary(resume.getSalary())
-                .isActive(resume.isActive())
+                .isActive(resume.getIsActive())
                 .updateTime(resume.getUpdateTime())
                 .createdDate(resume.getCreatedDate())
+                .educationInfo(List.of(resumeDao.getEducationInfo(resumeId)))
+                .workExperienceInfo(List.of(resumeDao.getWorkExperienceInfo(resumeId)))
                 .build();
     }
 
     public ResponseEntity<ResumeDto> createResume(ResumeDto resumeDto) throws IllegalArgumentException {
-        resumeDto.setCreatedDate(LocalDateTime.now());
-        resumeDto.setUpdateTime(LocalDateTime.now());
+            resumeDto.setCreatedDate(LocalDateTime.now());
+            resumeDto.setUpdateTime(LocalDateTime.now());
 
-        Resume resume = new Resume();
-        resume.setName(resumeDto.getName());
-        resume.setCategoryId(resumeDto.getCategoryId());
-        resume.setSalary(resumeDto.getSalary());
-        resume.setActive(resumeDto.isActive());
-        resume.setUpdateTime(resumeDto.getUpdateTime());
-        resume.setCreatedDate(LocalDateTime.now());
-        resume.setApplicantId(1L);
-        // у меня builder ломает предыдущие методы
+        Resume resume = Resume.builder()
+                .applicantId(1L)
+                .name(resumeDto.getName())
+                .categoryId(resumeDto.getCategoryId())
+                .salary(resumeDto.getSalary())
+                .isActive(resumeDto.getIsActive())
+                .updateTime(resumeDto.getUpdateTime())
+                .createdDate(resumeDto.getCreatedDate())
+                .build();
 
-        String sqltype = "select account_type from users where id = ?";
-        String typename = jdbcTemplate.queryForObject(sqltype, String.class, resume.getApplicantId());
-        if (typename == null || !typename.equalsIgnoreCase("applicant")) {
-            throw new UserStatusExeption("wrong user status");
-        }
-
-            try {
-                String sql = "insert into resumes(applicant_id, name, category_id, salary, is_active, created_date) values(?, ?, ?, ?, ?, ?)";
-                jdbcTemplate.update(sql,
-                        resume.getApplicantId(),
-                        resume.getName(),
-                        resume.getCategoryId(),
-                        resume.getSalary(),
-                        resume.isActive(),
-                        resume.getCreatedDate()
-                );
-                return ResponseEntity.status(HttpStatus.CREATED).body(resumeDto);
-            } catch (DataAccessException e) {
-                throw new RuntimeException("Ошибка при добавлении резюме: " + e.getMessage(), e);
-            }
-        }
+            resumeDao.createResume(resumeDto, resume);
+            return ResponseEntity.status(HttpStatus.CREATED).body(resumeDto);
+    }
 
         public HttpStatus deleteResume(Long resumeId) {
-            String sql = "delete from resumes where id = ?";
-            int resumefound = jdbcTemplate.update(sql, resumeId);
-
-            if (resumefound == 0) {
-                throw new EntityForDeleteNotFound("resume not found");
-            }
-            return HttpStatus.ACCEPTED;
+            return resumeDao.deleteResume(resumeId);
         }
 
         public ResponseEntity<ResumeDto> updateResume(Long resumeId, ResumeDto resumeDto) {
+            Resume oldResume = resumeDao.findResumeById(resumeId)
+                    .orElseThrow(() -> new NotFound("Could not find resume with id: " + resumeId));
+
             if (resumeDto.getName() == null || resumeDto.getName().isBlank()) {
-                String oldName = jdbcTemplate.queryForObject("select name from resumes where id = ?", String.class, resumeId);
-                resumeDto.setName(oldName);
-            }
+                resumeDto.setName(oldResume.getName());}
+            if (resumeDto.getCategoryId() == null || resumeDto.getCategoryId() <= 0) {
+                resumeDto.setCategoryId(oldResume.getCategoryId());}
+            if (resumeDto.getSalary() == null || resumeDto.getSalary() <= 0) {
+                resumeDto.setSalary(oldResume.getSalary());}
+            if (resumeDto.getIsActive() == null || resumeDto.getIsActive()) {
+                resumeDto.setIsActive(oldResume.getIsActive());}
 
-            if (resumeDto.getCategoryId() == 0 || resumeDto.getCategoryId() < 0) {
-                int oldId = jdbcTemplate.queryForObject("select category_id from resumes where id = ?", Integer.class, resumeId);
-                resumeDto.setCategoryId(oldId);
-            }
+            if (resumeDto.getEducationInfo() == null) {
+                EducationInfoDto oldEduc = resumeDao.getEducationInfo(oldResume.getId());
+                resumeDto.setEducationInfo(List.of(oldEduc));
+                resumeDao.updateEducationInfo(resumeId, oldEduc);
+            } else {
+                EducationInfoDto educDto = resumeDto.getEducationInfo().getFirst();
+                resumeDao.updateEducationInfo(resumeId, educDto);}
+            if (resumeDto.getWorkExperienceInfo() == null) {
+                WorkExperienceInfoDto oldWorkExperience = resumeDao.getWorkExperienceInfo(oldResume.getId());
+                resumeDto.setWorkExperienceInfo(List.of(oldWorkExperience));
+                resumeDao.updateWorkExperienceInfo(resumeId, oldWorkExperience);
+            } else {
+                WorkExperienceInfoDto workDto = resumeDto.getWorkExperienceInfo().getFirst();
+                resumeDao.updateWorkExperienceInfo(resumeId, workDto);}
 
-            if (resumeDto.getSalary() == 0 || resumeDto.getSalary() < 0) {
-                Double oldSalary = jdbcTemplate.queryForObject("select salary from resumes where id = ?", Double.class, resumeId);
-                resumeDto.setSalary(oldSalary);
-            }
-
-            LocalDateTime oldCreatedDate = jdbcTemplate.queryForObject("select created_date from resumes where id = ?", LocalDateTime.class, resumeId);
+            LocalDateTime oldCreatedDate = oldResume.getCreatedDate();
             resumeDto.setCreatedDate(oldCreatedDate);
             resumeDto.setUpdateTime(LocalDateTime.now());
-
-            String sql = "update resumes set name = ?, category_id = ?, salary = ?, is_active = ?, update_time = ? where id = ?";
-            jdbcTemplate.update(sql,resumeDto.getName(), resumeDto.getCategoryId(), resumeDto.getSalary(), resumeDto.isActive(), resumeDto.getUpdateTime(), resumeId);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(resumeDto);
+            resumeDao.updateResume(resumeDto,resumeId);
+            return ResponseEntity.status(HttpStatus.OK).body(resumeDto);
         }
 }

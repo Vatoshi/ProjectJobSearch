@@ -1,5 +1,7 @@
 package kg.attractor.jobsearch.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,16 +20,15 @@ public class VacancyDto {
     private String description;
     private Long categoryId;
     @PositiveOrZero
-    private double salary;
+    private Double salary;
     @PositiveOrZero
-    private int expFrom;
+    private Integer expFrom;
     @PositiveOrZero
-    private int expTo;
-    private boolean isActive;
-    private int authorId;
+    private Integer expTo;
+    @JsonProperty("isActive")
+    private Boolean isActive;
     @PastOrPresent
     private LocalDateTime createdDate;
     @PastOrPresent
-    private LocalDateTime updatedTime;
-    private Long id;
+    private LocalDateTime updateTime;
 }

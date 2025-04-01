@@ -6,6 +6,6 @@ import lombok.Data;
 public class RespondedApplicant {
     private Long resumeId;
     private Long vacancyId;
-    private boolean confirmation;
+    private Boolean confirmation;
     private Long id;
 }

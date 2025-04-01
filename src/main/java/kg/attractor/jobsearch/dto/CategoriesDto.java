@@ -10,5 +10,5 @@ import lombok.Setter;
 @Builder
 public class CategoriesDto {
     String name;
-    private int parentId;
+    private Integer parentId;
 }

@@ -1,13 +1,22 @@
 package kg.attractor.jobsearch.servise;
 
 import kg.attractor.jobsearch.dao.VacancyDao;
+import kg.attractor.jobsearch.dto.ResumeDto;
 import kg.attractor.jobsearch.dto.UserDto;
 import kg.attractor.jobsearch.dto.VacancyDto;
+import kg.attractor.jobsearch.dto.VacancyEditDto;
 import kg.attractor.jobsearch.exeptions.NotFound;
 import kg.attractor.jobsearch.exeptions.ResumeFromUserNotFound;
+import kg.attractor.jobsearch.models.Resume;
+import kg.attractor.jobsearch.models.Vacancy;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -22,7 +31,7 @@ public class VacancyService {
                         .id(user.getId())
                         .age(user.getAge())
                         .surname(user.getSurname())
-                        .phone(user.getPhoneNumber())
+                        .phoneNumber(user.getPhoneNumber())
                         .accountType(user.getAccountType())
                         .name(user.getName())
                         .email(user.getEmail())
@@ -34,56 +43,101 @@ public class VacancyService {
         return vacancyDao.findByCategory(category)
                 .stream()
                 .map(vacancy -> VacancyDto.builder()
-                        .id(vacancy.getId())
                         .name(vacancy.getName())
                         .description(vacancy.getDescription())
                         .expFrom(vacancy.getExpFrom())
                         .expTo(vacancy.getExpTo())
-                        .authorId(vacancy.getAuthorId())
                         .categoryId(vacancy.getCategoryId())
                         .createdDate(vacancy.getCreatedDate())
-                        .updatedTime(vacancy.getUpdatedTime())
-                        .isActive(vacancy.isActive())
+                        .updateTime(vacancy.getUpdateTime())
+                        .isActive(vacancy.getIsActive())
                         .salary(vacancy.getSalary())
                         .build())
+                .filter(VacancyDto::getIsActive)
                 .toList();
     }
 
     public List<VacancyDto> getAllVacancies() throws NotFound {
-       return vacancyDao.getAllVacancies()
-               .stream()
-               .map(vacancy -> VacancyDto.builder()
-                       .id(vacancy.getId())
-                       .name(vacancy.getName())
-                       .description(vacancy.getDescription())
-                       .expFrom(vacancy.getExpFrom())
-                       .expTo(vacancy.getExpTo())
-                       .authorId(vacancy.getAuthorId())
-                       .categoryId(vacancy.getCategoryId())
-                       .createdDate(vacancy.getCreatedDate())
-                       .updatedTime(vacancy.getUpdatedTime())
-                       .isActive(vacancy.isActive())
-                       .salary(vacancy.getSalary())
-                       .build())
-               .toList();
+        return vacancyDao.getAllVacancies()
+                .stream()
+                .map(vacancy -> VacancyDto.builder()
+                        .name(vacancy.getName())
+                        .description(vacancy.getDescription())
+                        .expFrom(vacancy.getExpFrom())
+                        .expTo(vacancy.getExpTo())
+                        .categoryId(vacancy.getCategoryId())
+                        .createdDate(vacancy.getCreatedDate())
+                        .updateTime(vacancy.getUpdateTime())
+                        .isActive(vacancy.getIsActive())
+                        .salary(vacancy.getSalary())
+                        .build())
+                .filter(VacancyDto::getIsActive)
+                .toList();
     }
 
     public List<VacancyDto> getApplicantsForVacancy(Long user) throws NotFound {
         return vacancyDao.getVacanciesResponses(user)
                 .stream()
                 .map(vacancy -> VacancyDto.builder()
-                        .id(vacancy.getId())
                         .name(vacancy.getName())
                         .description(vacancy.getDescription())
                         .expFrom(vacancy.getExpFrom())
                         .expTo(vacancy.getExpTo())
-                        .authorId(vacancy.getAuthorId())
                         .categoryId(vacancy.getCategoryId())
                         .createdDate(vacancy.getCreatedDate())
-                        .updatedTime(vacancy.getUpdatedTime())
-                        .isActive(vacancy.isActive())
+                        .updateTime(vacancy.getUpdateTime())
+                        .isActive(vacancy.getIsActive())
                         .salary(vacancy.getSalary())
                         .build())
+                .filter(VacancyDto::getIsActive)
                 .toList();
+    }
+
+    public ResponseEntity<VacancyDto> createVacancy(VacancyDto vacancyDto) throws IllegalArgumentException {
+        vacancyDto.setCreatedDate(LocalDateTime.now());
+        vacancyDto.setUpdateTime(LocalDateTime.now());
+
+        Vacancy vacancy = Vacancy.builder()
+                .authorId(2L)
+                .name(vacancyDto.getName())
+                .categoryId(vacancyDto.getCategoryId())
+                .salary(vacancyDto.getSalary())
+                .isActive(vacancyDto.getIsActive())
+                .updateTime(vacancyDto.getUpdateTime())
+                .createdDate(vacancyDto.getCreatedDate())
+                .expFrom(vacancyDto.getExpFrom())
+                .expTo(vacancyDto.getExpTo())
+                .description(vacancyDto.getDescription())
+                .build();
+
+        vacancyDao.createVacancy(vacancyDto, vacancy);
+        return ResponseEntity.status(HttpStatus.CREATED).body(vacancyDto);
+    }
+
+    public HttpStatus deleteVacancy(Long vacancyId) throws NotFound {
+        return vacancyDao.deleteVacancy(vacancyId);
+    }
+
+    public ResponseEntity<VacancyEditDto> updateResume(Long vacancyId, VacancyEditDto vacancyDto) throws NotFound {
+        Vacancy oldVacancy = vacancyDao.getVacancy(vacancyId)
+                .orElseThrow(() -> new NotFound("Vacancy not found"));
+        if (vacancyDto.getName() == null) {
+            vacancyDto.setName(oldVacancy.getName());}
+        if (vacancyDto.getDescription() == null) {
+            vacancyDto.setDescription(oldVacancy.getDescription());}
+        if (vacancyDto.getCategoryId() == null) {
+            vacancyDto.setCategoryId(oldVacancy.getCategoryId());}
+        if (vacancyDto.getSalary() == null || vacancyDto.getSalary() < 0) {
+            vacancyDto.setSalary(oldVacancy.getSalary());}
+        if (vacancyDto.getExpFrom() == null || vacancyDto.getExpFrom() < 0) {
+            vacancyDto.setExpFrom(oldVacancy.getExpFrom());}
+        if (vacancyDto.getExpTo() == null || vacancyDto.getExpTo() < 0) {
+            vacancyDto.setExpTo(oldVacancy.getExpTo());}
+        if (vacancyDto.getIsActive() == null || vacancyDto.getIsActive()) {vacancyDto.setIsActive(oldVacancy.getIsActive());}
+        vacancyDto.setCreatedDate(oldVacancy.getCreatedDate());
+        vacancyDto.setUpdateTime(LocalDateTime.now());
+        vacancyDao.updateVacancy(vacancyDto, vacancyId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(vacancyDto);
     }
 }

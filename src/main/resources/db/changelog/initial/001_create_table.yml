@@ -198,6 +198,8 @@ databaseChangeLog:
               - column:
                   name: resume_id
                   type: bigint
+                  constraints:
+                    nullable: false
               - column:
                   name: value_
                   type: varchar(255)
@@ -265,6 +267,8 @@ databaseChangeLog:
               - column:
                   name: resume_id
                   type: bigint
+                  constraints:
+                    nullable: false
               - column:
                   name: institution
                   type: varchar(255)

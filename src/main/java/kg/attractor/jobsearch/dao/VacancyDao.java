@@ -1,15 +1,26 @@
 package kg.attractor.jobsearch.dao;
+import kg.attractor.jobsearch.dto.ResumeDto;
+import kg.attractor.jobsearch.dto.VacancyDto;
+import kg.attractor.jobsearch.dto.VacancyEditDto;
+import kg.attractor.jobsearch.exeptions.EntityForDeleteNotFound;
 import kg.attractor.jobsearch.exeptions.NotFound;
 import kg.attractor.jobsearch.exeptions.ResumeFromUserNotFound;
+import kg.attractor.jobsearch.exeptions.UserStatusExeption;
 import kg.attractor.jobsearch.models.User;
 import kg.attractor.jobsearch.models.Vacancy;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.support.DataAccessUtils;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 
 @Component
@@ -92,5 +103,39 @@ public class VacancyDao {
                         "WHERE ra.resume_id IN (" + String.join(",", Collections.nCopies(resumeIds.size(), "?")) + ")";
 
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Vacancy.class), resumeIds.toArray());
+    }
+
+    public VacancyDto createVacancy(VacancyDto vacancyDto, Vacancy vacancy) {
+        String sqltype = "select account_type from users where id = ?";
+        String typename = jdbcTemplate.queryForObject(sqltype, String.class, vacancy.getAuthorId());
+
+        if (typename == null || !typename.equalsIgnoreCase("employer")) {
+            throw new UserStatusExeption("wrong user status");
+        }
+
+        String sql = "insert into vacancies (name,description,category_id,salary,exp_from, exp_to,is_active,author_id,created_date,update_time)" +
+                " values (?,?,?,?,?,?,?,?,?,?)";
+        jdbcTemplate.update(sql,vacancy.getName(),vacancy.getDescription(),vacancy.getCategoryId(),vacancy.getSalary(),vacancy.getExpFrom(),vacancy.getExpTo(),vacancy.getIsActive(),vacancy.getAuthorId(),vacancy.getCreatedDate(),vacancy.getUpdateTime());
+        return vacancyDto;
+    }
+
+    public HttpStatus deleteVacancy(Long vacancyId) {
+        String sql = "delete from vacancies where id = ?";
+        int vacanciesfound = jdbcTemplate.update(sql, vacancyId);
+
+        if (vacanciesfound == 0) {
+            throw new EntityForDeleteNotFound("vacancies not found");
+        }
+        return HttpStatus.ACCEPTED;
+    }
+
+    public Optional<Vacancy> getVacancy(Long vacancyId) {
+        return Optional.ofNullable(DataAccessUtils.singleResult(jdbcTemplate.query("select * from vacancies where id = ?", new BeanPropertyRowMapper<>(Vacancy.class), vacancyId)));
+    }
+
+    public VacancyEditDto updateVacancy(VacancyEditDto vacancyDto, Long vacancyId) {
+        String sql = "update vacancies set name = ?, description = ?, category_id = ?, salary = ?, exp_from = ?, exp_to = ?, is_active = ?, update_time = ? where id = ?";
+        jdbcTemplate.update(sql,vacancyDto.getName(), vacancyDto.getDescription(),vacancyDto.getCategoryId(),vacancyDto.getSalary(), vacancyDto.getExpFrom(), vacancyDto.getExpTo(), vacancyDto.getIsActive(), vacancyDto.getUpdateTime(), vacancyId);
+        return vacancyDto;
     }
 }
