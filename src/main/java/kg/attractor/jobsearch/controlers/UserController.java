@@ -32,6 +32,11 @@
             return ResponseEntity.status(HttpStatus.OK).body(userEditDto);
         }
 
+        @DeleteMapping("delete/{userId}")
+        public HttpStatus deleteUser(@PathVariable Long userId) {
+            return userService.deleteAcc(userId);
+        }
+
         @PostMapping("add-avatar")
         public String uploadImage(@Valid ImageDto ImageDto) {
             return userService.saveImage(ImageDto);
