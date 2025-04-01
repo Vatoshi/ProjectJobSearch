@@ -1,12 +1,14 @@
 package kg.attractor.jobsearch.dao;
 import kg.attractor.jobsearch.dto.UserEditDto;
 import kg.attractor.jobsearch.enums.AccountType;
+import kg.attractor.jobsearch.exeptions.EntityForDeleteNotFound;
 import kg.attractor.jobsearch.exeptions.NotFound;
 import kg.attractor.jobsearch.models.User;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.support.DataAccessUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -107,6 +109,17 @@ public class UserDao {
             return null;
         }
 
+    }
+
+    public HttpStatus deleteAcc(Long userId) {
+        String sql = "delete from users where id = ?";
+        int userFound = jdbcTemplate.update(sql, userId);
+
+        if (userFound == 0) {
+            throw new EntityForDeleteNotFound("user not found");
+        }
+
+        return HttpStatus.OK;
     }
 
 }

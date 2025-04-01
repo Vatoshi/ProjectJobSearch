@@ -55,8 +55,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers("/vacancy/create**","/vacancy/edit/**","vacancy/delete/**").hasAnyAuthority("USER-EMPLOYER", "ADMIN")
                         .requestMatchers("/resume/category/**", "/resume/by-user/**", "/resume/id/**").hasAnyAuthority("USER-APPLICANT","USER-EMPLOYER", "ADMIN")
-                        .requestMatchers("/resume/create**","/resume/edit/**","resume/delete/").hasAnyAuthority("USER-APPLICANT", "ADMIN")
-                        .requestMatchers("/user/add-avatar","/user/edit/").hasAnyAuthority("USER-APPLICANT", "ADMIN", "USER-EMPLOYER")
+                        .requestMatchers("/resume/create**","/resume/edit/**","resume/delete/**").hasAnyAuthority("USER-APPLICANT", "ADMIN")
+                        .requestMatchers("/user/add-avatar**","/user/edit/**","/user/delete/**").hasAnyAuthority("USER-APPLICANT", "ADMIN", "USER-EMPLOYER")
                         .anyRequest().permitAll());
 
         return http.build();

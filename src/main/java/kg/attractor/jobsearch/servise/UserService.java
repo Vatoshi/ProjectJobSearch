@@ -12,6 +12,7 @@ import kg.attractor.jobsearch.exeptions.UsernameNotFound;
 import kg.attractor.jobsearch.models.User;
 import kg.attractor.jobsearch.util.FileUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Service;
 
@@ -120,6 +121,10 @@ public class UserService {
 
         userDao.updateUser(u,userId);
         return u;
+    }
+
+    public HttpStatus deleteAcc(Long userId) {
+        return userDao.deleteAcc(userId);
     }
 }
 
