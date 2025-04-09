@@ -24,7 +24,6 @@ databaseChangeLog:
             referencedColumnNames: id
             constraintName: fk_vacancy_author
             onDelete: CASCADE
-
         - addForeignKeyConstraint:
             baseTableName: resumes
             baseColumnNames: applicant_id
