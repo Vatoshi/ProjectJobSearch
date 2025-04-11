@@ -5,6 +5,7 @@ import kg.attractor.jobsearch.dto.ResumeDto;
 import kg.attractor.jobsearch.dto.UserDto;
 import kg.attractor.jobsearch.dto.VacancyDto;
 import kg.attractor.jobsearch.dto.VacancyEditDto;
+import kg.attractor.jobsearch.dto.mutal.ProfileVacancyDto;
 import kg.attractor.jobsearch.exeptions.NotFound;
 import kg.attractor.jobsearch.exeptions.ResumeFromUserNotFound;
 import kg.attractor.jobsearch.models.Resume;
@@ -23,6 +24,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class VacancyService {
     private final VacancyDao vacancyDao;
+
+    public List<ProfileVacancyDto> getVacancyByUser(String username) {
+        Long userId = vacancyDao.userId(username);
+        return vacancyDao.getVacancyByUser(userId);
+    }
 
     public List<UserDto> getResponedUsers(Long vacancyId) throws IllegalArgumentException {
         return vacancyDao.getRespondedUsersOnVacancy(vacancyId)

@@ -10,7 +10,6 @@ databaseChangeLog:
               values ('Иван', 'Иванов', 30, 'ivan@example.com', '$2a$12$WB2YUbFcCN0tm44SBcKUjua9yiFBsfB3vW02IjuwzY7HGtlQIKzy2', '+1234567890', 'Default.png', true, 1),
               ('Петр', 'Петров', 40, 'petr@example.com', '$2a$12$WB2YUbFcCN0tm44SBcKUjua9yiFBsfB3vW02IjuwzY7HGtlQIKzy2', '+0987654321', 'Default.png', true, 2 ),
               ('Эмир', 'Кадыров', 16, 'emirchik@gmail.com', '$2a$12$WB2YUbFcCN0tm44SBcKUjua9yiFBsfB3vW02IjuwzY7HGtlQIKzy2', '+1231342345', 'Default.png', true,1);
-#              пароль для всех qwe , эмир бесправный пользователь
         
           
 

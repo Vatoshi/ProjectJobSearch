@@ -5,8 +5,6 @@ import kg.attractor.jobsearch.dto.UserFormDto;
 import kg.attractor.jobsearch.servise.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -21,8 +19,7 @@ public class AuthController {
     }
 
     @GetMapping("register")
-    public String getRegisterPage(Model model) {
-        model.addAttribute("userFormDto", new UserFormDto());
+    public String getRegisterPage() {
         return "register";
     }
 

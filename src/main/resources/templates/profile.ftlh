@@ -27,7 +27,7 @@
             </div>
             <div class="actions">
                 <div class="create-resume">
-                    +<br>Создать<br>резюме
+                    +<br>Создать<br> <#if user.roleId == 1> резюме <#else > вакансию </#if>
                 </div>
                 <div class="replies">
                     Отклики
@@ -37,19 +37,33 @@
         </div>
 
         <div class="resume-section">
-            <h3 style="font-weight: 200;">Резюме:</h3>
+            <h3 style="font-weight: 200;">Ваши <#if user.roleId == 1> резюме: <#else> вакансии: </#if></h3>
             <div class="resume-list">
 
+                <#if user.roleId == 1>
+                    <#list resumes as resume>
                 <div class="resume">
-                    <div style="margin: 0px; font-weight: 500; word-wrap: break-word;">Название резюме</div>
-                    <div style="margin-top: 30px;">Дата обновления: </div>
+                    <div style="margin: 0px; font-weight: 500; word-wrap: break-word;">Название резюме: ${resume.name}</div>
+                    <div style="margin-top: 30px;">Дата обновления: <br> ${resume.updated!}</div>
                     <div class="resumes-button">
                         <button class="update-btn">Обновить</button>
                         <button class="red-btn">Ред</button>
                     </div>
                 </div>
+                    </#list>
+                    <#else>
+                        <#list vacancies as vacancy>
+                            <div class="resume">
+                                <div style="margin: 0px; font-weight: 500; word-wrap: break-word;">Название резюме: ${vacancy.name}</div>
+                                <div style="margin-top: 30px;">Дата обновления:<br> ${vacancy.updated!}</div>
+                                <div class="resumes-button">
+                                    <button class="update-btn">Обновить</button>
+                                    <button class="red-btn">Ред</button>
+                                </div>
+                            </div>
+                        </#list>
+                </#if>
 
-                
             </div>
         </div>
     </div>
