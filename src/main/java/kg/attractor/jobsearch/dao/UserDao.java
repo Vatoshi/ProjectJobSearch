@@ -23,6 +23,11 @@ import java.util.Optional;
 public class UserDao {
     private final JdbcTemplate jdbcTemplate;
 
+    public Long userId(String username) {
+        String sql = "select id from users where email = ?";
+        return jdbcTemplate.queryForObject(sql,Long.class, username);
+    }
+
     public Optional<User> findByEmail(String email) {
         String sql = "SELECT * FROM users WHERE email = ?";
         return Optional.ofNullable(

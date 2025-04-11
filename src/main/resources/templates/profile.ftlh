@@ -23,7 +23,7 @@
             <div class="info">
                 <h2 style="font-weight: 200;">${user.name}</h2>
                 <p>Возраст: ${user.age}</p>
-                <button class="edit-btn">Редактировать</button>
+                <a href="profile/edit"><button class="edit-btn">Редактировать</button></a>
             </div>
             <div class="actions">
                 <div class="create-resume">

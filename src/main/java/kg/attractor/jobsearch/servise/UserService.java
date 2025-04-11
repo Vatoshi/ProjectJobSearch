@@ -1,5 +1,6 @@
 package kg.attractor.jobsearch.servise;
 
+import jakarta.validation.Valid;
 import kg.attractor.jobsearch.dto.ImageDto;
 import kg.attractor.jobsearch.dto.UserDto;
 import kg.attractor.jobsearch.dao.UserDao;
@@ -22,6 +23,10 @@ import java.util.List;
 public class UserService {
     public final UserDao userDao;
     private final FileUtil fileUtil;
+
+    public Long userId(String username) {
+        return userDao.userId(username);
+    }
 
     public UserDto getEmail(String email) {
         User user = userDao.findByEmail(email)
@@ -106,17 +111,17 @@ public class UserService {
         return u;
     }
 
-    public UserEditDto editAcc(UserEditDto u, Long userId) throws HttpMessageNotReadableException {
+    public UserEditDto editAcc(@Valid UserEditDto u, Long userId) throws HttpMessageNotReadableException {
         User oldUser = userDao.findById(userId).orElseThrow(UsernameNotFound::new);
-        if (u.getName() == null) {u.setName(oldUser.getName());}
-        if (u.getSurname() == null) {u.setSurname(oldUser.getSurname());}
+        if (u.getName() == null || u.getName().isEmpty()) {u.setName(oldUser.getName());}
+        if (u.getSurname() == null || u.getSurname().isEmpty()) {u.setSurname(oldUser.getSurname());}
         if (u.getAge() == null || u.getAge() < 14 || u.getAge() > 120) {u.setAge(oldUser.getAge());}
 
         if (userDao.getExistEmail(u.getEmail()) != null) { throw new AlreadyExists("User with email " + u.getEmail() + " already exists");}
-        if (u.getEmail() == null) {u.setEmail(oldUser.getEmail());}
+        if (u.getEmail() == null || u.getEmail().isEmpty()) {u.setEmail(oldUser.getEmail());}
         u.setPassword(oldUser.getPassword());
         if (u.getAvatar() == null) {u.setAvatar(oldUser.getAvatar());}
-        if (u.getPhoneNumber() == null) {u.setPhoneNumber(oldUser.getPhoneNumber());}
+        if (u.getPhoneNumber() == null || u.getPhoneNumber().isEmpty()) {u.setPhoneNumber(oldUser.getPhoneNumber());}
 
         userDao.updateUser(u,userId);
         return u;
