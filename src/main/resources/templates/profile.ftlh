@@ -19,7 +19,7 @@
         <h1 style="padding-bottom: 20px;">Личный кабинет <#if user.roleId == 1> Соискателя <#else> Работодателя </#if></h1>
 
         <div class="profile">
-            <img src="" alt="User Icon">
+            <img src="/image/${user.avatar}" alt="User Icon">
             <div class="info">
                 <h2 style="font-weight: 200;">${user.name}</h2>
                 <p>Возраст: ${user.age}</p>

@@ -5,7 +5,6 @@ import kg.attractor.jobsearch.dto.UserDto;
 import kg.attractor.jobsearch.dao.UserDao;
 import kg.attractor.jobsearch.dto.UserEditDto;
 import kg.attractor.jobsearch.dto.UserFormDto;
-import kg.attractor.jobsearch.enums.AccountType;
 import kg.attractor.jobsearch.exeptions.AlreadyExists;
 import kg.attractor.jobsearch.exeptions.NotFound;
 import kg.attractor.jobsearch.exeptions.UsernameNotFound;
@@ -35,6 +34,7 @@ public class UserService {
                 .name(user.getName())
                 .email(user.getEmail())
                 .roleId(user.getRoleId())
+                .avatar(user.getAvatar())
                 .build();
     }
 

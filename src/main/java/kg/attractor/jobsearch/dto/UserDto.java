@@ -1,6 +1,5 @@
 package kg.attractor.jobsearch.dto;
 
-import kg.attractor.jobsearch.enums.AccountType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -1,6 +1,5 @@
 package kg.attractor.jobsearch.dao;
 import kg.attractor.jobsearch.dto.UserEditDto;
-import kg.attractor.jobsearch.enums.AccountType;
 import kg.attractor.jobsearch.exeptions.EntityForDeleteNotFound;
 import kg.attractor.jobsearch.exeptions.NotFound;
 import kg.attractor.jobsearch.models.User;
