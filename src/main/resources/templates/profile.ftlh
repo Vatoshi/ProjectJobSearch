@@ -37,24 +37,28 @@
         </div>
 
         <div class="resume-section">
-            <h3 style="font-weight: 200;">Ваши <#if user.roleId == 1> резюме: <#else> вакансии: </#if></h3>
+            <h3 style="font-weight: 200;">Ваши <#if user.roleId == 1>резюме:<#else>вакансии:</#if></h3>
             <div class="resume-list">
-
                 <#if user.roleId == 1>
-                    <#list resumes as resume>
-                <div class="resume">
-                    <div style="margin: 0px; font-weight: 500; word-wrap: break-word;">Название резюме: ${resume.name}</div>
-                    <div style="margin-top: 30px;">Дата обновления: <br> ${resume.updated!}</div>
-                    <div class="resumes-button">
-                        <button class="update-btn">Обновить</button>
-                        <button class="red-btn">Ред</button>
-                    </div>
-                </div>
-                    </#list>
+                    <#if resumes?has_content>
+                        <#list resumes as resume>
+                            <div class="resume">
+                                <div style="margin: 0px; font-weight: 500; word-wrap: break-word;">Название резюме: ${resume.name}</div>
+                                <div style="margin-top: 30px;">Дата обновления: <br> ${resume.updated!}</div>
+                                <div class="resumes-button">
+                                    <button class="update-btn">Обновить</button>
+                                    <button class="red-btn">Ред</button>
+                                </div>
+                            </div>
+                        </#list>
                     <#else>
+                        <div class="empty-message">У вас нет резюме</div>
+                    </#if>
+                <#else>
+                    <#if vacancies?has_content>
                         <#list vacancies as vacancy>
                             <div class="resume">
-                                <div style="margin: 0px; font-weight: 500; word-wrap: break-word;">Название резюме: ${vacancy.name}</div>
+                                <div style="margin: 0px; font-weight: 500; word-wrap: break-word;">Название вакансии: ${vacancy.name}</div>
                                 <div style="margin-top: 30px;">Дата обновления:<br> ${vacancy.updated!}</div>
                                 <div class="resumes-button">
                                     <button class="update-btn">Обновить</button>
@@ -62,8 +66,10 @@
                                 </div>
                             </div>
                         </#list>
+                    <#else>
+                        <div class="empty-message">У вас нет вакансий</div>
+                    </#if>
                 </#if>
-
             </div>
         </div>
     </div>
