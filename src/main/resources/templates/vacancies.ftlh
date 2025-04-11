@@ -15,6 +15,10 @@
         <div class="div-img"><img></div>
         <p class="profile-text">Ваш <br> профиль</p>
     </a>
+<#else>
+    <a href="/auth/login" class="profile" style="justify-content: center" >
+        <div style="font-weight: 600;">Войти в аккаунт</div>
+    </a>
 </#if>
 
     <div class="container">

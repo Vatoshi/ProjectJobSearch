@@ -11,6 +11,7 @@ import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.NoSuchElementException;
 
@@ -45,8 +46,11 @@ public class GlobalControllerAdvice {
     }
 
     @ExceptionHandler(UsernameNotFound.class)
-    private ResponseEntity<ErrorResponseBody> userNotFoundHandler(UsernameNotFound e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorService.makeResponse(e, "user not found", HttpStatus.NOT_FOUND));
+    private ModelAndView userNotFoundHandler(UsernameNotFound e) {
+        ModelAndView modelAndView = new ModelAndView("/error/userNotFound");
+        modelAndView.addObject("message", e.getMessage());
+        modelAndView.setStatus(HttpStatus.NOT_FOUND);
+        return modelAndView;
     }
 
     @ExceptionHandler(UserStatusExeption.class)
