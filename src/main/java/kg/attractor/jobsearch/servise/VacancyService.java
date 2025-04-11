@@ -32,7 +32,6 @@ public class VacancyService {
                         .age(user.getAge())
                         .surname(user.getSurname())
                         .phoneNumber(user.getPhoneNumber())
-                        .accountType(user.getAccountType())
                         .name(user.getName())
                         .email(user.getEmail())
                         .build())

@@ -19,7 +19,6 @@ public class User {
     private String password;
     private String phoneNumber;
     private String avatar;
-    private AccountType accountType;
     private Boolean enabled;
     private Long roleId;
 }

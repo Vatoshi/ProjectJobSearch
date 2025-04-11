@@ -45,7 +45,6 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
                 .age(user.getAge())
                 .email(user.getEmail())
                 .phoneNumber(user.getPhoneNumber())
-                .accountType(user.getAccountType())
                 .avatar(user.getAvatar())
                 .build();
 

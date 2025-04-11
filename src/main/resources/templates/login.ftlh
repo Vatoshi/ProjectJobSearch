@@ -15,10 +15,10 @@
             Вход</h1>
         <div class="sign-form">
             <form class="form" id="loginForm" method="POST" action="/auth/login">
-                <input minlength="2" maxlength="20" type="text" id="username" name="username"
+                <input minlength="2" maxlength="50" type="text" id="username" name="username"
                     placeholder="Веддите никнейм" required>
                 <br>
-                <input minlength="2 " maxlength="20" style="margin-top: 2px;" name="password" type="password"
+                <input minlength="2 " maxlength="50" style="margin-top: 2px;" name="password" type="password"
                     id="password" placeholder="Веддите пароль" required>
                 <br>
         </div>

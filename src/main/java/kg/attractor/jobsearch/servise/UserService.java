@@ -32,9 +32,9 @@ public class UserService {
                 .age(user.getAge())
                 .surname(user.getSurname())
                 .phoneNumber(user.getPhoneNumber())
-                .accountType(user.getAccountType())
                 .name(user.getName())
                 .email(user.getEmail())
+                .roleId(user.getRoleId())
                 .build();
     }
 
@@ -49,9 +49,9 @@ public class UserService {
                         .age(user.getAge())
                         .surname(user.getSurname())
                         .phoneNumber(user.getPhoneNumber())
-                        .accountType(user.getAccountType())
                         .name(user.getName())
                         .email(user.getEmail())
+                        .roleId(user.getRoleId())
                         .build())
                 .toList();
     }
@@ -67,9 +67,9 @@ public class UserService {
                         .age(user.getAge())
                         .surname(user.getSurname())
                         .phoneNumber(user.getPhoneNumber())
-                        .accountType(user.getAccountType())
                         .name(user.getName())
                         .email(user.getEmail())
+                        .roleId(user.getRoleId())
                         .build())
                 .toList();
     }

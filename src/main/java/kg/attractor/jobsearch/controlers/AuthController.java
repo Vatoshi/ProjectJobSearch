@@ -30,6 +30,6 @@ public class AuthController {
     public String postRegister(@ModelAttribute @Valid UserFormDto userFormDto) {
         userService.createAcc(userFormDto);
 
-        return "redirect:/profile";
+        return "redirect:/auth/login";
     }
 }

@@ -18,5 +18,5 @@ public class UserDto {
     private String email;
     private String avatar;
     private String phoneNumber;
-    private AccountType accountType;
+    private Long roleId;
 }

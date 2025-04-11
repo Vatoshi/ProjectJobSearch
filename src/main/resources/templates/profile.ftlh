@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/profile.css">
     <title>Личный кабинет
-        <#if user.accountType == "APPLICANT">
+        <#if user.roleId == 1>
             Соискателя
         <#else>
             Работодателя
@@ -16,7 +16,7 @@
 
 <body>
     <div class="container">
-        <h1 style="padding-bottom: 20px;">Личный кабинет <#if user.accountType == "APPLICANT"> Соискателя <#else> Работодателя </#if></h1>
+        <h1 style="padding-bottom: 20px;">Личный кабинет <#if user.roleId == 1> Соискателя <#else> Работодателя </#if></h1>
 
         <div class="profile">
             <img src="" alt="User Icon">
