@@ -1,5 +1,6 @@
 package kg.attractor.jobsearch.config.Security;
 
+import kg.attractor.jobsearch.util.CustomAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.Customizer;
@@ -13,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 
 import javax.sql.DataSource;
@@ -22,6 +24,8 @@ import javax.sql.DataSource;
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final DataSource dataSource;
+//    @Autowired
+//    private CustomAuthenticationProvider customAuthenticationProvider;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -38,6 +42,7 @@ public class SecurityConfig {
                 "where u.email = ? " +
                 "and u.role_id = r.id";
 
+//        auth.authenticationProvider(customAuthenticationProvider);
         auth.jdbcAuthentication()
                 .dataSource(dataSource)
                 .usersByUsernameQuery(fetchUser)
@@ -47,16 +52,23 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .formLogin(AbstractHttpConfigurer::disable)
-                .logout(AbstractHttpConfigurer::disable)
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
+                .formLogin(login -> login
+                        .loginPage("/auth/login")
+                        .loginProcessingUrl("/auth/login")
+                        .defaultSuccessUrl("/profile", true)
+                        .failureUrl("/auth/login?error=true")
+                        .permitAll())
+                .logout(logout -> logout
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                        .permitAll())
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers("/vacancy/create**","/vacancy/edit/**","vacancy/delete/**").hasAnyAuthority("USER-EMPLOYER", "ADMIN")
-                        .requestMatchers("/resume/category/**", "/resume/by-user/**", "/resume/id/**").hasAnyAuthority("USER-APPLICANT","USER-EMPLOYER", "ADMIN")
+                        .requestMatchers("/vacancy/create**","/vacancy/edit/**","vacancy/delete/**").hasAnyAuthority("EMPLOYER")
+                        .requestMatchers("/resume/category/**", "/resume/by-user/**", "/resume/id/**").hasAnyAuthority("APPLICANT","EMPLOYER")
                         .requestMatchers("/resume/create**","/resume/edit/**","resume/delete/**").hasAnyAuthority("USER-APPLICANT", "ADMIN")
-                        .requestMatchers("/user/add-avatar**","/user/edit/**","/user/delete/**").hasAnyAuthority("USER-APPLICANT", "ADMIN", "USER-EMPLOYER")
+                        .requestMatchers("/user/add-avatar**","/user/edit/**","/user/delete/**").hasAnyAuthority("APPLICANT","USER-EMPLOYER")
                         .anyRequest().permitAll());
 
         return http.build();

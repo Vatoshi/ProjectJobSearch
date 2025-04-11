@@ -34,7 +34,6 @@ public class UserFormDto {
     @Pattern(regexp = "^\\d{10}$", message = "10 цифр")
     private String phoneNumber;
     @NotNull(message = "notnull")
-    private AccountType accountType;
-    @JsonIgnore
+    @NotNull
     private Long roleId;
 }

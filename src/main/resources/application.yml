@@ -10,3 +10,7 @@ spring:
   liquibase:
     change-log: classpath:/db/changelog/master.yml
     drop-first: true
+#  mvc:
+#    static-path-pattern: /static/**
+  freemarker:
+    expose-session-attributes: true

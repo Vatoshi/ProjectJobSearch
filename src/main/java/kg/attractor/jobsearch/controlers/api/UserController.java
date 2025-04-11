@@ -1,4 +1,4 @@
-    package kg.attractor.jobsearch.controlers;
+    package kg.attractor.jobsearch.controlers.api;
 
     import jakarta.validation.Valid;
     import kg.attractor.jobsearch.dto.ImageDto;
@@ -8,7 +8,6 @@
     import kg.attractor.jobsearch.servise.UserService;
     import lombok.RequiredArgsConstructor;
     import org.springframework.http.HttpStatus;
-    import org.springframework.http.HttpStatusCode;
     import org.springframework.http.ResponseEntity;
     import org.springframework.web.bind.annotation.*;
 

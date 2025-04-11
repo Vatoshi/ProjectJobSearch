@@ -98,9 +98,8 @@ public class UserService {
                 .email(u.getEmail())
                 .password(u.getPassword())
                 .phoneNumber(u.getPhoneNumber())
-                .accountType(u.getAccountType())
                 .enabled(true)
-                .roleId(u.getAccountType() == null ? 2L : 3L)
+                .roleId(u.getRoleId())
                 .build();
 
         userDao.createAcc(newUser);
@@ -115,7 +114,7 @@ public class UserService {
 
         if (userDao.getExistEmail(u.getEmail()) != null) { throw new AlreadyExists("User with email " + u.getEmail() + " already exists");}
         if (u.getEmail() == null) {u.setEmail(oldUser.getEmail());}
-        u.setPassword(oldUser.getPassword()); //сапорт сказал пароль тяжко будет менять из за BCrypt
+        u.setPassword(oldUser.getPassword());
         if (u.getAvatar() == null) {u.setAvatar(oldUser.getAvatar());}
         if (u.getPhoneNumber() == null) {u.setPhoneNumber(oldUser.getPhoneNumber());}
 

@@ -1,20 +1,16 @@
-package kg.attractor.jobsearch.controlers;
+package kg.attractor.jobsearch.controlers.api;
 
 import jakarta.validation.Valid;
-import kg.attractor.jobsearch.dao.VacancyDao;
 import kg.attractor.jobsearch.dto.UserDto;
 import kg.attractor.jobsearch.dto.VacancyDto;
 import kg.attractor.jobsearch.dto.VacancyEditDto;
 import kg.attractor.jobsearch.exeptions.NotFound;
-import kg.attractor.jobsearch.models.Vacancy;
 import kg.attractor.jobsearch.servise.VacancyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.security.Principal;
 import java.util.List;
 
 @RestController

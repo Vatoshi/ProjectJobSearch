@@ -41,11 +41,6 @@ databaseChangeLog:
               - column:
                   name: avatar
                   type: varchar(255)
-              - column:
-                  name: account_type
-                  type: varchar(50)
-                  constraints:
-                    check: "account_type IN ('applicant', 'employer')"
   - changeSet:
       id: create_categories_table
       author: eric
