@@ -15,6 +15,10 @@
 </head>
 
 <body>
+    <a href="vacancies" class="main-page">
+        <p style="font-weight: 600; font-size: 12px">к вакансиям</p>
+    </a>
+
     <div class="container">
         <h1 style="padding-bottom: 20px;">Личный кабинет <#if user.roleId==1> Соискателя <#else> Работодателя </#if>
         </h1>
