@@ -2,6 +2,7 @@ package kg.attractor.jobsearch.dao;
 import kg.attractor.jobsearch.dto.ResumeDto;
 import kg.attractor.jobsearch.dto.VacancyDto;
 import kg.attractor.jobsearch.dto.VacancyEditDto;
+import kg.attractor.jobsearch.dto.mutal.ProfileResumeDto;
 import kg.attractor.jobsearch.dto.mutal.ProfileVacancyDto;
 import kg.attractor.jobsearch.exeptions.EntityForDeleteNotFound;
 import kg.attractor.jobsearch.exeptions.NotFound;
@@ -37,7 +38,14 @@ public class VacancyDao {
 
     public List<ProfileVacancyDto> getVacancyByUser(Long userId) {
         String sql = "SELECT name, update_time FROM vacancies WHERE author_id = ?";
-        return jdbcTemplate.query(sql,new BeanPropertyRowMapper<>(ProfileVacancyDto.class),userId);
+        return jdbcTemplate.query(
+                sql,
+                (rs, rowNum) -> new ProfileVacancyDto(
+                        rs.getString("name"),
+                        rs.getObject("update_time", LocalDateTime.class)
+                ),
+                userId
+        );
     }
 
     public List<User> getRespondedUsersOnVacancy(Long vacancyId) {
