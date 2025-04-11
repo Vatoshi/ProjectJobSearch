@@ -7,9 +7,10 @@ spring:
     username: sa
     password: 123321
     driver-class-name: org.h2.Driver
-#  sql:
-#    init:
-#      mode: always
   liquibase:
     change-log: classpath:/db/changelog/master.yml
-    drop-first: true
+#    drop-first: true
+#  mvc:
+#    static-path-pattern: /static/**
+  freemarker:
+    expose-session-attributes: true

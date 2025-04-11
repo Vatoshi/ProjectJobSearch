@@ -2,6 +2,8 @@ package kg.attractor.jobsearch.dao;
 import kg.attractor.jobsearch.dto.ResumeDto;
 import kg.attractor.jobsearch.dto.VacancyDto;
 import kg.attractor.jobsearch.dto.VacancyEditDto;
+import kg.attractor.jobsearch.dto.mutal.ProfileResumeDto;
+import kg.attractor.jobsearch.dto.mutal.ProfileVacancyDto;
 import kg.attractor.jobsearch.exeptions.EntityForDeleteNotFound;
 import kg.attractor.jobsearch.exeptions.NotFound;
 import kg.attractor.jobsearch.exeptions.ResumeFromUserNotFound;
@@ -28,6 +30,23 @@ import java.util.Optional;
 @Builder
 public class VacancyDao {
     private final JdbcTemplate jdbcTemplate;
+
+    public Long userId(String username) {
+        String sql = "select id from users where email = ?";
+        return jdbcTemplate.queryForObject(sql,Long.class, username);
+    }
+
+    public List<ProfileVacancyDto> getVacancyByUser(Long userId) {
+        String sql = "SELECT name, update_time FROM vacancies WHERE author_id = ?";
+        return jdbcTemplate.query(
+                sql,
+                (rs, rowNum) -> new ProfileVacancyDto(
+                        rs.getString("name"),
+                        rs.getObject("update_time", LocalDateTime.class)
+                ),
+                userId
+        );
+    }
 
     public List<User> getRespondedUsersOnVacancy(Long vacancyId) {
         String sql1 = "SELECT resume_id FROM responded_applicants WHERE vacancy_id = ?";
@@ -104,6 +123,8 @@ public class VacancyDao {
 
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Vacancy.class), resumeIds.toArray());
     }
+
+
 
     public VacancyDto createVacancy(VacancyDto vacancyDto, Vacancy vacancy) {
         String sqltype = "select account_type from users where id = ?";

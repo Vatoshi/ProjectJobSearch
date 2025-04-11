@@ -3,6 +3,7 @@ import kg.attractor.jobsearch.dao.ResumeDao;
 import kg.attractor.jobsearch.dto.EducationInfoDto;
 import kg.attractor.jobsearch.dto.ResumeDto;
 import kg.attractor.jobsearch.dto.WorkExperienceInfoDto;
+import kg.attractor.jobsearch.dto.mutal.ProfileResumeDto;
 import kg.attractor.jobsearch.exeptions.NotFound;
 import kg.attractor.jobsearch.models.EducationInfo;
 import kg.attractor.jobsearch.models.Resume;
@@ -34,6 +35,11 @@ public class ResumeService {
                         .createdDate(resume.getCreatedDate())
                         .build())
                 .toList();
+    }
+
+    public List<ProfileResumeDto> getUserResume(String username) {
+        Long userId = resumeDao.userId(username);
+        return resumeDao.getResumeByUser(userId);
     }
 
     public List<ResumeDto> getResumesByAplicant(Long userId) {

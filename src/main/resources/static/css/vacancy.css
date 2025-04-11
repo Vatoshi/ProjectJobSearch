@@ -1,0 +1,159 @@
+* {
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    margin: 0;
+    padding: 20px;
+    background-color: #ffffff;
+    color: #333;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.vacancies-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.vacancy-item {
+    background-color: white;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    transition: box-shadow 0.2s;
+    border-left: 4px solid #3498db;
+}
+
+.vacancy-item:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.vacancy-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+
+.vacancy-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0;
+}
+
+.salary {
+    font-weight: 600;
+    color: #27ae60;
+    white-space: nowrap;
+    margin-left: 15px;
+}
+
+.company-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: #666;
+}
+
+.company-name {
+    margin-right: 15px;
+}
+
+.vacancy-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.meta-item {
+    background-color: #f0f7ff;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #3498db;
+}
+
+.vacancy-description {
+    color: #666;
+    line-height: 1.5;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.vacancy-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.date {
+    font-size: 12px;
+    color: #999;
+}
+
+.apply-btn {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.apply-btn:hover {
+    background-color: #2980b9;
+}
+
+.empty-message {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+    font-size: 16px;
+}
+
+.profile {
+    width: 160px;
+    height: 50px;
+    border: 1px solid rgb(168, 209, 219);
+    border-radius: 10px;
+    position: absolute;
+    right: 50px;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: black;
+    background: white;
+    box-shadow: none;
+    transition: box-shadow 0.3s ease;
+}
+
+.profile:hover {
+    box-shadow: 0 0 10px rgba(147, 147, 147, 0.5);
+}
+
+.div-img {
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgb(98, 98, 98);
+    border-radius: 100%;
+    margin-left: 9px;
+    background-color: #f0f0f0;
+}
+
+.profile-text {
+    font-size: 13px;
+    font-weight: 600;
+    margin-left: 10px;
+    line-height: 1.2;
+}

@@ -3,6 +3,7 @@ package kg.attractor.jobsearch.dao;
 import kg.attractor.jobsearch.dto.EducationInfoDto;
 import kg.attractor.jobsearch.dto.ResumeDto;
 import kg.attractor.jobsearch.dto.WorkExperienceInfoDto;
+import kg.attractor.jobsearch.dto.mutal.ProfileResumeDto;
 import kg.attractor.jobsearch.exeptions.EntityForDeleteNotFound;
 import kg.attractor.jobsearch.exeptions.NotFound;
 import kg.attractor.jobsearch.exeptions.UserStatusExeption;
@@ -35,6 +36,23 @@ import java.util.Optional;
 public class ResumeDao {
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
+    public Long userId(String username) {
+        String sql = "select id from users where email = ?";
+        return jdbcTemplate.queryForObject(sql,Long.class, username);
+    }
+
+    public List<ProfileResumeDto> getResumeByUser(Long userId) {
+        String sql = "SELECT name, update_time FROM resumes WHERE applicant_id = ?";
+        return jdbcTemplate.query(
+                sql,
+                (rs, rowNum) -> new ProfileResumeDto(
+                        rs.getString("name"),
+                        rs.getObject("update_time", LocalDateTime.class)
+                ),
+                userId
+        );
+    }
 
     public Optional<Resume> findResumeById(Long resumeId) {
         String sql = "SELECT * FROM resumes WHERE id = ? and is_active = true";

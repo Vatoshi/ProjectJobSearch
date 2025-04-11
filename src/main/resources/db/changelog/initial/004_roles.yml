@@ -16,10 +16,10 @@ databaseChangeLog:
               - column:
                   name: role
                   type: varchar(50)
-              - column:
-                  name: authority_id
-                  type: long
-                  constraints:
-                    nullable: false
-                    foreignKeyName: fk_authority_id
-                    references: authority(id)
+#              - column:
+#                  name: authority_id
+#                  type: long
+#                  constraints:
+#                    nullable: false
+#                    foreignKeyName: fk_authority_id
+#                    references: authority(id)

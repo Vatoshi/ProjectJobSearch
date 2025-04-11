@@ -7,8 +7,6 @@ databaseChangeLog:
             #            dbms: any
             comment: Insert data into role table
             sql: |
-              insert into role(role, authority_id)
-              values('ADMIN', (select id from authority where authority = 'FULL')),
-              ('GUEST', (select id from authority where authority = 'READ_ONLY')),
-              ('USER-APPLICANT', (select id from authority where authority = 'APPLICANT')),
-              ('USER-EMPLOYER', (select id from authority where authority = 'EMPLOYER'));
+              insert into role(role)
+              values('APPLICANT'),
+              ('EMPLOYER');
