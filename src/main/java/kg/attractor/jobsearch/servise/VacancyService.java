@@ -68,6 +68,7 @@ public class VacancyService {
         return vacancyDao.getAllVacancies()
                 .stream()
                 .map(vacancy -> VacancyForWebDto.builder()
+                        .id(vacancy.getId())
                         .name(vacancy.getName())
                         .description(vacancy.getDescription())
                         .ExpTo(vacancy.getExpTo())
