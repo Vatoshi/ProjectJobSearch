@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/vacancy.css">
-    <title>Список вакансий</title>
+    <title>Вакансии</title>
 </head>
 
 <body>
@@ -21,37 +21,59 @@
     </a>
 </#if>
 
-    <div class="container">
-        <div class="vacancies-list">
-
-            <#list vacancies as vacancy>
-            <div class="vacancy-item">
-                <div class="vacancy-header">
-                    <h3 class="vacancy-title">${vacancy.name}</h3>
-                    <div class="salary">от ${vacancy.salary} ₽</div>
-                </div>
-                <div class="company-info">
-                    <span class="company-name">(имя пользователя компании)</span>
-<#--                    <span>Москва</span>-->
-                </div>
-                <div class="vacancy-meta">
-                    <span class="meta-item">Опыт от ${vacancy.expFrom} года</span>
-                </div>
-                <div class="vacancy-description">
-                    ${vacancy.description}
-                </div>
-                <div class="vacancy-footer">
-                    <div class="date">Опубликовано ${vacancy.createdDate}</div>
-                    <button class="apply-btn">Откликнуться</button>
-                </div>
-            </div>
-            </#list>
-
-
+<div class="container">
+    <div class="sidebar">
+        <h3>Фильтры</h3>
+        <div class="filter-section">
+            <label for="category">Категория</label>
+            <select id="category">
+                <option value="">Все</option>
+                <option value="frontend">Frontend</option>
+                <option value="backend">Backend</option>
+                <option value="designer">Дизайнер</option>
+            </select>
         </div>
+
+        <div class="filter-section">
+            <label for="location">Местоположение</label>
+            <select id="location">
+                <option value="">Все</option>
+                <option value="moscow">Москва</option>
+                <option value="spb">Санкт-Петербург</option>
+                <option value="kazan">Казань</option>
+            </select>
+        </div>
+
+        <button class="action-btn" onclick="filterJobs()">Применить фильтры</button>
     </div>
+
+    <div class="main-content">
+        <h2 class="section-title">Вакансии</h2>
+        <ul class="vacancy-list" id="vacancy-list">
+
+            <#if vacancies? has_content>
+            <#list vacancies as vacancy>
+                <li class="vacancy-item">
+                    <div class="vacancy-left">
+                        <div class="vacancy-header">
+                            <h3 class="vacancy-title">${vacancy.name}</h3>
+                        </div>
+                        <div class="vacancy-date">Последнее обновление: ${vacancy.updateTime}</div>
+                        <div class="vacancy-experience">Опыт работы: ${vacancy.expFrom} года</div>
+                        <p class="vacancy-description">${vacancy.description!"-"}</p>
+                        <div class="vacancy-actions">
+                            <button class="action-btn">Подать заявку</button>
+                        </div>
+                    </div>
+                    <div class="vacancy-company">${vacancy.author}</div>
+                    <div class="vacancy-salary">Зарплата: ${vacancy.salary!"Договорная"} ₽ </div>
+                </li>
+            </#list>
+            </#if>
+        </ul>
+    </div>
+</div>
 
 
 </body>
-
 </html>

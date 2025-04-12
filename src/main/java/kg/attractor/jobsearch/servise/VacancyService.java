@@ -6,6 +6,7 @@ import kg.attractor.jobsearch.dto.UserDto;
 import kg.attractor.jobsearch.dto.VacancyDto;
 import kg.attractor.jobsearch.dto.VacancyEditDto;
 import kg.attractor.jobsearch.dto.mutal.ProfileVacancyDto;
+import kg.attractor.jobsearch.dto.mutal.VacancyForWebDto;
 import kg.attractor.jobsearch.exeptions.NotFound;
 import kg.attractor.jobsearch.exeptions.ResumeFromUserNotFound;
 import kg.attractor.jobsearch.models.Resume;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -62,21 +64,21 @@ public class VacancyService {
                 .toList();
     }
 
-    public List<VacancyDto> getAllVacancies() throws NotFound {
+    public List<VacancyForWebDto> getAllVacancies() throws NotFound {
         return vacancyDao.getAllVacancies()
                 .stream()
-                .map(vacancy -> VacancyDto.builder()
+                .map(vacancy -> VacancyForWebDto.builder()
                         .name(vacancy.getName())
                         .description(vacancy.getDescription())
-                        .expFrom(vacancy.getExpFrom())
-                        .expTo(vacancy.getExpTo())
-                        .categoryId(vacancy.getCategoryId())
-                        .createdDate(vacancy.getCreatedDate())
-                        .updateTime(vacancy.getUpdateTime())
-                        .isActive(vacancy.getIsActive())
+                        .ExpTo(vacancy.getExpTo())
+                        .ExpFrom(vacancy.getExpFrom())
                         .salary(vacancy.getSalary())
+                        .isActive(vacancy.getIsActive())
+                        .updateTime(LocalDate.from(vacancy.getUpdateTime()))
+                        .author(vacancyDao.getAuthorName(vacancy.getAuthorId()))
+                        .category(vacancyDao.getCategoryName(vacancy.getCategoryId()))
                         .build())
-                .filter(VacancyDto::getIsActive)
+                .filter(VacancyForWebDto::getIsActive)
                 .toList();
     }
 

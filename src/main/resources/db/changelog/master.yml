@@ -13,7 +13,7 @@ databaseChangeLog:
 #      file: db/changelog/initial/006_authority_data.yml
   - include:
       file: db/changelog/initial/007_role_data.yml
-  - include:
-      file: db/changelog/initial/008_user_data.yml
+#  - include:
+#      file: db/changelog/initial/008_user_data.yml
   - include:
       file: db/changelog/initial/insert.sql

@@ -35,7 +35,7 @@
                 <li class="nav-item">
                     <a href="#" class="nav-link" data-target="create">
                         <span class="nav-icon">➕</span>
-                        <span>Создать <#if user.roleId==1> резюме <#else> вакансии </#if></span>
+                        <span>Создать <#if user.roleId==1> резюме <#else> вакансию </#if></span>
                     </a>
                 </li>
             </ul>

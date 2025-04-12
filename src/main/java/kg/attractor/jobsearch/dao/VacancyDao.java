@@ -32,6 +32,26 @@ import java.util.Optional;
 public class VacancyDao {
     private final JdbcTemplate jdbcTemplate;
 
+    public String getAuthorName(Long userId) {
+        String sql = "select name from users where id = ?";
+        try {
+            return jdbcTemplate.queryForObject(sql,String.class, userId);
+        } catch (Exception e) {
+            return "Unknown";
+        }
+
+    }
+
+    public String getCategoryName(Long id) {
+        String sql = "select name from categories where id = ?";
+        try {
+            return jdbcTemplate.queryForObject(sql,String.class, id);
+        } catch (Exception e) {
+            return "Unknown";
+        }
+
+    }
+
     public Long userId(String username) {
         String sql = "select id from users where email = ?";
         return jdbcTemplate.queryForObject(sql,Long.class, username);

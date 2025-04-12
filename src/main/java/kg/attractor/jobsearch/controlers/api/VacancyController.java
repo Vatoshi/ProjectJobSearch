@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import kg.attractor.jobsearch.dto.UserDto;
 import kg.attractor.jobsearch.dto.VacancyDto;
 import kg.attractor.jobsearch.dto.VacancyEditDto;
+import kg.attractor.jobsearch.dto.mutal.VacancyForWebDto;
 import kg.attractor.jobsearch.exeptions.NotFound;
 import kg.attractor.jobsearch.servise.VacancyService;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,7 @@ public class VacancyController {
     private final VacancyService vacancyService;
 
     @GetMapping
-    public List<VacancyDto> getAllVacancies() {
+    public List<VacancyForWebDto> getAllVacancies() {
         return vacancyService.getAllVacancies();
     }
 
