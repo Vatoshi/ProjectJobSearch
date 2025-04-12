@@ -1,3 +1,5 @@
+<#import "profile-edit.ftlh" as layout>
+
 <!DOCTYPE html>
 <html lang="ru">
 
@@ -15,7 +17,7 @@
                 <img src="/image/${user.avatar}" alt="Фото профиля" class="avatar">
                 <h2 class="profile-name">${user.name}</h2>
                 <div class="profile-age">Возраст: ${user.age}</div>
-                <a href="#" class="btn" id="edit-profile-btn">Редактировать</a>
+                <a href="/profile/edit" class="btn" id="edit-profile-btn">Редактировать</a>
             </div>
             <ul class="nav-menu">
                 <li class="nav-item">
@@ -96,51 +98,7 @@
         </div>
 
         <div class="main-content" id="edit-profile" style="display: none;">
-            <h2 class="section-title">Редактировать профиль</h2>
-            <form id="profileForm" method="post" enctype="multipart/form-data">
-                <div class="form-group">
-                    <label for="name">Имя:</label>
-                    <input type="text" id="name" name="name" pattern="^\p{L}+$" title="Только буквы" minlength="1"
-                        maxlength="20" value="Иван">
-                    <div class="error" id="nameError"></div>
-                </div>
-
-                <div class="form-group">
-                    <label for="surname">Фамилия:</label>
-                    <input type="text" id="surname" name="surname" pattern="^\p{L}+$" title="Только буквы" minlength="1"
-                        maxlength="20" value="Иванов">
-                    <div class="error" id="surnameError"></div>
-                </div>
-
-                <div class="form-group">
-                    <label for="age">Возраст:</label>
-                    <input type="number" id="age" name="age" min="1" max="120" value="55">
-                    <div class="error" id="ageError"></div>
-                </div>
-
-                <div class="form-group">
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" value="ivanov@example.com">
-                    <div class="error" id="emailError"></div>
-                </div>
-
-                <div class="form-group">
-                    <label for="phoneNumber">Номер телефона:</label>
-                    <input type="text" id="phoneNumber" name="phoneNumber" value="+7 (123) 456-78-90">
-                    <div class="error" id="phoneError"></div>
-                </div>
-
-                <div class="form-group">
-                    <label for="password">Пароль:</label>
-                    <input type="password" id="password" name="password" disabled placeholder="••••••••">
-                    <div class="error" id="passwordError"></div>
-                    <div class="password-change">
-                        <a href="/change-password">Изменить пароль</a>
-                    </div>
-                </div>
-
-                <button type="submit" class="submit-btn">Сохранить изменения</button>
-            </form>
+            <@layout.layout/>
         </div>
     </div>
 

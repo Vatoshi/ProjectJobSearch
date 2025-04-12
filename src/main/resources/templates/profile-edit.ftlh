@@ -1,3 +1,5 @@
+<#macro layout>
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -8,25 +10,14 @@
 </head>
 <body>
     <div class="profile-edit-container">
-        <div class="profile-header">
-            <div class="avatar-container">
-                <img src="https://i.pravatar.cc/150?img=30" alt="Аватар" class="avatar">
-                <label class="avatar-upload" title="Изменить фото">
-                    <input type="file" name="avatar" accept="image/*">
-                    <span>+</span>
-                </label>
-            </div>
-            <h2 class="profile-title">Редактирование профиля</h2>
-        </div>
-        
-        <form id="profileForm" method="post" enctype="multipart/form-data">
+
+        <form id="profileForm" method="post" action="/profile/edit" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="name">Имя:</label>
                 <input type="text" id="name" name="name" 
                        pattern="^\p{L}+$"
                        title="Только буквы"
-                       minlength="1" maxlength="20"
-                       value="Иван">
+                       minlength="1" maxlength="20">
                 <div class="error" id="nameError"></div>
             </div>
             
@@ -35,29 +26,25 @@
                 <input type="text" id="surname" name="surname"
                        pattern="^\p{L}+$"
                        title="Только буквы"
-                       minlength="1" maxlength="20"
-                       value="Иванов">
+                       minlength="1" maxlength="20">
                 <div class="error" id="surnameError"></div>
             </div>
             
             <div class="form-group">
                 <label for="age">Возраст:</label>
-                <input type="number" id="age" name="age" min="1" max="120"
-                       value="55">
+                <input type="number" id="age" name="age" min="1" max="120">
                 <div class="error" id="ageError"></div>
             </div>
             
             <div class="form-group">
                 <label for="email">Email:</label>
-                <input type="email" id="email" name="email"
-                       value="ivanov@example.com">
+                <input type="email" id="email" name="email" placeholder="example@gmail.com">
                 <div class="error" id="emailError"></div>
             </div>
             
             <div class="form-group">
                 <label for="phoneNumber">Номер телефона:</label>
-                <input type="text" id="phoneNumber" name="phoneNumber"
-                       value="+7 (123) 456-78-90">
+                <input type="text" id="phoneNumber" name="phoneNumber" placeholder="7993708422">
                 <div class="error" id="phoneError"></div>
             </div>
             
@@ -77,3 +64,4 @@
 
 </body>
 </html>
+</#macro>
