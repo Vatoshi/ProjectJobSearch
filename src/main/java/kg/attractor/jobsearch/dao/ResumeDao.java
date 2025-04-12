@@ -26,6 +26,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -48,7 +49,7 @@ public class ResumeDao {
                 sql,
                 (rs, rowNum) -> new ProfileResumeDto(
                         rs.getString("name"),
-                        rs.getObject("update_time", LocalDateTime.class)
+                        rs.getObject("update_time", LocalDate.class)
                 ),
                 userId
         );

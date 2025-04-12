@@ -19,6 +19,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -42,7 +43,7 @@ public class VacancyDao {
                 sql,
                 (rs, rowNum) -> new ProfileVacancyDto(
                         rs.getString("name"),
-                        rs.getObject("update_time", LocalDateTime.class)
+                        rs.getObject("update_time", LocalDate.class)
                 ),
                 userId
         );

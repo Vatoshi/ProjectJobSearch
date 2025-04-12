@@ -1,6 +1,6 @@
 :root {
-    --primary: #6a46eacc;
-    --secondary: #8739fb;
+    --primary: #8739fb;
+    --secondary: #924eef;
     --light: #f8f9fa;
     --dark: #2d3748;
     --gray: #718096;
@@ -76,7 +76,7 @@ body {
 
 .btn {
     display: inline-block;
-    background: linear-gradient(to right, var(--primary), var(--secondary));
+    background: linear-gradient(to right, var(--primary), var(--primary));
     color: white;
     border: none;
     padding: 8px 16px;

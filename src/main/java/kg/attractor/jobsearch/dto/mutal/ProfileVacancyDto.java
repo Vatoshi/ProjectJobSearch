@@ -6,8 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
+
 
 @Data
 @Builder
@@ -15,6 +14,6 @@ import java.util.Date;
 @AllArgsConstructor
 public class ProfileVacancyDto {
     private String name;
-    private LocalDateTime updated;
+    private LocalDate updated;
 
 }
