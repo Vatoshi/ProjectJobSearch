@@ -1,4 +1,4 @@
-<#import "profile-edit.ftlh" as layout>
+<#import "profile-edit.ftlh" as userEdit>
 
 <!DOCTYPE html>
 <html lang="ru">
@@ -98,7 +98,7 @@
         </div>
 
         <div class="main-content" id="edit-profile" style="display: none;">
-            <@layout.layout/>
+            <@userEdit.userEdit/>
         </div>
     </div>
 
@@ -129,7 +129,6 @@
             contentSections.forEach(section => section.style.display = 'none');
             editSection.style.display = 'block';
         });
-
     </script>
 
 </body>

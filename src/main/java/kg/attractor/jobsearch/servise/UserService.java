@@ -111,7 +111,7 @@ public class UserService {
         return u;
     }
 
-    public UserEditDto editAcc(@Valid UserEditDto u, Long userId) throws HttpMessageNotReadableException {
+    public UserEditDto editAcc(UserEditDto u, Long userId) throws HttpMessageNotReadableException {
         User oldUser = userDao.findById(userId).orElseThrow(UsernameNotFound::new);
         if (u.getName() == null || u.getName().isEmpty()) {u.setName(oldUser.getName());}
         if (u.getSurname() == null || u.getSurname().isEmpty()) {u.setSurname(oldUser.getSurname());}
