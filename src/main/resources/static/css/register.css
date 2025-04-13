@@ -145,3 +145,10 @@ body {
         padding: 30px 20px;
     }
 }
+
+.error {
+    color: #dd2737;
+    font-size: 0.750em;
+    margin-top: 0.25rem;
+    display: block;
+}

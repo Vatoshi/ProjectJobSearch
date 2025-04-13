@@ -1,3 +1,4 @@
+<#import "/spring.ftl" as spring>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -20,6 +21,12 @@
                 <label for="password">Пароль</label>
                 <input type="password" name="password" id="password" placeholder="Введите ваш пароль" required>
             </div>
+
+            <#if error?has_content>
+                <p style="color:#e12e2e;font-size: 14px;">
+                ${error}
+                </p>
+            </#if>
             
             <button type="submit" class="btn">Войти</button>
             

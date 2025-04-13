@@ -117,10 +117,10 @@ body {
     font-size: 1rem;
     color: var(--dark);
     display: -webkit-box;
-    -webkit-line-clamp: 3; /* Ограничиваем на 3 строки */
+    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    text-overflow: ellipsis; /* Добавляем троеточие */
+    text-overflow: ellipsis;
 }
 
 
@@ -222,10 +222,18 @@ select {
 .div-img {
     width: 40px;
     height: 40px;
+    overflow: hidden;
     border: 1px solid rgb(98, 98, 98);
     border-radius: 100%;
     margin-left: 9px;
     background-color: #f0f0f0;
+}
+
+.div-img img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
 }
 
 .profile-text {

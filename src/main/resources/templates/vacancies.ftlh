@@ -12,7 +12,7 @@
 
 <#if user?has_content>
     <a href="/profile" class="profile">
-        <div class="div-img"><img></div>
+        <div class="div-img"><img src="/image/${user.avatar}"></div>
         <p class="profile-text">Ваш <br> профиль</p>
     </a>
 <#else>

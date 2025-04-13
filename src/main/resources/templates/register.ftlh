@@ -1,3 +1,4 @@
+<#import "/spring.ftl" as spring>
 <!DOCTYPE html>
 <html lang="ru">
 
@@ -17,27 +18,33 @@
 
         <form id="registrationForm" method="POST" action="/auth/register">
             <div class="form-group">
-                <input type="text" name="name" required placeholder="Имя">
+                <@spring.formInput "userFormDto.name" 'placeholder="Имя" required'/>
+                <@spring.showErrors "<br>" "error"/>
             </div>
 
             <div class="form-group">
-                <input type="text" name="surname" required placeholder="Фамилия">
+                <@spring.formInput "userFormDto.surname" 'placeholder="Фамилия" required'/>
+                <@spring.showErrors "<br>" "error"/>
             </div>
 
             <div class="form-group">
-                <input type="email" name="email" required placeholder="Email">
+                <@spring.formInput "userFormDto.email" 'placeholder="Почта" required'/>
+                <@spring.showErrors "<br>" "error"/>
             </div>
 
             <div class="form-group">
-                <input type="password" id="password" name="password" required placeholder="Пароль">
+                <@spring.formInput "userFormDto.password" 'placeholder="Пароль" required'/>
+                <@spring.showErrors "<br>" "error"/>
             </div>
 
             <div class="form-group">
-                <input type="number" name="age" required placeholder="Возраст">
+                <@spring.formInput "userFormDto.age" 'placeholder="Возраст" required'/>
+                <@spring.showErrors "<br>" "error"/>
             </div>
 
             <div class="form-group">
-                <input type="text" name="phoneNumber" required placeholder="Телефон">
+                <@spring.formInput "userFormDto.phoneNumber" 'placeholder="Номер телефона" required'/>
+                <@spring.showErrors "<br>" "error"/>
             </div>
 
             <div class="form-group">
