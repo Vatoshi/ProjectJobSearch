@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("profile")
+@RequestMapping("/profile")
 public class ProfileController {
     private final UserService userService;
     private final ResumeService resumeService;
@@ -36,17 +36,18 @@ public class ProfileController {
         return "profile";
     }
 
-    @GetMapping("edit")
-    public String editUserProfile(Model model) {
+    @GetMapping("/edit")
+    public String editUserProfile(Model model, Authentication authentication) {
+        model.addAttribute("user", userService.getEmail(authentication.getName()));
         model.addAttribute("userEditDto", new UserEditDto());
         return "profile-edit";
     }
 
-    @PostMapping("edit")
+    @PostMapping("/edit")
     public String editUserProfile(@Valid @ModelAttribute("userEditDto") UserEditDto userEditDto, BindingResult bindingResult, Authentication authentication, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("userEditDto", userEditDto);
-            return "redirect:/profile#edit";
+            return "profile-edit";
         }
         userService.editAcc(userEditDto, userService.userId(authentication.getName()));
         return "redirect:/profile";

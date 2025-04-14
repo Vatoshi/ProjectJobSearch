@@ -14,7 +14,7 @@
     <div class="container">
         <div class="sidebar">
             <div class="profile-header">
-                <img src="/image/${user.avatar}" alt="Фото профиля" class="avatar">
+                <img src="user/avatars/${user.avatar}" onerror="this.onerror=null; this.src='/image/${user.avatar}'" alt="Фото профиля" class="avatar">
                 <h2 class="profile-name">${user.name}</h2>
                 <div class="profile-age">Возраст: ${user.age}</div>
                 <a href="/profile/edit" class="btn" id="edit-profile-btn">Редактировать</a>
@@ -96,16 +96,11 @@
             <h2 class="section-title">Создать резюме</h2>
             <p>Здесь будет форма создания резюме.</p>
         </div>
-
-        <div class="main-content" id="edit-profile" style="display: none;">
-            <@userEdit.userEdit/>
-        </div>
     </div>
 
     <script>
         const navLinks = document.querySelectorAll('.nav-link');
         const contentSections = document.querySelectorAll('.main-content');
-
         navLinks.forEach(link => {
             link.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -118,19 +113,7 @@
                 document.getElementById(target).style.display = 'block';
             });
         });
-
-        const editBtn = document.getElementById('edit-profile-btn');
-        const editSection = document.getElementById('edit-profile');
-
-        editBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-
-            navLinks.forEach(link => link.classList.remove('active'));
-            contentSections.forEach(section => section.style.display = 'none');
-            editSection.style.display = 'block';
-        });
     </script>
-
 </body>
 
 </html>
