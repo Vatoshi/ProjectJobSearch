@@ -12,7 +12,9 @@
 
 <#if user?has_content>
     <a href="/profile" class="profile">
-        <div class="div-img"><img src="/image/${user.avatar}"></div>
+        <div class="div-img">
+            <img src="user/avatars/${user.avatar}" onerror="this.onerror=null; this.src='/image/Default.png'" alt="Фото профиля" class="avatar">
+        </div>
         <p class="profile-text">Ваш <br> профиль</p>
     </a>
 <#else>

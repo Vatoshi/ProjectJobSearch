@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -79,11 +80,9 @@ public class UserService {
                 .toList();
     }
 
-    public String saveImage(ImageDto imageDto) {
-        User user = userDao.findById(imageDto.getUserId())
-                .orElseThrow(UsernameNotFound::new);
-        String filename = fileUtil.saveUploadFile(imageDto.getImage(), "images/");
-        userDao.save(filename,imageDto.getUserId());
+    public String saveImage(MultipartFile image, String username) {
+        String filename = fileUtil.saveUploadFile(image, "images/");
+        userDao.saveImage(filename, username);
         return filename;
     }
 

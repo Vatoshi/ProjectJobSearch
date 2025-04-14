@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @Controller
@@ -46,10 +47,17 @@ public class ProfileController {
     @PostMapping("/edit")
     public String editUserProfile(@Valid @ModelAttribute("userEditDto") UserEditDto userEditDto, BindingResult bindingResult, Authentication authentication, Model model) {
         if (bindingResult.hasErrors()) {
+            model.addAttribute("user", userService.getEmail(authentication.getName()));
             model.addAttribute("userEditDto", userEditDto);
             return "profile-edit";
         }
         userService.editAcc(userEditDto, userService.userId(authentication.getName()));
+        return "redirect:/profile";
+    }
+
+    @PostMapping("avatar")
+    public String addAvatar(MultipartFile image, Authentication auth) {
+        userService.saveImage(image,auth.getName());
         return "redirect:/profile";
     }
 }

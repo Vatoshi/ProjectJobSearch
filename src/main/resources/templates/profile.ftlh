@@ -14,7 +14,7 @@
     <div class="container">
         <div class="sidebar">
             <div class="profile-header">
-                <img src="user/avatars/${user.avatar}" onerror="this.onerror=null; this.src='/image/${user.avatar}'" alt="Фото профиля" class="avatar">
+                <img src="user/avatars/${user.avatar}" onerror="this.onerror=null; this.src='/image/Default.png'" alt="Фото профиля" class="avatar">
                 <h2 class="profile-name">${user.name}</h2>
                 <div class="profile-age">Возраст: ${user.age}</div>
                 <a href="/profile/edit" class="btn" id="edit-profile-btn">Редактировать</a>

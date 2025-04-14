@@ -1,6 +1,6 @@
 <#import "/spring.ftl" as spring>
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,14 +10,21 @@
 <body>
 <div class="profile-edit-container">
 
-    <form id="profileForm" method="post" action="/profile/edit" enctype="multipart/form-data">
         <div class="icon">
             <div class="circle">
-                <img src="/user/avatars/${user.avatar}"
-                     onerror="this.onerror=null; this.src='/image/${user.avatar}'"
-                     alt="avatar">
+                <form action="/profile/avatar" method="post" enctype="multipart/form-data" id="avatarForm">
+                    <input type="file" name="image" id="upload" style="display: none" onchange="document.getElementById('avatarForm').submit();">
+                    <label for="upload" class="plus">
+                        <img class="plus" src="/image/icons8-знак-плюс-30.png" alt="plus">
+                    </label>
+                    <img src="/user/avatars/${user.avatar}"
+                         onerror="this.onerror=null; this.src='/image/Default.png'"
+                         alt="avatar">
+                </form>
             </div>
         </div>
+
+        <form id="profileForm" method="post" action="/profile/edit" enctype="multipart/form-data">
 
         <div class="form-group">
             <label for="name">Имя:</label>

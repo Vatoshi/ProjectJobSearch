@@ -167,3 +167,9 @@ body {
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
     cursor: pointer;
 }
+
+.plus {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+}
