@@ -6,6 +6,7 @@ import kg.attractor.jobsearch.servise.ResumeService;
 import kg.attractor.jobsearch.servise.UserService;
 import kg.attractor.jobsearch.servise.VacancyService;
 import lombok.RequiredArgsConstructor;
+import org.h2.engine.Mode;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -27,14 +28,19 @@ public class ProfileController {
     private final VacancyService vacancyService;
 
     @GetMapping
-    public String profile(Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        model.addAttribute("user", userService.getEmail(username));
-        model.addAttribute("resumes", resumeService.getUserResume(username));
-        model.addAttribute("vacancies", vacancyService.getVacancyByUser(username));
+    public String profile(Model model, Authentication auth) {
+        model.addAttribute("user", userService.getEmail(auth.getName()));
+        model.addAttribute("resumes", resumeService.getUserResume(auth.getName()));
+        model.addAttribute("vacancies", vacancyService.getVacancyByUser(auth.getName()));
         model.addAttribute("userEditDto", new UserEditDto());
         return "profile";
+    }
+
+    @GetMapping("/response")
+    public String profileResponse (Model model, Authentication auth) {
+        model.addAttribute("user", userService.getEmail(auth.getName()));
+        model.addAttribute("userEditDto", new UserEditDto());
+        return "profile-response";
     }
 
     @GetMapping("/edit")

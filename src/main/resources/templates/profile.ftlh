@@ -27,7 +27,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link" data-target="responses">
+                    <a href="/profile/response" class="nav-link" data-target="responses">
                         <span class="nav-icon">✉️</span>
                         <span>Отклики</span>
                     </a>
@@ -86,34 +86,7 @@
 
             </ul>
         </div>
-
-        <div class="main-content" id="responses" style="display: none;">
-            <h2 class="section-title">Отклики</h2>
-            <p>Пока нет откликов.</p>
-        </div>
-
-        <div class="main-content" id="create" style="display: none;">
-            <h2 class="section-title">Создать резюме</h2>
-            <p>Здесь будет форма создания резюме.</p>
-        </div>
     </div>
-
-    <script>
-        const navLinks = document.querySelectorAll('.nav-link');
-        const contentSections = document.querySelectorAll('.main-content');
-        navLinks.forEach(link => {
-            link.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = this.getAttribute('data-target');
-
-                navLinks.forEach(l => l.classList.remove('active'));
-                this.classList.add('active');
-
-                contentSections.forEach(section => section.style.display = 'none');
-                document.getElementById(target).style.display = 'block';
-            });
-        });
-    </script>
 </body>
 
 </html>
