@@ -1,4 +1,3 @@
-<#import "profile-edit.ftlh" as userEdit>
 
 <!DOCTYPE html>
 <html lang="ru">
@@ -33,7 +32,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link" data-target="create">
+                    <a <#if user.roleId == 1> href="/profile/create-resume" <#else> href="#" </#if> class="nav-link" data-target="create">
                         <span class="nav-icon">➕</span>
                         <span>Создать <#if user.roleId==1> резюме <#else> вакансию </#if></span>
                     </a>

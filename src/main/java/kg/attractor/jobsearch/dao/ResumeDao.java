@@ -84,10 +84,10 @@ public class ResumeDao {
     }
 
     public ResumeDto createResume(ResumeDto resumeDto, Resume resume) {
-        String sqltype = "select account_type from users where id = ?";
-        String typename = jdbcTemplate.queryForObject(sqltype, String.class, resume.getApplicantId());
+        String sqltype = "select role_id from users where id = ?";
+        Integer typename = jdbcTemplate.queryForObject(sqltype, Integer.class, resume.getApplicantId());
 
-        if (typename == null || !typename.equalsIgnoreCase("applicant")) {
+        if (typename == 2) {
             throw new UserStatusExeption("wrong user status");
         }
 

@@ -1,7 +1,10 @@
 package kg.attractor.jobsearch.controlers;
 
 import jakarta.validation.Valid;
+import kg.attractor.jobsearch.dto.EducationInfoDto;
+import kg.attractor.jobsearch.dto.ResumeDto;
 import kg.attractor.jobsearch.dto.UserEditDto;
+import kg.attractor.jobsearch.dto.WorkExperienceInfoDto;
 import kg.attractor.jobsearch.servise.ResumeService;
 import kg.attractor.jobsearch.servise.UserService;
 import kg.attractor.jobsearch.servise.VacancyService;
@@ -12,10 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 
@@ -64,6 +64,27 @@ public class ProfileController {
     @PostMapping("avatar")
     public String addAvatar(MultipartFile image, Authentication auth) {
         userService.saveImage(image,auth.getName());
+        return "redirect:/profile";
+    }
+
+    @GetMapping("create-resume")
+    public String showResumeForm(Authentication auth, Model model) {
+        model.addAttribute("user", userService.getEmail(auth.getName()));
+        model.addAttribute("resumeDto",new ResumeDto());
+        return "resume-form";
+    }
+
+    @PostMapping("create-resume")
+    public String createResume(
+            @Valid @ModelAttribute ResumeDto resumeDto,
+            BindingResult bindingResult,
+            Authentication auth,
+            Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("user", userService.getEmail(auth.getName()));
+            return "resume-form";
+        }
+        resumeService.createResume(resumeDto);
         return "redirect:/profile";
     }
 }
