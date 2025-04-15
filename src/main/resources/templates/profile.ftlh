@@ -39,11 +39,18 @@
                 </li>
                 <#if user.roleId == 2>
                 <li class="nav-item">
-                    <a href="/resumes">
-                        <span class="nav-item"> Посмотреть доступные резюме </span>
+                    <a href="/resumes" class="nav-link">
+                        <span class="nav-icon">📌</span>
+                        <span> Доступные резюме </span>
                     </a>
                 </li>
                 </#if>
+                <li class="nav-item">
+                    <a href="/vacancies" class="nav-link" data-target="resumes">
+                        <span class="nav-icon">🔄</span>
+                        <span> К вакансиям </span>
+                    </a>
+                </li>
             </ul>
         </div>
 
