@@ -8,6 +8,7 @@ import kg.attractor.jobsearch.exeptions.EntityForDeleteNotFound;
 import kg.attractor.jobsearch.exeptions.NotFound;
 import kg.attractor.jobsearch.exeptions.ResumeFromUserNotFound;
 import kg.attractor.jobsearch.exeptions.UserStatusExeption;
+import kg.attractor.jobsearch.models.Resume;
 import kg.attractor.jobsearch.models.User;
 import kg.attractor.jobsearch.models.Vacancy;
 import lombok.Builder;
@@ -19,6 +20,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -31,18 +33,69 @@ import java.util.Optional;
 public class VacancyDao {
     private final JdbcTemplate jdbcTemplate;
 
+    public Optional<Vacancy> findVacancyById(Long resumeId) {
+        String sql = "SELECT * FROM vacancies WHERE id = ?";
+        return Optional.ofNullable(
+                DataAccessUtils.singleResult(
+                        jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Vacancy.class), resumeId)));
+    }
+
+    public List<Vacancy> findByUser(Long userId, Long resumeId) {
+        String sql = "SELECT * FROM vacancies WHERE author_id = ? and id = ?";
+        try {
+            List<Vacancy> a = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Vacancy.class), userId, resumeId);
+            if (a.isEmpty()) {
+                throw new NotFound("Vacancy not fount");
+            }
+        } catch (Exception e) {
+            throw new NotFound("Vacancy not fount");
+        }
+        return null;
+    }
+
+    public void updatetime(Long resumeId) {
+        String sql = "update vacancies set update_time = ? where id = ?";
+        jdbcTemplate.update(sql, LocalDateTime.now(), resumeId);
+    }
+
+    public Long getUserId(String username) {
+        String sql = "select id from users where email = ?";
+        return jdbcTemplate.queryForObject(sql, Long.class, username);
+    }
+
+    public String getAuthorName(Long userId) {
+        String sql = "select name from users where id = ?";
+        try {
+            return jdbcTemplate.queryForObject(sql,String.class, userId);
+        } catch (Exception e) {
+            return "Unknown";
+        }
+
+    }
+
+    public String getCategoryName(Long id) {
+        String sql = "select name from categories where id = ?";
+        try {
+            return jdbcTemplate.queryForObject(sql,String.class, id);
+        } catch (Exception e) {
+            return "Unknown";
+        }
+
+    }
+
     public Long userId(String username) {
         String sql = "select id from users where email = ?";
         return jdbcTemplate.queryForObject(sql,Long.class, username);
     }
 
     public List<ProfileVacancyDto> getVacancyByUser(Long userId) {
-        String sql = "SELECT name, update_time FROM vacancies WHERE author_id = ?";
+        String sql = "SELECT id, name, update_time FROM vacancies WHERE author_id = ?";
         return jdbcTemplate.query(
                 sql,
                 (rs, rowNum) -> new ProfileVacancyDto(
+                        rs.getLong("id"),
                         rs.getString("name"),
-                        rs.getObject("update_time", LocalDateTime.class)
+                        rs.getObject("update_time", LocalDate.class)
                 ),
                 userId
         );
@@ -57,7 +110,7 @@ public class VacancyDao {
         );
 
         if (resumeIds.isEmpty()) {
-            throw new NotFound("resumes not found");
+            throw new NotFound("resumes.ftlh not found");
         }
 
         String sql2 = "SELECT DISTINCT applicant_id FROM resumes WHERE id IN (" +
@@ -127,13 +180,6 @@ public class VacancyDao {
 
 
     public VacancyDto createVacancy(VacancyDto vacancyDto, Vacancy vacancy) {
-        String sqltype = "select account_type from users where id = ?";
-        String typename = jdbcTemplate.queryForObject(sqltype, String.class, vacancy.getAuthorId());
-
-        if (typename == null || !typename.equalsIgnoreCase("employer")) {
-            throw new UserStatusExeption("wrong user status");
-        }
-
         String sql = "insert into vacancies (name,description,category_id,salary,exp_from, exp_to,is_active,author_id,created_date,update_time)" +
                 " values (?,?,?,?,?,?,?,?,?,?)";
         jdbcTemplate.update(sql,vacancy.getName(),vacancy.getDescription(),vacancy.getCategoryId(),vacancy.getSalary(),vacancy.getExpFrom(),vacancy.getExpTo(),vacancy.getIsActive(),vacancy.getAuthorId(),vacancy.getCreatedDate(),vacancy.getUpdateTime());

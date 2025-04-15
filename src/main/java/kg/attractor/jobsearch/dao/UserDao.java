@@ -12,6 +12,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 
 import java.util.List;
@@ -22,6 +23,11 @@ import java.util.Optional;
 @Builder
 public class UserDao {
     private final JdbcTemplate jdbcTemplate;
+
+    public void saveImage(String image, String username) {
+        String sql = "update users set avatar = ? where email = ?";
+        jdbcTemplate.update(sql, image, username);
+    }
 
     public Long userId(String username) {
         String sql = "select id from users where email = ?";
@@ -54,16 +60,6 @@ public class UserDao {
                         jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(User.class), id)
                 )
         );
-    }
-
-    public void save(String filename, Long userId) {
-        String finduser = "select id from users where id = ?";
-            List<Integer> id = jdbcTemplate.queryForList(finduser, Integer.class, userId);
-        if (id.isEmpty()) {
-            throw new NotFound("User for upload file not found");
-        }
-        String sql = "update users set avatar = ? where id = ?";
-        jdbcTemplate.update(sql, filename, userId);
     }
 
     public void createAcc(User u) {

@@ -1,24 +1,40 @@
 package kg.attractor.jobsearch.exeptions.advice;
 
+import jakarta.servlet.http.HttpServletRequest;
 import kg.attractor.jobsearch.exeptions.*;
 import kg.attractor.jobsearch.servise.ErrorService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.web.ErrorResponse;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.NoSuchElementException;
 
-@RestControllerAdvice
+@ControllerAdvice
 @RequiredArgsConstructor
 public class GlobalControllerAdvice {
     private final ErrorService errorService;
+
+    @ExceptionHandler(NotFound.class)
+    public String handleNoSuchElementException(Model model, HttpServletRequest request) {
+        model.addAttribute("status", HttpStatus.NOT_FOUND.value());
+        model.addAttribute("reason", HttpStatus.NOT_FOUND.getReasonPhrase());
+        model.addAttribute("details", request);
+        return "errors/error";
+    }
+
+    @ExceptionHandler(NullPointerException.class)
+    public String NullPointExep(Model model, HttpServletRequest request) {
+        model.addAttribute("status", HttpStatus.NOT_FOUND.value());
+        model.addAttribute("reason", HttpStatus.NOT_FOUND.getReasonPhrase());
+        model.addAttribute("details", request);
+        return "errors/error";
+    }
 
     @ExceptionHandler(NoSuchElementException.class)
     private ResponseEntity<ErrorResponseBody> noSuchElementHandler(NoSuchElementException e) {
@@ -33,11 +49,6 @@ public class GlobalControllerAdvice {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     private ResponseEntity<ErrorResponseBody> validHandler(MethodArgumentNotValidException e) {
         return new ResponseEntity<>(errorService.makeResponse(e.getBindingResult()), HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(NotFound.class)
-    private ResponseEntity<ErrorResponseBody> noSuchElementHandler(NotFound e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorService.makeResponse(e, "not found", HttpStatus.NOT_FOUND));
     }
 
     @ExceptionHandler(EntityForDeleteNotFound.class)
@@ -67,4 +78,5 @@ public class GlobalControllerAdvice {
     private ResponseEntity<ErrorResponseBody> alreadyExist (HttpMessageNotReadableException e){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorService.makeResponse(e, "wrong account type", HttpStatus.BAD_REQUEST));
     }
+
 }

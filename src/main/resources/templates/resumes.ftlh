@@ -53,26 +53,22 @@
         <h2 class="section-title">Вакансии</h2>
         <ul class="vacancy-list" id="vacancy-list">
 
-            <#if vacancies? has_content>
-            <#list vacancies as vacancy>
-                <a href="vacancies/details?id=${vacancy.id}" style="text-decoration: none; transition: none; animation: none">
-                <li class="vacancy-item">
-                    <div class="vacancy-left">
-                        <div class="vacancy-header">
-                            <h3 class="vacancy-title">${vacancy.name}</h3>
+            <#if resumes? has_content>
+                <#list resumes as resume>
+                    <li class="vacancy-item">
+                        <div class="vacancy-left">
+                            <div class="vacancy-header">
+                                <h3 class="vacancy-title">${resume.name}</h3>
+                            </div>
+                            <div class="vacancy-date">Последнее обновление: ${resume.updateTime}</div>
+                            <div class="vacancy-actions">
+                                <button class="action-btn">Откликнуться</button>
+                            </div>
                         </div>
-                        <div class="vacancy-date">Последнее обновление: ${vacancy.updateTime}</div>
-                        <div class="vacancy-experience">Опыт работы: ${vacancy.expFrom} года</div>
-                        <p class="vacancy-description">${vacancy.description!"-"}</p>
-                        <div class="vacancy-actions">
-                            <button class="action-btn">Подать заявку</button>
-                        </div>
-                    </div>
-                    <div class="vacancy-company">${vacancy.author}</div>
-                    <div class="vacancy-salary">Зарплата: ${vacancy.salary!"Договорная"} ₽ </div>
-                </li>
-                </a>
-            </#list>
+                        <div class="vacancy-company">${resume.author}</div>
+                        <div class="vacancy-salary">Хочу зарплату: ${resume.salary!"Договорная"} ₽ </div>
+                    </li>
+                </#list>
             </#if>
         </ul>
     </div>

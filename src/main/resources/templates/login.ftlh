@@ -1,36 +1,39 @@
+<#import "/spring.ftl" as spring>
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <title>Sign in</title>
+    <link rel="stylesheet" href="/css/login.css">
+    <title>Вход в систему</title>
 </head>
-
 <body>
-    <div class="sign">
-        <h1 style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; text-align: center;">
-            Вход</h1>
-        <div class="sign-form">
-            <form class="form" id="loginForm" method="POST" action="/auth/login">
-                <input minlength="2" maxlength="50" type="text" id="username" name="username"
-                    placeholder="Веддите никнейм" required>
-                <br>
-                <input minlength="2 " maxlength="50" style="margin-top: 2px;" name="password" type="password"
-                    id="password" placeholder="Веддите пароль" required>
-                <br>
-        </div>
-        <div class="btns">
-            <button class="btn-sum" type="submit">Войти</button>
-            </form>
-            <a href="/auth/register"><button class="btn-log">Авторизоваться</button></a>
-        </div>
+    <div class="login-container">
+        <h1>Добро пожаловать</h1>
+        
+        <form method="post" action="/auth/login">
+            <div class="input-group">
+                <label for="email">Электронная почта</label>
+                <input type="text" name="username" id="email" placeholder="Введите ваш email" required>
+            </div>
+            
+            <div class="input-group">
+                <label for="password">Пароль</label>
+                <input type="password" name="password" id="password" placeholder="Введите ваш пароль" required>
+            </div>
 
+            <#if error?has_content>
+                <p style="color:#e12e2e;font-size: 14px;">
+                ${error}
+                </p>
+            </#if>
+            
+            <button type="submit" class="btn">Войти</button>
+            
+            <div class="links">
+                <a href="#">Забыли пароль?</a> · <a href="register">Регистрация</a>
+            </div>
+        </form>
     </div>
-
-    <script src="	https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>

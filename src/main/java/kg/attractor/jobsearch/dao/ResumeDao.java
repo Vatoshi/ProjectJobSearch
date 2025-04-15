@@ -26,6 +26,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -37,25 +38,36 @@ public class ResumeDao {
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
+    public String getUserName(Long userId) {
+        String sql = "select name from users where id = ?";
+        return jdbcTemplate.queryForObject(sql, String.class, userId);
+    }
+
+    public List<Resume> getAllResumes() {
+        String sql = "select * from resumes";
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Resume.class));
+    }
+
     public Long userId(String username) {
         String sql = "select id from users where email = ?";
         return jdbcTemplate.queryForObject(sql,Long.class, username);
     }
 
     public List<ProfileResumeDto> getResumeByUser(Long userId) {
-        String sql = "SELECT name, update_time FROM resumes WHERE applicant_id = ?";
+        String sql = "SELECT id, name, update_time FROM resumes WHERE applicant_id = ?";
         return jdbcTemplate.query(
                 sql,
                 (rs, rowNum) -> new ProfileResumeDto(
+                        rs.getLong("id"),
                         rs.getString("name"),
-                        rs.getObject("update_time", LocalDateTime.class)
+                        rs.getObject("update_time", LocalDate.class)
                 ),
                 userId
         );
     }
 
     public Optional<Resume> findResumeById(Long resumeId) {
-        String sql = "SELECT * FROM resumes WHERE id = ? and is_active = true";
+        String sql = "SELECT * FROM resumes WHERE id = ?";
         return Optional.ofNullable(
                 DataAccessUtils.singleResult(
                         jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Resume.class), resumeId)));
@@ -77,16 +89,24 @@ public class ResumeDao {
         return namedParameterJdbcTemplate.query(sqlResumes, parameters, new BeanPropertyRowMapper<>(Resume.class));
     }
 
-    public List<Resume> findByUser(Long userId) {
-        String sql = "SELECT * FROM resumes WHERE applicant_id = ?";
-        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Resume.class), userId);
+    public List<Resume> findByUser(Long userId, Long resumeId) {
+        String sql = "SELECT * FROM resumes WHERE applicant_id = ? and id = ?";
+        try {
+            List<Resume> a = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Resume.class), userId, resumeId);
+            if (a.isEmpty()) {
+                throw new NotFound("resume not fount");
+            }
+        } catch (Exception e) {
+            throw new NotFound("resume not fount");
+        }
+        return null;
     }
 
     public ResumeDto createResume(ResumeDto resumeDto, Resume resume) {
-        String sqltype = "select account_type from users where id = ?";
-        String typename = jdbcTemplate.queryForObject(sqltype, String.class, resume.getApplicantId());
+        String sqltype = "select role_id from users where id = ?";
+        Integer typename = jdbcTemplate.queryForObject(sqltype, Integer.class, resume.getApplicantId());
 
-        if (typename == null || !typename.equalsIgnoreCase("applicant")) {
+        if (typename == 2) {
             throw new UserStatusExeption("wrong user status");
         }
 
@@ -101,7 +121,7 @@ public class ResumeDao {
             ps.setInt(3, resume.getCategoryId() != null ? resume.getCategoryId() : 1);
             ps.setDouble(4, resume.getSalary() != null ? resume.getSalary() : 0);
             ps.setBoolean(5, resume.getIsActive() != null ? resume.getIsActive() : false);
-            ps.setTimestamp(6, Timestamp.valueOf(resume.getCreatedDate()));
+            ps.setTimestamp(6, Timestamp.valueOf(resume.getCreatedDate().atStartOfDay()));
             return ps;
         }, keyHolder);
 
@@ -185,4 +205,9 @@ public class ResumeDao {
             jdbcTemplate.update(sql,resumeDto.getName(), resumeDto.getCategoryId(), resumeDto.getSalary(), resumeDto.getIsActive(), resumeDto.getUpdateTime(), resumeId);
             return resumeDto;
         }
+
+    public void updatetime(Long resumeId) {
+        String sql = "update resumes set update_time = ? where id = ?";
+        jdbcTemplate.update(sql, LocalDateTime.now(), resumeId);
+    }
 }

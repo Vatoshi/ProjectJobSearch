@@ -7,10 +7,15 @@
     import kg.attractor.jobsearch.dto.UserFormDto;
     import kg.attractor.jobsearch.servise.UserService;
     import lombok.RequiredArgsConstructor;
+    import org.springframework.core.io.FileSystemResource;
+    import org.springframework.core.io.Resource;
     import org.springframework.http.HttpStatus;
     import org.springframework.http.ResponseEntity;
+    import org.springframework.security.core.Authentication;
     import org.springframework.web.bind.annotation.*;
+    import org.springframework.web.multipart.MultipartFile;
 
+    import java.io.File;
     import java.util.List;
 
     @RestController
@@ -36,9 +41,20 @@
             return userService.deleteAcc(userId);
         }
 
+        @GetMapping("/avatars/{filename}")
+        public ResponseEntity<Resource> getAvatar(@PathVariable String filename) {
+            File file = new File("data/images/" + filename);
+            if (file.exists()) {
+                Resource resource = new FileSystemResource(file);
+                return ResponseEntity.ok().body(resource);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        }
+
         @PostMapping("add-avatar")
-        public String uploadImage(@Valid ImageDto ImageDto) {
-            return userService.saveImage(ImageDto);
+        public void uploadImage(MultipartFile image, Authentication auth) {
+            userService.saveImage(image,auth.getName());
         }
 
         @GetMapping("/email/{email}")

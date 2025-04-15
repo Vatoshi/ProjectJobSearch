@@ -9,10 +9,13 @@ import java.time.LocalDate;
 
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class ProfileResumeDto {
-    private Long id;
+@NoArgsConstructor
+public class ResumeForWeb {
+    private String author;
     private String name;
-    private LocalDate updated;
+    private Integer categoryId;
+    private Double salary;
+    private boolean isActive;
+    private LocalDate updateTime;
 }

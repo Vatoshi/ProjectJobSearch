@@ -14,3 +14,9 @@ spring:
 #    static-path-pattern: /static/**
   freemarker:
     expose-session-attributes: true
+logging:
+  file:
+    name: logs/app.log
+
+
+
