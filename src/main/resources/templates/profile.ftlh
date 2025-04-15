@@ -53,7 +53,10 @@
                         <div class="resume-date">Дата обновления: ${resume.updated!}</div>
                     </div>
                     <div class="resume-actions">
-                        <a href="#" class="btn action-btn">Обновить</a>
+                        <form method="get" action="/profile/update-resume-time">
+                            <input type="hidden" name="id" value="${resume.id}">
+                            <button type="submit" class="btn action-btn">Обновить</button>
+                        </form>
                         <a href="/profile/edit-resume?id=${resume.id}"  class="btn btn-outline action-btn">Редактировать</a>
                     </div>
                 </li>

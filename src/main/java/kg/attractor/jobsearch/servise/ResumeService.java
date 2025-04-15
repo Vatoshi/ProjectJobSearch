@@ -136,4 +136,8 @@ public class ResumeService {
             resumeDao.updateResume(resumeDto,resumeId);
             return ResponseEntity.status(HttpStatus.OK).body(resumeDto);
         }
+
+        public void updateTime(Long resumeId) {
+            resumeDao.updatetime(resumeId);
+        }
 }

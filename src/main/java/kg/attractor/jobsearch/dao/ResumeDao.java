@@ -195,4 +195,9 @@ public class ResumeDao {
             jdbcTemplate.update(sql,resumeDto.getName(), resumeDto.getCategoryId(), resumeDto.getSalary(), resumeDto.getIsActive(), resumeDto.getUpdateTime(), resumeId);
             return resumeDto;
         }
+
+    public void updatetime(Long resumeId) {
+        String sql = "update resumes set update_time = ? where id = ?";
+        jdbcTemplate.update(sql, LocalDateTime.now(), resumeId);
+    }
 }

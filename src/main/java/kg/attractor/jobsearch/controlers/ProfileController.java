@@ -105,4 +105,9 @@ public class ProfileController {
         return "redirect:/profile";
     }
 
+    @GetMapping("update-resume-time")
+    public String updateResumeTime(@RequestParam("id") Long id) {
+        resumeService.updateTime(id);
+        return "redirect:/profile";
+    }
 }
