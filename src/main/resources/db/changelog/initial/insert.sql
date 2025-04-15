@@ -1,7 +1,7 @@
 insert into users(name, surname, age, email, password, phone_number, avatar, enabled, role_id)
 values
     ('Иван', 'Иванов', 30, 'ivan@example.com', '$2a$12$WB2YUbFcCN0tm44SBcKUjua9yiFBsfB3vW02IjuwzY7HGtlQIKzy2', '+1234567890', 'Default.png', true, 1),
-    ('Петр', 'Петров', 40, 'petr@example.com', '$2a$12$WB2YUbFcCN0tm44SBcKUjua9yiFBsfB3vW02IjuwzY7HGtlQIKzy2', '+0987654321', 'Default.png', true, 2),
+    ('Петр', 'Петров', 40, 'petr@example.com', '$2a$12$WB2YUbFcCN0tm44SBcKUjua9yiFBsfB3vW02IjuwzY7HGtlQIKzy2', '+0987654321', '9c3bedbe-3221-43ca-b49e-c242442b3418_Снимок экрана 2025-03-02 002559.png', true, 2),
     ('Эмир', 'Кадыров', 16, 'emirchik@gmail.com', '$2a$12$WB2YUbFcCN0tm44SBcKUjua9yiFBsfB3vW02IjuwzY7HGtlQIKzy2', '+1231342345', 'Default.png', true, 1),
     ('Александр', 'Сидоров', 35, 'alexandr.sidorov@example.com', '$2a$12$WB2YUbFcCN0tm44SBcKUjua9yiFBsfB3vW02IjuwzY7HGtlQIKzy2', '+1122334455', 'Default.png', true, 1),
     ('Анна', 'Петрова', 28, 'anna.petrovna@example.com', '$2a$12$WB2YUbFcCN0tm44SBcKUjua9yiFBsfB3vW02IjuwzY7HGtlQIKzy2', '+1222333445', 'Default.png', true, 2),
