@@ -1,5 +1,6 @@
 package kg.attractor.jobsearch.controlers;
 
+import kg.attractor.jobsearch.dto.VacancyEditDto;
 import kg.attractor.jobsearch.servise.UserService;
 import kg.attractor.jobsearch.servise.VacancyService;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.Objects;
 
 
 @Controller
@@ -30,5 +34,15 @@ public class VacansiesController {
         }
         model.addAttribute("vacancies", vacancyService.getAllVacancies());
         return "vacancies";
+    }
+
+    @GetMapping("details")
+    public String getVacancy(@RequestParam("id") Long id,  Model model, Authentication auth) {
+        model.addAttribute("vacancy", vacancyService.getAllVacancies()
+                .stream()
+                .filter(v -> Objects.equals(v.getId(), id))
+                .findFirst()
+                .orElse(null));
+        return "vacancy-details";
     }
 }
