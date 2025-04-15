@@ -110,7 +110,7 @@ public class VacancyDao {
         );
 
         if (resumeIds.isEmpty()) {
-            throw new NotFound("resumes not found");
+            throw new NotFound("resumes.ftlh not found");
         }
 
         String sql2 = "SELECT DISTINCT applicant_id FROM resumes WHERE id IN (" +

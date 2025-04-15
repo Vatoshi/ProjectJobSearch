@@ -4,6 +4,8 @@ import kg.attractor.jobsearch.dto.EducationInfoDto;
 import kg.attractor.jobsearch.dto.ResumeDto;
 import kg.attractor.jobsearch.dto.WorkExperienceInfoDto;
 import kg.attractor.jobsearch.dto.mutal.ProfileResumeDto;
+import kg.attractor.jobsearch.dto.mutal.ResumeForWeb;
+import kg.attractor.jobsearch.dto.mutal.VacancyForWebDto;
 import kg.attractor.jobsearch.exeptions.NotFound;
 import kg.attractor.jobsearch.models.EducationInfo;
 import kg.attractor.jobsearch.models.Resume;
@@ -25,6 +27,21 @@ public class ResumeService {
     private final UserService dao;
     private final ResumeDao resumeDao;
 
+    public List<ResumeForWeb> getResumes() {
+        return resumeDao.getAllResumes()
+                .stream()
+                .filter(Resume::getIsActive)
+                .map(resume -> ResumeForWeb.builder()
+                        .name(resume.getName())
+                        .salary(resume.getSalary())
+                        .updateTime(resume.getUpdateTime())
+                        .categoryId(resume.getCategoryId())
+                        .author(resumeDao.getUserName(resume.getApplicantId()))
+                        .build())
+                .toList();
+    }
+
+
     public List<ResumeDto> getResumesById(String categoryName) throws NotFound {
         List<Resume> resumes = resumeDao.findByCategory(categoryName).stream().filter(Resume::getIsActive).toList();
         return resumes.stream()
@@ -45,12 +62,12 @@ public class ResumeService {
     }
 
 //    public List<ResumeDto> getResumesByAplicant(Long userId) {
-//        List<Resume> resumes = resumeDao.findByUser(userId).stream().filter(Resume::getIsActive).toList();
-//        if (resumes.isEmpty()) {
+//        List<Resume> resumes.ftlh = resumeDao.findByUser(userId).stream().filter(Resume::getIsActive).toList();
+//        if (resumes.ftlh.isEmpty()) {
 //            throw new NotFound("resume not found");
 //        }
 //
-//        return resumes.stream()
+//        return resumes.ftlh.stream()
 //                .map(resume -> ResumeDto.builder()
 //                        .name(resume.getName())
 //                        .categoryId(resume.getCategoryId())

@@ -37,6 +37,13 @@
                         <span>Создать <#if user.roleId==1> резюме <#else> вакансию </#if></span>
                     </a>
                 </li>
+                <#if user.roleId == 2>
+                <li class="nav-item">
+                    <a href="/resumes">
+                        <span class="nav-item"> Посмотреть доступные резюме </span>
+                    </a>
+                </li>
+                </#if>
             </ul>
         </div>
 

@@ -38,6 +38,16 @@ public class ResumeDao {
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
+    public String getUserName(Long userId) {
+        String sql = "select name from users where id = ?";
+        return jdbcTemplate.queryForObject(sql, String.class, userId);
+    }
+
+    public List<Resume> getAllResumes() {
+        String sql = "select * from resumes";
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Resume.class));
+    }
+
     public Long userId(String username) {
         String sql = "select id from users where email = ?";
         return jdbcTemplate.queryForObject(sql,Long.class, username);

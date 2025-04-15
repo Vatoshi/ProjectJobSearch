@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/vacancy.css">
+    <title>Вакансии</title>
+</head>
+
+<body>
+
+<#if user?has_content>
+    <a href="/profile" class="profile">
+        <div class="div-img">
+            <img src="user/avatars/${user.avatar}" onerror="this.onerror=null; this.src='/image/Default.png'" alt="Фото профиля" class="avatar">
+        </div>
+        <p class="profile-text">Ваш <br> профиль</p>
+    </a>
+<#else>
+    <a href="/auth/login" class="profile" style="justify-content: center" >
+        <div style="font-weight: 600;">Войти в аккаунт</div>
+    </a>
+</#if>
+
+<div class="container">
+    <div class="sidebar">
+        <h3>Фильтры</h3>
+        <div class="filter-section">
+            <label for="category">Категория</label>
+            <select id="category">
+                <option value="">Все</option>
+                <option value="frontend">Frontend</option>
+                <option value="backend">Backend</option>
+                <option value="designer">Дизайнер</option>
+            </select>
+        </div>
+
+        <div class="filter-section">
+            <label for="location">Местоположение</label>
+            <select id="location">
+                <option value="">Все</option>
+                <option value="moscow">Москва</option>
+                <option value="spb">Санкт-Петербург</option>
+                <option value="kazan">Казань</option>
+            </select>
+        </div>
+
+        <button class="action-btn" onclick="filterJobs()">Применить фильтры</button>
+    </div>
+
+    <div class="main-content">
+        <h2 class="section-title">Вакансии</h2>
+        <ul class="vacancy-list" id="vacancy-list">
+
+            <#if resumes? has_content>
+                <#list resumes as resume>
+                    <li class="vacancy-item">
+                        <div class="vacancy-left">
+                            <div class="vacancy-header">
+                                <h3 class="vacancy-title">${resume.name}</h3>
+                            </div>
+                            <div class="vacancy-date">Последнее обновление: ${resume.updateTime}</div>
+                            <div class="vacancy-actions">
+                                <button class="action-btn">Откликнуться</button>
+                            </div>
+                        </div>
+                        <div class="vacancy-company">${resume.author}</div>
+                        <div class="vacancy-salary">Хочу зарплату: ${resume.salary!"Договорная"} ₽ </div>
+                    </li>
+                </#list>
+            </#if>
+        </ul>
+    </div>
+</div>
+
+
+</body>
+</html>
