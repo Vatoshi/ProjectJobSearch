@@ -9,12 +9,12 @@ import kg.attractor.jobsearch.servise.ResumeService;
 import kg.attractor.jobsearch.servise.UserService;
 import kg.attractor.jobsearch.servise.VacancyService;
 import lombok.RequiredArgsConstructor;
-import org.h2.engine.Mode;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -84,7 +84,25 @@ public class ProfileController {
             model.addAttribute("user", userService.getEmail(auth.getName()));
             return "resume-form";
         }
-        resumeService.createResume(resumeDto);
+        resumeService.createResume(resumeDto, auth.getName());
         return "redirect:/profile";
     }
+
+    @GetMapping("edit-resume")
+    public String editResumeForm(Model model, Authentication auth, @RequestParam("id") Long id) {
+        model.addAttribute("user", userService.getEmail(auth.getName()));
+        model.addAttribute("resumeDto", resumeService.getResumeById(id,auth.getName()));
+        return "resume-edit";
+    }
+
+    @PostMapping("edit-resume")
+    public String editResume(Authentication auth, ResumeDto resumeDto,BindingResult bindingResult, Model model, @RequestParam("id") Long id) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("user", userService.getEmail(auth.getName()));
+            return "resume-edit";
+        }
+        resumeService.updateResume(id,resumeDto);
+        return "redirect:/profile";
+    }
+
 }

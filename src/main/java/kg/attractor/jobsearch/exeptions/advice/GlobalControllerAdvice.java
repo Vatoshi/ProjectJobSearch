@@ -3,6 +3,7 @@ package kg.attractor.jobsearch.exeptions.advice;
 import kg.attractor.jobsearch.exeptions.*;
 import kg.attractor.jobsearch.servise.ErrorService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.TypeMismatchException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.NoSuchElementException;
@@ -67,4 +69,5 @@ public class GlobalControllerAdvice {
     private ResponseEntity<ErrorResponseBody> alreadyExist (HttpMessageNotReadableException e){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorService.makeResponse(e, "wrong account type", HttpStatus.BAD_REQUEST));
     }
+
 }

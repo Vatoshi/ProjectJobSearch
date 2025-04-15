@@ -12,6 +12,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProfileResumeDto {
+    private Long id;
     private String name;
     private LocalDate updated;
 }

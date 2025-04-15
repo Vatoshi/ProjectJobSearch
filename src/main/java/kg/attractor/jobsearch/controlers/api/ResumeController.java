@@ -21,11 +21,6 @@ public class ResumeController {
         return resumeService.deleteResume(resumeId);
     }
 
-    @PostMapping("create")
-    public ResponseEntity<ResumeDto> createResume(@RequestBody @Valid ResumeDto resumeDto) {
-    return resumeService.createResume(resumeDto);
-    }
-
     @PutMapping("edit/{resumeId}")
     public ResponseEntity<ResumeDto> editResume(@PathVariable Long resumeId, @RequestBody @Valid ResumeDto resumeDto) {
         return resumeService.updateResume(resumeId, resumeDto);
@@ -36,13 +31,13 @@ public class ResumeController {
         return resumeService.getResumesById(categoryName);
     }
 
-    @GetMapping("by-user/{userId}")
-    public List<ResumeDto> getResumesByUserId(@PathVariable Long userId) {
-        return resumeService.getResumesByAplicant(userId);
-    }
+//    @GetMapping("by-user/{userId}")
+//    public List<ResumeDto> getResumesByUserId(@PathVariable Long userId) {
+//        return resumeService.getResumesByAplicant(userId);
+//    }
 
-    @GetMapping("id/{resumeId}")
-    public ResumeDto getResume(@PathVariable Long resumeId) {
-        return resumeService.getResumeById(resumeId);
-    }
+//    @GetMapping("id/{resumeId}")
+//    public ResumeDto getResume(@PathVariable Long resumeId) {
+//        return resumeService.getResumeById(resumeId);
+//    }
 }

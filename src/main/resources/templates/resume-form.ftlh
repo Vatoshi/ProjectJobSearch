@@ -16,9 +16,6 @@
     </div>
 
     <form id="resumeForm" method="post">
-        <input type="hidden" name="experience" value="${experience!1}">
-        <input type="hidden" name="education" value="${education!1}">
-
         <div class="form-section">
             <div class="form-group">
                 <label for="name">Название резюме:</label>
@@ -45,14 +42,12 @@
             </div>
         </div>
 
-<#--        <#assign experienceCount = experience!1>-->
         <div class="form-section">
             <h3 class="section-title">Опыт работы</h3>
-<#--            <#list 1..experienceCount as i>-->
                 <div class="experience-item">
                     <div class="form-group">
                         <label for="workExperienceInfo[0].years">Год работы:</label>
-                        <@spring.formInput "resumeDto.workExperienceInfo[0].years" 'placeholder="Например: 2018-2022"'></@spring.formInput>
+                        <@spring.formInput "resumeDto.workExperienceInfo[0].years" 'placeholder="Сколько лет вы отработали"'></@spring.formInput>
                         <@spring.showErrors "<br>" "error"/>
                     </div>
 
@@ -74,18 +69,10 @@
                         <@spring.showErrors "<br>" "error"/>
                     </div>
                 </div>
-<#--            </#list>-->
-
-<#--            <a href="/create-resume?educationCount=${education}&experienceCount=${experience + 1}"-->
-<#--               class="add-btn">-->
-<#--                Добавить место работы-->
-<#--            </a>-->
         </div>
 
-<#--        <#assign educationCount = education!1>-->
         <div class="form-section">
             <h3 class="section-title">Образование</h3>
-<#--            <#list 1..educationCount as i>-->
                 <div class="education-item">
                     <div class="form-group">
                         <label for="educationInfo[0].institution">Учебное заведение:</label>
@@ -101,14 +88,13 @@
 
                     <div class="form-group">
                         <label for="educationInfo[0].startDate">Дата начала:</label>
-                        <@spring.formInput "resumeDto.educationInfo[0].startDate" 'type="datetime-local"'></@spring.formInput>
-                        <@spring.showErrors "<br>" "error"/>
+<#--                        <@spring.formInput "educationInfo[0].startDate" 'type="date"'></@spring.formInput>-->
+                        <input name="resumeDto.educationInfo[0].startDate" type="date">
                     </div>
 
                     <div class="form-group">
                         <label for="educationInfo[0].endDate">Дата окончания:</label>
-                        <@spring.formInput "resumeDto.educationInfo[0].endDate" 'type="datetime-local"'></@spring.formInput>
-                        <@spring.showErrors "<br>" "error"/>
+                        <input name="resumeDto.educationInfo[0].endDate" type="date">
                     </div>
 
                     <div class="form-group">
@@ -117,12 +103,6 @@
                         <@spring.showErrors "<br>" "error"/>
                     </div>
                 </div>
-<#--            </#list>-->
-
-<#--            <a href="/create-resume?educationCount=${education + 1}&experienceCount=${experience}"-->
-<#--               class="add-btn">-->
-<#--                Добавить образование-->
-<#--            </a>-->
         </div>
 
         <div class="switch-container">

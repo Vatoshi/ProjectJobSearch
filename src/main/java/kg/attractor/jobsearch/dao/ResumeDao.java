@@ -44,10 +44,11 @@ public class ResumeDao {
     }
 
     public List<ProfileResumeDto> getResumeByUser(Long userId) {
-        String sql = "SELECT name, update_time FROM resumes WHERE applicant_id = ?";
+        String sql = "SELECT id, name, update_time FROM resumes WHERE applicant_id = ?";
         return jdbcTemplate.query(
                 sql,
                 (rs, rowNum) -> new ProfileResumeDto(
+                        rs.getLong("id"),
                         rs.getString("name"),
                         rs.getObject("update_time", LocalDate.class)
                 ),
@@ -78,9 +79,17 @@ public class ResumeDao {
         return namedParameterJdbcTemplate.query(sqlResumes, parameters, new BeanPropertyRowMapper<>(Resume.class));
     }
 
-    public List<Resume> findByUser(Long userId) {
-        String sql = "SELECT * FROM resumes WHERE applicant_id = ?";
-        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Resume.class), userId);
+    public List<Resume> findByUser(Long userId, Long resumeId) {
+        String sql = "SELECT * FROM resumes WHERE applicant_id = ? and id = ?";
+        try {
+            List<Resume> a = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Resume.class), userId, resumeId);
+            if (a.isEmpty()) {
+                throw new NotFound("resume not fount");
+            }
+        } catch (Exception e) {
+            throw new NotFound("resume not fount");
+        }
+        return null;
     }
 
     public ResumeDto createResume(ResumeDto resumeDto, Resume resume) {
@@ -102,7 +111,7 @@ public class ResumeDao {
             ps.setInt(3, resume.getCategoryId() != null ? resume.getCategoryId() : 1);
             ps.setDouble(4, resume.getSalary() != null ? resume.getSalary() : 0);
             ps.setBoolean(5, resume.getIsActive() != null ? resume.getIsActive() : false);
-            ps.setTimestamp(6, Timestamp.valueOf(resume.getCreatedDate()));
+            ps.setTimestamp(6, Timestamp.valueOf(resume.getCreatedDate().atStartOfDay()));
             return ps;
         }, keyHolder);
 

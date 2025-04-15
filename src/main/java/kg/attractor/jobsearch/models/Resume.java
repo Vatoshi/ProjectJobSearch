@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -17,7 +18,7 @@ public class Resume {
     private Integer categoryId;
     private Double salary;
     private Boolean isActive;
-    private LocalDateTime createdDate;
-    private LocalDateTime updateTime;
+    private LocalDate createdDate;
+    private LocalDate updateTime;
     private Long id;
 }

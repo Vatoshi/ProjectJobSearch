@@ -54,7 +54,7 @@
                     </div>
                     <div class="resume-actions">
                         <a href="#" class="btn action-btn">Обновить</a>
-                        <a href="#" class="btn btn-outline action-btn">Редактировать</a>
+                        <a href="/profile/edit-resume?id=${resume.id}"  class="btn btn-outline action-btn">Редактировать</a>
                     </div>
                 </li>
                 </#list>
