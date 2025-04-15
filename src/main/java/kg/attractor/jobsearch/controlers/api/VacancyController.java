@@ -40,15 +40,15 @@ public class VacancyController {
         return vacancyService.getResponedUsers(vacancyId);
     }
 
-    @PostMapping("create")
-    public ResponseEntity<VacancyDto> createVacancy(@RequestBody @Valid VacancyDto vacancyDto) {
-        return vacancyService.createVacancy(vacancyDto);
-    }
+//    @PostMapping("create")
+//    public ResponseEntity<VacancyDto> createVacancy(@RequestBody @Valid VacancyDto vacancyDto) {
+//        return vacancyService.createVacancy(vacancyDto);
+//    }
 
-    @PostMapping("edit/{resumeId}")
-    public ResponseEntity<VacancyEditDto> editVacancy(@PathVariable Long resumeId, @RequestBody VacancyEditDto vacancyDto) {
-        return vacancyService.updateResume(resumeId, vacancyDto);
-    }
+//    @PostMapping("edit/{resumeId}")
+//    public ResponseEntity<VacancyEditDto> editVacancy(@PathVariable Long resumeId, @RequestBody VacancyEditDto vacancyDto) {
+//        return vacancyService.updateResume(resumeId, vacancyDto);
+//    }
 
     @DeleteMapping("delete/{vacancyId}")
     public HttpStatus deleteVacancy(@PathVariable Long vacancyId) throws NotFound {

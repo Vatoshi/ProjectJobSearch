@@ -4,20 +4,23 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import kg.attractor.jobsearch.util.ValidExperienceRange;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@ValidExperienceRange
 public class VacancyDto {
     @NotNull(message = "имя не должно быть пустым")
     @Size(min = 3, max = 30, message = "имя должно содержать от 1 - 30 символов")
     @Pattern(regexp = ".*\\p{L}.*", message = "Название не может состоять только из цифр")
     private String name;
+    @Size(min = 5, message = "минимум 5 символов")
     private String description;
     private Long categoryId;
     @PositiveOrZero
@@ -25,6 +28,7 @@ public class VacancyDto {
     @PositiveOrZero
     private Integer expFrom;
     @PositiveOrZero
+    @Max(value = 50, message = "Максимум 50 лет")
     private Integer expTo;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Boolean isActive;

@@ -32,6 +32,23 @@ public class VacancyService {
         return vacancyDao.getVacancyByUser(userId);
     }
 
+    public VacancyEditDto getVacancyById(Long vacancyId,String username) {
+        Long userId = vacancyDao.userId(username);
+        vacancyDao.findByUser(userId,vacancyId);
+        Vacancy vacancy = vacancyDao.findVacancyById(vacancyId)
+                .orElseThrow(() -> new NotFound("Could not find vacancy with id: " + vacancyId));
+        return VacancyEditDto.builder()
+                .name(vacancy.getName())
+                .description(vacancy.getDescription())
+                .salary(vacancy.getSalary())
+                .isActive(vacancy.getIsActive())
+                .updateTime(vacancy.getUpdateTime())
+                .expFrom(vacancy.getExpFrom())
+                .expTo(vacancy.getExpTo())
+                .createdDate(vacancy.getCreatedDate())
+                .build();
+    }
+
     public List<UserDto> getResponedUsers(Long vacancyId) throws IllegalArgumentException {
         return vacancyDao.getRespondedUsersOnVacancy(vacancyId)
                 .stream()
@@ -101,12 +118,12 @@ public class VacancyService {
                 .toList();
     }
 
-    public ResponseEntity<VacancyDto> createVacancy(VacancyDto vacancyDto) throws IllegalArgumentException {
+    public ResponseEntity<VacancyDto> createVacancy(VacancyDto vacancyDto, String username) throws IllegalArgumentException {
         vacancyDto.setCreatedDate(LocalDateTime.now());
         vacancyDto.setUpdateTime(LocalDateTime.now());
-
+        Long userId = vacancyDao.getUserId(username);
         Vacancy vacancy = Vacancy.builder()
-                .authorId(2L)
+                .authorId(userId)
                 .name(vacancyDto.getName())
                 .categoryId(vacancyDto.getCategoryId())
                 .salary(vacancyDto.getSalary())
@@ -126,7 +143,7 @@ public class VacancyService {
         return vacancyDao.deleteVacancy(vacancyId);
     }
 
-    public ResponseEntity<VacancyEditDto> updateResume(Long vacancyId, VacancyEditDto vacancyDto) throws NotFound {
+    public ResponseEntity<VacancyEditDto> updateVacancy(Long vacancyId, VacancyEditDto vacancyDto) throws NotFound {
         Vacancy oldVacancy = vacancyDao.getVacancy(vacancyId)
                 .orElseThrow(() -> new NotFound("Vacancy not found"));
         if (vacancyDto.getName() == null) {
@@ -147,5 +164,9 @@ public class VacancyService {
         vacancyDao.updateVacancy(vacancyDto, vacancyId);
 
         return ResponseEntity.status(HttpStatus.OK).body(vacancyDto);
+    }
+
+    public void updateTime(Long resumeId) {
+        vacancyDao.updatetime(resumeId);
     }
 }

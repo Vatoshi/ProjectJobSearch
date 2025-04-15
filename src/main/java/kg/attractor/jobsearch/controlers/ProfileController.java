@@ -1,10 +1,7 @@
 package kg.attractor.jobsearch.controlers;
 
 import jakarta.validation.Valid;
-import kg.attractor.jobsearch.dto.EducationInfoDto;
-import kg.attractor.jobsearch.dto.ResumeDto;
-import kg.attractor.jobsearch.dto.UserEditDto;
-import kg.attractor.jobsearch.dto.WorkExperienceInfoDto;
+import kg.attractor.jobsearch.dto.*;
 import kg.attractor.jobsearch.servise.ResumeService;
 import kg.attractor.jobsearch.servise.UserService;
 import kg.attractor.jobsearch.servise.VacancyService;
@@ -107,6 +104,55 @@ public class ProfileController {
 
     @GetMapping("update-resume-time")
     public String updateResumeTime(@RequestParam("id") Long id) {
+        resumeService.updateTime(id);
+        return "redirect:/profile";
+    }
+
+    @GetMapping("create-vacancy")
+    public String showVacancyForm(Authentication auth, Model model) {
+        model.addAttribute("user", userService.getEmail(auth.getName()));
+        model.addAttribute("vacancyDto",new VacancyDto());
+        return "vacancy-form";
+    }
+
+    @PostMapping("create-vacancy")
+    public String createVacancy(@Valid @ModelAttribute VacancyDto vacancyDto,
+                                BindingResult bindingResult,
+                                Authentication auth,
+                                Model model){
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("user", userService.getEmail(auth.getName()));
+            model.addAttribute("vacancyDto", vacancyDto);
+            return "vacancy-form";
+        }
+        vacancyService.createVacancy(vacancyDto, auth.getName());
+        return "redirect:/profile";
+    }
+
+    @GetMapping("edit-vacancy")
+    public String editVacancyForm(Model model, VacancyEditDto vacancyEditDto, Authentication auth, @RequestParam("id") Long id) {
+        model.addAttribute("user", userService.getEmail(auth.getName()));
+        model.addAttribute("vacancyEditDto", vacancyService.getVacancyById(id,auth.getName()));
+        return "vacancy-edit";
+    }
+
+    @PostMapping("edit-vacancy")
+    public String editVacancy(VacancyEditDto vacancyEditDto,
+                              BindingResult bindingResult,
+                              Model model,
+                              Authentication auth,
+                              @RequestParam("id") Long id) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("user", userService.getEmail(auth.getName()));
+            model.addAttribute("vacancyDto", vacancyEditDto);
+            return "vacancy-edit";
+        }
+        vacancyService.updateVacancy(id,vacancyEditDto);
+        return "redirect:/profile";
+    }
+
+    @GetMapping("update-vacancy-time")
+    public String updateVacancyTime(@RequestParam("id") Long id) {
         resumeService.updateTime(id);
         return "redirect:/profile";
     }

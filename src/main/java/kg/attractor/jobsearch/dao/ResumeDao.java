@@ -57,7 +57,7 @@ public class ResumeDao {
     }
 
     public Optional<Resume> findResumeById(Long resumeId) {
-        String sql = "SELECT * FROM resumes WHERE id = ? and is_active = true";
+        String sql = "SELECT * FROM resumes WHERE id = ?";
         return Optional.ofNullable(
                 DataAccessUtils.singleResult(
                         jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Resume.class), resumeId)));

@@ -1,5 +1,4 @@
-<#import "../layout.ftlh" as main>
-<@main.layout>
+
     <link rel="preconnect" href="https://fonts.bunny.net" crossorigin>
     <link rel="dns-prefetch" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito+Sans" rel="stylesheet">
@@ -422,4 +421,3 @@
         }
         // {{ end }}
     </script>
-</@main.layout>

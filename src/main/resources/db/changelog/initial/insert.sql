@@ -23,7 +23,6 @@ insert into categories (name, parent_id) values
                                              ('финансы', (select id from categories where name = 'основные категории')),
                                              ('менеджмент', (select id from categories where name = 'основные категории'));
 
--- Добавление вакансий с разными пользователями, названиями и описаниями
 insert into vacancies (name, description, category_id, salary, exp_from, exp_to, is_active, author_id, created_date, update_time)
 select 'Frontend Developer', 'Создание пользовательских интерфейсов с использованием HTML, CSS и JavaScript. Работы с фреймворками и оптимизация производительности.',
        (select id from categories where name = 'it'), 70000.00, 2, 5, true, (select id from users where email = 'ivan@example.com'), current_timestamp, current_timestamp;
@@ -46,7 +45,7 @@ select 'SEO Specialist', 'Оптимизация сайтов для поиск�
 
 insert into vacancies (name, description, category_id, salary, exp_from, exp_to, is_active, author_id, created_date, update_time)
 select 'Content Manager', 'Разработка контент-стратегий, написание текстов и управление социальными сетями компании.',
-       (select id from categories where name = 'маркетинг'), 70000.00, 3, 6, true, (select id from users where email = 'tatyana.novikova@example.com'), current_timestamp, current_timestamp;
+       (select id from categories where name = 'маркетинг'), 70000.00, 3, 6, true, (select id from users where email = 'dmitriy.smirnov@example.com'), current_timestamp, current_timestamp;
 
 insert into vacancies (name, description, category_id, salary, exp_from, exp_to, is_active, author_id, created_date, update_time)
 select 'Graphic Designer', 'Разработка визуальных концепций, дизайн рекламных материалов, создание логотипов и брендинга.',
@@ -62,23 +61,23 @@ select 'Financial Analyst', 'Анализ финансовых данных, с�
 
 insert into vacancies (name, description, category_id, salary, exp_from, exp_to, is_active, author_id, created_date, update_time)
 select 'Business Analyst', 'Анализ бизнес-процессов, выявление требований к системам и консультирование по вопросам автоматизации бизнеса.',
-       (select id from categories where name = 'финансы'), 85000.00, 4, 7, true, (select id from users where email = 'elena.ivanova@example.com'), current_timestamp, current_timestamp;
+       (select id from categories where name = 'финансы'), 85000.00, 4, 7, true, (select id from users where email = 'svetlana.orlova@example.com'), current_timestamp, current_timestamp;
 
 insert into vacancies (name, description, category_id, salary, exp_from, exp_to, is_active, author_id, created_date, update_time)
 select 'Data Scientist', 'Анализ данных, создание предсказательных моделей и работа с большими данными для извлечения полезных инсайтов.',
-       (select id from categories where name = 'it'), 90000.00, 5, 8, true, (select id from users where email = 'sergey.kovalev@example.com'), current_timestamp, current_timestamp;
+       (select id from categories where name = 'it'), 90000.00, 5, 8, true, (select id from users where email = 'maksim.lebedev@example.com'), current_timestamp, current_timestamp;
 
 insert into vacancies (name, description, category_id, salary, exp_from, exp_to, is_active, author_id, created_date, update_time)
 select 'DevOps Engineer', 'Автоматизация процессов разработки, управление инфраструктурой, настройка CI/CD и работа с облачными сервисами.',
-       (select id from categories where name = 'it'), 95000.00, 4, 7, true, (select id from users where email = 'igor.korolev@example.com'), current_timestamp, current_timestamp;
+       (select id from categories where name = 'it'), 95000.00, 4, 7, true, (select id from users where email = 'maksim.lebedev@example.com'), current_timestamp, current_timestamp;
 
 insert into vacancies (name, description, category_id, salary, exp_from, exp_to, is_active, author_id, created_date, update_time)
 select 'Cloud Engineer', 'Разработка и поддержка облачных решений, настройка инфраструктуры и работа с облачными провайдерами.',
-       (select id from categories where name = 'it'), 100000.00, 5, 8, true, (select id from users where email = 'valentina.makarova@example.com'), current_timestamp, current_timestamp;
+       (select id from categories where name = 'it'), 100000.00, 5, 8, true, (select id from users where email = 'anna.petrovna@example.com'), current_timestamp, current_timestamp;
 
 insert into vacancies (name, description, category_id, salary, exp_from, exp_to, is_active, author_id, created_date, update_time)
 select 'Network Administrator', 'Управление и поддержка сетевой инфраструктуры компании, обеспечение безопасности и надежности работы сети.',
-       (select id from categories where name = 'it'), 70000.00, 2, 5, true, (select id from users where email = 'andrey.belyaev@example.com'), current_timestamp, current_timestamp;
+       (select id from categories where name = 'it'), 70000.00, 2, 5, true, (select id from users where email = 'anna.petrovna@example.com'), current_timestamp, current_timestamp;
 
 
 insert into resumes (applicant_id, name, category_id, salary, is_active, created_date, update_time)

@@ -13,6 +13,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProfileVacancyDto {
+    private Long id;
     private String name;
     private LocalDate updated;
 

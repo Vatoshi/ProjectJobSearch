@@ -32,7 +32,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a <#if user.roleId == 1> href="/profile/create-resume" <#else> href="#" </#if> class="nav-link" data-target="create">
+                    <a <#if user.roleId == 1> href="/profile/create-resume" <#else> href="/profile/create-vacancy" </#if> class="nav-link" data-target="create">
                         <span class="nav-icon">➕</span>
                         <span>Создать <#if user.roleId==1> резюме <#else> вакансию </#if></span>
                     </a>
@@ -75,8 +75,11 @@
                                 <div class="resume-date">Дата обновления: ${vacancy.updated!}</div>
                             </div>
                             <div class="resume-actions">
-                                <a href="#" class="btn action-btn">Обновить</a>
-                                <a href="#" class="btn btn-outline action-btn">Редактировать</a>
+                                <form method="get" action="/profile/update-vacancy-time">
+                                    <input type="hidden" name="id" value="${vacancy.id}">
+                                    <button type="submit" class="btn action-btn">Обновить</button>
+                                </form>
+                                <a href="/profile/edit-vacancy?id=${vacancy.id}" class="btn btn-outline action-btn">Редактировать</a>
                             </div>
                         </li>
                         </#list>

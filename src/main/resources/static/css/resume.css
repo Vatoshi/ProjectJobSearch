@@ -238,3 +238,25 @@ input:checked+.slider:before {
         padding: 30px 20px;
     }
 }
+
+.experience-block {
+    margin-top: 1em;
+}
+
+.experience-range {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.experience-range input {
+    width: 60px;
+    padding: 5px;
+}
+
+.error {
+    color: #dd2737;
+    font-size: 0.750em;
+    margin-top: 0.25rem;
+    display: block;
+}
