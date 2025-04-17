@@ -33,7 +33,6 @@ public class VacansiesController {
         } else {
             model.addAttribute("user", null);
         }
-        // использовать jpa там все равно обработка null
         model.addAttribute("vacancies", vacancyRepository.findActiveVacancies());
         return "main/vacancies";
     }

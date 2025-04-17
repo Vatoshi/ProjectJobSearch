@@ -21,7 +21,6 @@ public class VacancyEditDto {
     private Double salary;
     private Integer expFrom;
     private Integer expTo;
-    @JsonProperty("isActive")
     private Boolean isActive;
     @PastOrPresent
     private LocalDateTime createdDate;

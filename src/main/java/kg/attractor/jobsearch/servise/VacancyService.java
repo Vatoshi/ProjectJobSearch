@@ -43,12 +43,13 @@ public class VacancyService {
     public VacancyEditDto getVacancyById(Long vacancyId,String username) {
         Long userId = vacancyDao.userId(username);
         vacancyRepository.exist(userId,vacancyId);
-        Vacancy vacancy = vacancyDao.findVacancyById(vacancyId)
+        Vacancy vacancy = vacancyRepository.findById(vacancyId)
                 .orElseThrow(() -> new NotFound("Could not find vacancy with id: " + vacancyId));
         return VacancyEditDto.builder()
                 .name(vacancy.getName())
                 .description(vacancy.getDescription())
                 .salary(vacancy.getSalary())
+                .categoryId(vacancy.getCategory().getId())
                 .isActive(vacancy.getIsActive())
                 .updateTime(vacancy.getUpdateTime())
                 .expFrom(vacancy.getExpFrom())
