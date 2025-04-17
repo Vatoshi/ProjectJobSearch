@@ -1,6 +1,5 @@
 package kg.attractor.jobsearch.controlers;
 
-import kg.attractor.jobsearch.dto.VacancyEditDto;
 import kg.attractor.jobsearch.servise.UserService;
 import kg.attractor.jobsearch.servise.VacancyService;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import java.util.Objects;
 
 
@@ -32,8 +30,9 @@ public class VacansiesController {
         } else {
             model.addAttribute("user", null);
         }
+        // использовать jpa там все равно обработка null
         model.addAttribute("vacancies", vacancyService.getAllVacancies());
-        return "vacancies";
+        return "main/vacancies";
     }
 
     @GetMapping("details")
@@ -43,6 +42,6 @@ public class VacansiesController {
                 .filter(v -> Objects.equals(v.getId(), id))
                 .findFirst()
                 .orElse(null));
-        return "vacancy-details";
+        return "main/vacancy-details";
     }
 }

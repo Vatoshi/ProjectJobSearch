@@ -158,7 +158,8 @@ public class VacancyService {
             vacancyDto.setExpFrom(oldVacancy.getExpFrom());}
         if (vacancyDto.getExpTo() == null || vacancyDto.getExpTo() < 0) {
             vacancyDto.setExpTo(oldVacancy.getExpTo());}
-        if (vacancyDto.getIsActive() == null || vacancyDto.getIsActive()) {vacancyDto.setIsActive(oldVacancy.getIsActive());}
+        if (vacancyDto.getIsActive() == null) {
+            vacancyDto.setIsActive(oldVacancy.getIsActive());}
         vacancyDto.setCreatedDate(oldVacancy.getCreatedDate());
         vacancyDto.setUpdateTime(LocalDateTime.now());
         vacancyDao.updateVacancy(vacancyDto, vacancyId);

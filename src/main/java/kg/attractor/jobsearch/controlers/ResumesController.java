@@ -2,7 +2,6 @@ package kg.attractor.jobsearch.controlers;
 
 import kg.attractor.jobsearch.servise.ResumeService;
 import kg.attractor.jobsearch.servise.UserService;
-import kg.attractor.jobsearch.servise.VacancyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -29,6 +28,6 @@ public class ResumesController {
             model.addAttribute("user", null);
         }
         model.addAttribute("resumes", resumeService.getResumes());
-        return "resumes";
+        return "main/resumes";
     }
 }

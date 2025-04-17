@@ -17,6 +17,8 @@ spring:
 logging:
   file:
     name: logs/app.log
+  level:
+    root: WARN
 
 
 

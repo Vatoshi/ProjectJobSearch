@@ -22,20 +22,20 @@ public class AuthController {
         if (error != null) {
             model.addAttribute("error", "Неверная почта или пароль");
         }
-        return "login";
+        return "/login/login";
     }
 
     @GetMapping("register")
     public String getRegisterPage(Model model) {
         model.addAttribute("userFormDto", new UserFormDto());
-        return "register";
+        return "login/register";
     }
 
     @PostMapping("register")
     public String postRegister(@Valid UserFormDto userFormDto, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("userFormDto", userFormDto);
-            return "register";
+            return "login/register";
         }
         userService.createAcc(userFormDto);
         return "redirect:/auth/login";
