@@ -104,7 +104,7 @@ public class ResumeDao {
 
     public ResumeDto createResume(ResumeDto resumeDto, Resume resume) {
         String sqltype = "select role_id from users where id = ?";
-        Integer typename = jdbcTemplate.queryForObject(sqltype, Integer.class, resume.getApplicantId());
+        Integer typename = jdbcTemplate.queryForObject(sqltype, Integer.class, resume.getUser());
 
         if (typename == 2) {
             throw new UserStatusExeption("wrong user status");
@@ -116,9 +116,9 @@ public class ResumeDao {
                     "INSERT INTO resumes(applicant_id, name, category_id, salary, is_active, created_date) VALUES (?, ?, ?, ?, ?, ?)",
                     new String[]{"ID"}
             );
-            ps.setLong(1, resume.getApplicantId());
+            ps.setLong(1, resume.getUser().getId());
             ps.setString(2, resume.getName());
-            ps.setInt(3, resume.getCategoryId() != null ? resume.getCategoryId() : 1);
+            ps.setLong(3, resume.getCategory() != null ? resume.getCategory().getId() : 1);
             ps.setDouble(4, resume.getSalary() != null ? resume.getSalary() : 0);
             ps.setBoolean(5, resume.getIsActive() != null ? resume.getIsActive() : false);
             ps.setTimestamp(6, Timestamp.valueOf(resume.getCreatedDate().atStartOfDay()));

@@ -40,19 +40,6 @@ public class VacancyDao {
                         jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Vacancy.class), resumeId)));
     }
 
-    public List<Vacancy> findByUser(Long userId, Long resumeId) {
-        String sql = "SELECT * FROM vacancies WHERE author_id = ? and id = ?";
-        try {
-            List<Vacancy> a = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Vacancy.class), userId, resumeId);
-            if (a.isEmpty()) {
-                throw new NotFound("Vacancy not fount");
-            }
-        } catch (Exception e) {
-            throw new NotFound("Vacancy not fount");
-        }
-        return null;
-    }
-
     public void updatetime(Long resumeId) {
         String sql = "update vacancies set update_time = ? where id = ?";
         jdbcTemplate.update(sql, LocalDateTime.now(), resumeId);
@@ -182,7 +169,7 @@ public class VacancyDao {
     public VacancyDto createVacancy(VacancyDto vacancyDto, Vacancy vacancy) {
         String sql = "insert into vacancies (name,description,category_id,salary,exp_from, exp_to,is_active,author_id,created_date,update_time)" +
                 " values (?,?,?,?,?,?,?,?,?,?)";
-        jdbcTemplate.update(sql,vacancy.getName(),vacancy.getDescription(),vacancy.getCategoryId(),vacancy.getSalary(),vacancy.getExpFrom(),vacancy.getExpTo(),vacancy.getIsActive(),vacancy.getAuthorId(),vacancy.getCreatedDate(),vacancy.getUpdateTime());
+        jdbcTemplate.update(sql,vacancy.getName(),vacancy.getDescription(),vacancy.getCategory(),vacancy.getSalary(),vacancy.getExpFrom(),vacancy.getExpTo(),vacancy.getIsActive(),vacancy.getUser(),vacancy.getCreatedDate(),vacancy.getUpdateTime());
         return vacancyDto;
     }
 

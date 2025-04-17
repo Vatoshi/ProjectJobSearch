@@ -65,12 +65,12 @@ public class UserDao {
     public void createAcc(User u) {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         String hashedPassword = encoder.encode(u.getPassword());
-        if (u.getRoleId() != 1 && u.getRoleId() != 2) {
+        if (u.getRole().getId() != 1 && u.getRole().getId() != 2) {
             throw new NotFound("Role like your not found");
         }
         String sql = "insert into users (name, surname, age, email, password, phone_number, avatar, enabled, role_id)" +
                 " values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        jdbcTemplate.update(sql,u.getName(),u.getSurname(),u.getAge(),u.getEmail(),hashedPassword,u.getPhoneNumber(),u.getAvatar(),u.getEnabled(),u.getRoleId());
+        jdbcTemplate.update(sql,u.getName(),u.getSurname(),u.getAge(),u.getEmail(),hashedPassword,u.getPhoneNumber(),u.getAvatar(),u.getEnabled(),u.getRole());
     }
 
     public void updateUser(UserEditDto u, Long userId) {

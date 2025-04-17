@@ -1,5 +1,6 @@
 package kg.attractor.jobsearch.controlers;
 
+import kg.attractor.jobsearch.repositories.UserRepository;
 import kg.attractor.jobsearch.servise.UserService;
 import kg.attractor.jobsearch.servise.VacancyService;
 import lombok.RequiredArgsConstructor;
@@ -18,15 +19,15 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @RequestMapping("vacancies")
 public class VacansiesController {
-    private final UserService userService;
     private final VacancyService vacancyService;
+    private final UserRepository userRepository;
 
     @GetMapping
     public String getMainPage(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken)) {
             String username = auth.getName();
-            model.addAttribute("user", userService.getEmail(username));
+            model.addAttribute("user", userRepository.findByEmail(username));
         } else {
             model.addAttribute("user", null);
         }

@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/profile.css">
-    <title>Личный кабинет <#if user.roleId==1> соискателя <#else> работодателя </#if> </title>
+    <title>Личный кабинет <#if user.role.id==1> соискателя <#else> работодателя </#if> </title>
 </head>
 
 <body>
@@ -22,7 +22,7 @@
                 <li class="nav-item">
                     <a href="#" class="nav-link active" data-target="resumes">
                         <span class="nav-icon">📄</span>
-                        <span>Мои <#if user.roleId==1> резюме <#else> вакансии </#if></span>
+                        <span>Мои <#if user.role.id==1> резюме <#else> вакансии </#if></span>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -32,12 +32,12 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a <#if user.roleId == 1> href="/profile/create-resume" <#else> href="/profile/create-vacancy" </#if> class="nav-link" data-target="create">
+                    <a <#if user.role.id == 1> href="/profile/create-resume" <#else> href="/profile/create-vacancy" </#if> class="nav-link" data-target="create">
                         <span class="nav-icon">➕</span>
-                        <span>Создать <#if user.roleId==1> резюме <#else> вакансию </#if></span>
+                        <span>Создать <#if user.role.id==1> резюме <#else> вакансию </#if></span>
                     </a>
                 </li>
-                <#if user.roleId == 2>
+                <#if user.role.id == 2>
                 <li class="nav-item">
                     <a href="/resumes" class="nav-link">
                         <span class="nav-icon">📌</span>
@@ -55,10 +55,10 @@
         </div>
 
         <div class="main-content" id="resumes">
-            <h2 class="section-title"> Ваши <#if user.roleId==1> резюме <#else> вакансии </#if> </h2>
+            <h2 class="section-title"> Ваши <#if user.role.id==1> резюме <#else> вакансии </#if> </h2>
             <ul class="resume-list">
 
-                <#if user.roleId==1>
+                <#if user.role.id==1>
                 <#if resumes?has_content>
                     <#list resumes as resume>
                 <li class="resume-item">
@@ -80,7 +80,7 @@
                 </#if>
                 </#if>
 
-                <#if user.roleId==2>
+                <#if user.role.id==2>
                     <#if vacancies?has_content>
                         <#list vacancies as vacancy>
                         <li class="resume-item">

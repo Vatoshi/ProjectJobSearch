@@ -49,7 +49,7 @@
 
             <div class="form-group">
                 <label for="accountType">Тип аккаунта:</label>
-                <select name="roleId" id="accountType" required>
+                <select name="role.id" id="accountType" required>
                     <option value="" disabled selected>Выберите тип</option>
                     <option value="1">Соискатель</option>
                     <option value="2">Работодатель</option>

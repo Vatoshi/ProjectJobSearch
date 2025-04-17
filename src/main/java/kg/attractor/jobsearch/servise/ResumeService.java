@@ -7,9 +7,10 @@ import kg.attractor.jobsearch.dto.mutal.ProfileResumeDto;
 import kg.attractor.jobsearch.dto.mutal.ResumeForWeb;
 import kg.attractor.jobsearch.dto.mutal.VacancyForWebDto;
 import kg.attractor.jobsearch.exeptions.NotFound;
-import kg.attractor.jobsearch.models.EducationInfo;
-import kg.attractor.jobsearch.models.Resume;
-import kg.attractor.jobsearch.models.WorkExperienceInfo;
+import kg.attractor.jobsearch.models.*;
+import kg.attractor.jobsearch.repositories.CategoryRepository;
+import kg.attractor.jobsearch.repositories.ResumeRepository;
+import kg.attractor.jobsearch.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
@@ -26,28 +27,31 @@ import java.util.List;
 public class ResumeService {
     private final UserService dao;
     private final ResumeDao resumeDao;
+    private final CategoryRepository categoryRepository;
+    private final ResumeRepository resumeRepository;
+    private final UserRepository userRepository;
 
     public List<ResumeForWeb> getResumes() {
-        return resumeDao.getAllResumes()
+        return resumeRepository.findAll()
                 .stream()
                 .filter(Resume::getIsActive)
                 .map(resume -> ResumeForWeb.builder()
                         .name(resume.getName())
                         .salary(resume.getSalary())
                         .updateTime(resume.getUpdateTime())
-                        .categoryId(resume.getCategoryId())
-                        .author(resumeDao.getUserName(resume.getApplicantId()))
+                        .categoryId(resume.getCategory().getId())
+                        .author(resumeDao.getUserName(resume.getUser().getId()))
                         .build())
                 .toList();
     }
 
 
     public List<ResumeDto> getResumesById(String categoryName) throws NotFound {
-        List<Resume> resumes = resumeDao.findByCategory(categoryName).stream().filter(Resume::getIsActive).toList();
+        List<Resume> resumes = resumeRepository.findActiveByCategoryName(categoryName).stream().filter(Resume::getIsActive).toList();
         return resumes.stream()
                 .map(resume -> ResumeDto.builder()
                         .name(resume.getName())
-                        .categoryId(resume.getCategoryId())
+                        .categoryId(resume.getCategory().getId())
                         .salary(resume.getSalary())
                         .isActive(resume.getIsActive())
                         .updateTime(resume.getUpdateTime())
@@ -82,11 +86,11 @@ public class ResumeService {
     public ResumeDto getResumeById(Long resumeId,String username) {
         Long userId = resumeDao.userId(username);
         resumeDao.findByUser(userId,resumeId);
-        Resume resume = resumeDao.findResumeById(resumeId)
+        Resume resume = resumeRepository.findById(resumeId)
                 .orElseThrow(() -> new NotFound("Could not find resume with id: " + resumeId));
         return ResumeDto.builder()
                 .name(resume.getName())
-                .categoryId(resume.getCategoryId())
+                .categoryId(resume.getCategory().getId())
                 .salary(resume.getSalary())
                 .isActive(resume.getIsActive())
                 .updateTime(resume.getUpdateTime())
@@ -99,12 +103,12 @@ public class ResumeService {
     public ResponseEntity<ResumeDto> createResume(ResumeDto resumeDto, String username) throws IllegalArgumentException {
             resumeDto.setCreatedDate(LocalDate.now());
             resumeDto.setUpdateTime(LocalDate.now());
-            Long userId = resumeDao.userId(username);
-
+            User user = userRepository.findByEmail(username);
+            Category category = categoryRepository.findById(resumeDto.getCategoryId()).orElseThrow(() -> new NotFound("Could not find category with id: " + resumeDto.getCategoryId()));
         Resume resume = Resume.builder()
-                .applicantId(userId)
+                .user(user)
                 .name(resumeDto.getName())
-                .categoryId(resumeDto.getCategoryId())
+                .category(category)
                 .salary(resumeDto.getSalary())
                 .isActive(resumeDto.getIsActive())
                 .updateTime(resumeDto.getUpdateTime())
@@ -126,7 +130,7 @@ public class ResumeService {
             if (resumeDto.getName() == null || resumeDto.getName().isBlank()) {
                 resumeDto.setName(oldResume.getName());}
             if (resumeDto.getCategoryId() == null || resumeDto.getCategoryId() <= 0) {
-                resumeDto.setCategoryId(oldResume.getCategoryId());}
+                resumeDto.setCategoryId(oldResume.getCategory().getId());}
             if (resumeDto.getSalary() == null || resumeDto.getSalary() <= 0) {
                 resumeDto.setSalary(oldResume.getSalary());}
             if (resumeDto.getIsActive() == null || resumeDto.getIsActive()) {

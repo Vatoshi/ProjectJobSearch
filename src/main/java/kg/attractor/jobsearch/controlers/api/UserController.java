@@ -57,10 +57,10 @@
             userService.saveImage(image,auth.getName());
         }
 
-        @GetMapping("/email/{email}")
-        public UserDto findByEmail(@PathVariable String email) {
-            return userService.getEmail(email);
-        }
+//        @GetMapping("/email/{email}")
+//        public UserDto findByEmail(@PathVariable String email) {
+//            return userService.getEmail(email);
+//        }
 
         @GetMapping("/name/{name}")
         public List<UserDto> findByName(@PathVariable String name) {

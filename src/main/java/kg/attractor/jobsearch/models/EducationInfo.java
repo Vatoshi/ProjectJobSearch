@@ -1,15 +1,31 @@
 package kg.attractor.jobsearch.models;
 
-import lombok.Data;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(name = "education_info")
 public class EducationInfo {
-    private Long resumeId;
+    @JoinColumn(name = "resume_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Resume resume;
+
     private String institution;
     private String program;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    @Column(name = "start_date")
+    private LocalDate startDate;
+    @Column(name = "end_date")
+    private LocalDate endDate;
     private String degree;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 }

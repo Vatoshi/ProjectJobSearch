@@ -1,24 +1,45 @@
 package kg.attractor.jobsearch.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name = "resumes")
 public class Resume {
-    private Long applicantId;
+    @JoinColumn(name = "applicant_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User user;
+
     private String name;
-    private Integer categoryId;
+
+    @JoinColumn(name = "category_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Category category;
+
     private Double salary;
+
+    @Column(name = "is_active")
     private Boolean isActive;
+    @Column(name = "created_date")
     private LocalDate createdDate;
+    @Column(name = "update_time")
     private LocalDate updateTime;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "resume")
+    private List<WorkExperienceInfo> workExperienceInfo;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "resume")
+    private List<EducationInfo> educationInfo;
 }

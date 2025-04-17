@@ -1,5 +1,6 @@
 package kg.attractor.jobsearch.controlers;
 
+import kg.attractor.jobsearch.repositories.UserRepository;
 import kg.attractor.jobsearch.servise.ResumeService;
 import kg.attractor.jobsearch.servise.UserService;
 import lombok.RequiredArgsConstructor;
@@ -18,12 +19,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ResumesController {
     private final UserService userService;
     private final ResumeService resumeService;
+    private final UserRepository userRepository;
 
     @GetMapping()
     public String getResumes(Model model, Authentication auth) {
         if (auth != null && auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken)) {
             String username = auth.getName();
-            model.addAttribute("user", userService.getEmail(username));
+            model.addAttribute("user", userRepository.findByEmail(username));
         } else {
             model.addAttribute("user", null);
         }

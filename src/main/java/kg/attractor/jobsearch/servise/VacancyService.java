@@ -9,8 +9,13 @@ import kg.attractor.jobsearch.dto.mutal.ProfileVacancyDto;
 import kg.attractor.jobsearch.dto.mutal.VacancyForWebDto;
 import kg.attractor.jobsearch.exeptions.NotFound;
 import kg.attractor.jobsearch.exeptions.ResumeFromUserNotFound;
+import kg.attractor.jobsearch.models.Category;
 import kg.attractor.jobsearch.models.Resume;
+import kg.attractor.jobsearch.models.User;
 import kg.attractor.jobsearch.models.Vacancy;
+import kg.attractor.jobsearch.repositories.CategoryRepository;
+import kg.attractor.jobsearch.repositories.UserRepository;
+import kg.attractor.jobsearch.repositories.VacancyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +31,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class VacancyService {
     private final VacancyDao vacancyDao;
+    private final UserRepository userRepository;
+    private final CategoryRepository categoryRepository;
+    private final VacancyRepository vacancyRepository;
 
     public List<ProfileVacancyDto> getVacancyByUser(String username) {
         Long userId = vacancyDao.userId(username);
@@ -34,7 +42,7 @@ public class VacancyService {
 
     public VacancyEditDto getVacancyById(Long vacancyId,String username) {
         Long userId = vacancyDao.userId(username);
-        vacancyDao.findByUser(userId,vacancyId);
+        vacancyRepository.exist(userId,vacancyId);
         Vacancy vacancy = vacancyDao.findVacancyById(vacancyId)
                 .orElseThrow(() -> new NotFound("Could not find vacancy with id: " + vacancyId));
         return VacancyEditDto.builder()
@@ -71,7 +79,7 @@ public class VacancyService {
                         .description(vacancy.getDescription())
                         .expFrom(vacancy.getExpFrom())
                         .expTo(vacancy.getExpTo())
-                        .categoryId(vacancy.getCategoryId())
+                        .categoryId(vacancy.getCategory().getId())
                         .createdDate(vacancy.getCreatedDate())
                         .updateTime(vacancy.getUpdateTime())
                         .isActive(vacancy.getIsActive())
@@ -93,8 +101,8 @@ public class VacancyService {
                         .salary(vacancy.getSalary())
                         .isActive(vacancy.getIsActive())
                         .updateTime(LocalDate.from(vacancy.getUpdateTime()))
-                        .author(vacancyDao.getAuthorName(vacancy.getAuthorId()))
-                        .category(vacancyDao.getCategoryName(vacancy.getCategoryId()))
+                        .author(vacancyDao.getAuthorName(vacancy.getUser().getId()))
+                        .category(vacancyDao.getCategoryName(vacancy.getCategory().getId()))
                         .build())
                 .filter(VacancyForWebDto::getIsActive)
                 .toList();
@@ -108,7 +116,7 @@ public class VacancyService {
                         .description(vacancy.getDescription())
                         .expFrom(vacancy.getExpFrom())
                         .expTo(vacancy.getExpTo())
-                        .categoryId(vacancy.getCategoryId())
+                        .categoryId(vacancy.getCategory().getId())
                         .createdDate(vacancy.getCreatedDate())
                         .updateTime(vacancy.getUpdateTime())
                         .isActive(vacancy.getIsActive())
@@ -122,10 +130,12 @@ public class VacancyService {
         vacancyDto.setCreatedDate(LocalDateTime.now());
         vacancyDto.setUpdateTime(LocalDateTime.now());
         Long userId = vacancyDao.getUserId(username);
+        Category category = categoryRepository.findById(vacancyDto.getCategoryId()).orElseThrow(() -> new NotFound("Could not find category with id: " + vacancyDto.getCategoryId()));
+        User user = userRepository.findById(userId).orElseThrow(() -> new NotFound("Could not find user with id: " + userId));
         Vacancy vacancy = Vacancy.builder()
-                .authorId(userId)
+                .user(user)
                 .name(vacancyDto.getName())
-                .categoryId(vacancyDto.getCategoryId())
+                .category(category)
                 .salary(vacancyDto.getSalary())
                 .isActive(vacancyDto.getIsActive())
                 .updateTime(vacancyDto.getUpdateTime())
@@ -151,7 +161,7 @@ public class VacancyService {
         if (vacancyDto.getDescription() == null) {
             vacancyDto.setDescription(oldVacancy.getDescription());}
         if (vacancyDto.getCategoryId() == null) {
-            vacancyDto.setCategoryId(oldVacancy.getCategoryId());}
+            vacancyDto.setCategoryId(oldVacancy.getCategory().getId());}
         if (vacancyDto.getSalary() == null || vacancyDto.getSalary() < 0) {
             vacancyDto.setSalary(oldVacancy.getSalary());}
         if (vacancyDto.getExpFrom() == null || vacancyDto.getExpFrom() < 0) {

@@ -25,7 +25,7 @@
 
             <div class="form-group">
                 <label for="categoryId">Категория:</label>
-                <select id="categoryId" name="categoryId" required>
+                <select id="categoryId" name="category.id" required>
                     <option value="" disabled selected>Выберите категорию</option>
                     <option value="2">IT</option>
                     <option value="3">Маркетинг</option>

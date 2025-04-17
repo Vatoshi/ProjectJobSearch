@@ -9,7 +9,9 @@ import kg.attractor.jobsearch.dto.UserFormDto;
 import kg.attractor.jobsearch.exeptions.AlreadyExists;
 import kg.attractor.jobsearch.exeptions.NotFound;
 import kg.attractor.jobsearch.exeptions.UsernameNotFound;
+import kg.attractor.jobsearch.models.Role;
 import kg.attractor.jobsearch.models.User;
+import kg.attractor.jobsearch.repositories.RoleRepository;
 import kg.attractor.jobsearch.util.FileUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,6 +26,7 @@ import java.util.List;
 public class UserService {
     public final UserDao userDao;
     private final FileUtil fileUtil;
+    private final RoleRepository roleRepository;
 
     public Long userId(String username) {
         return userDao.userId(username);
@@ -39,7 +42,7 @@ public class UserService {
                 .phoneNumber(user.getPhoneNumber())
                 .name(user.getName())
                 .email(user.getEmail())
-                .roleId(user.getRoleId())
+                .roleId(user.getRole().getId())
                 .avatar(user.getAvatar())
                 .build();
     }
@@ -57,7 +60,7 @@ public class UserService {
                         .phoneNumber(user.getPhoneNumber())
                         .name(user.getName())
                         .email(user.getEmail())
-                        .roleId(user.getRoleId())
+                        .roleId(user.getRole().getId())
                         .build())
                 .toList();
     }
@@ -75,7 +78,7 @@ public class UserService {
                         .phoneNumber(user.getPhoneNumber())
                         .name(user.getName())
                         .email(user.getEmail())
-                        .roleId(user.getRoleId())
+                        .roleId(user.getRole().getId())
                         .build())
                 .toList();
     }
@@ -88,6 +91,7 @@ public class UserService {
 
     public UserFormDto createAcc(UserFormDto u)  throws HttpMessageNotReadableException  {
         String gmail = u.getEmail();
+        Role role = roleRepository.findById(u.getRoleId()).orElseThrow(() -> new NotFound("Role with id " + u.getRoleId() + " not found"));
         if (u.getEmail() == null || gmail.equals(userDao.getExistEmail(u.getEmail()))) {
             throw new AlreadyExists("User with email " + u.getEmail() + " already exists");
         }
@@ -103,7 +107,7 @@ public class UserService {
                 .password(u.getPassword())
                 .phoneNumber(u.getPhoneNumber())
                 .enabled(true)
-                .roleId(u.getRoleId())
+                .role(role)
                 .build();
 
         userDao.createAcc(newUser);

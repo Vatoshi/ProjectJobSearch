@@ -14,8 +14,8 @@ import java.time.LocalDate;
 public class ResumeForWeb {
     private String author;
     private String name;
-    private Integer categoryId;
+    private Long categoryId;
     private Double salary;
-    private boolean isActive;
+    private Boolean isActive;
     private LocalDate updateTime;
 }
