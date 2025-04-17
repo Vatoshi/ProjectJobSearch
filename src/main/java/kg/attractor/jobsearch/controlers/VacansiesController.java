@@ -1,6 +1,7 @@
 package kg.attractor.jobsearch.controlers;
 
 import kg.attractor.jobsearch.repositories.UserRepository;
+import kg.attractor.jobsearch.repositories.VacancyRepository;
 import kg.attractor.jobsearch.servise.UserService;
 import kg.attractor.jobsearch.servise.VacancyService;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ import java.util.Objects;
 public class VacansiesController {
     private final VacancyService vacancyService;
     private final UserRepository userRepository;
+    private final VacancyRepository vacancyRepository;
 
     @GetMapping
     public String getMainPage(Model model) {
@@ -32,7 +34,7 @@ public class VacansiesController {
             model.addAttribute("user", null);
         }
         // использовать jpa там все равно обработка null
-        model.addAttribute("vacancies", vacancyService.getAllVacancies());
+        model.addAttribute("vacancies", vacancyRepository.findActiveVacancies());
         return "main/vacancies";
     }
 

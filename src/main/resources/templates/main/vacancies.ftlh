@@ -68,7 +68,7 @@
                             <button class="action-btn">Подать заявку</button>
                         </div>
                     </div>
-                    <div class="vacancy-company">${vacancy.author}</div>
+                    <div class="vacancy-company">${vacancy.user.name}</div>
                     <div class="vacancy-salary">Зарплата: ${vacancy.salary!"Договорная"} ₽ </div>
                 </li>
                 </a>
