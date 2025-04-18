@@ -67,10 +67,10 @@
                         <div class="resume-date">Дата обновления: ${resume.updated!}</div>
                     </div>
                     <div class="resume-actions">
-                        <form method="get" action="/profile/update-resume-time">
+                        <form id="updateTimeResume${resume.id}" method="get" action="/profile/update-resume-time">
                             <input type="hidden" name="id" value="${resume.id}">
-                            <button type="submit" class="btn action-btn">Обновить</button>
                         </form>
+                        <button form="updateTimeResume${resume.id}" type="submit" class="btn action-btn">Обновить</button>
                         <a href="/profile/edit-resume?id=${resume.id}"  class="btn btn-outline action-btn">Редактировать</a>
                     </div>
                 </li>
@@ -89,10 +89,10 @@
                                 <div class="resume-date">Дата обновления: ${vacancy.updated!}</div>
                             </div>
                             <div class="resume-actions">
-                                <form method="get" action="/profile/update-vacancy-time">
+                                <form id="updateTime${vacancy.id}" method="get" action="/profile/update-vacancy-time">
                                     <input type="hidden" name="id" value="${vacancy.id}">
-                                    <button type="submit" class="btn action-btn">Обновить</button>
                                 </form>
+                                <button form="updateTime${vacancy.id}" type="submit" class="btn action-btn">Обновить</button>
                                 <a href="/profile/edit-vacancy?id=${vacancy.id}" class="btn btn-outline action-btn">Редактировать</a>
                             </div>
                         </li>

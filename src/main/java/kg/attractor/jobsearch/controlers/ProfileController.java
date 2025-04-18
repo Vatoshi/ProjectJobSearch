@@ -153,7 +153,7 @@ public class ProfileController {
 
     @GetMapping("update-vacancy-time")
     public String updateVacancyTime(@RequestParam("id") Long id) {
-        resumeService.updateTime(id);
+        vacancyService.updateTime(id);
         return "redirect:/profile";
     }
 }

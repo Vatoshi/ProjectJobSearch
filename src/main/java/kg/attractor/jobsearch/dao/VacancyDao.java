@@ -124,7 +124,7 @@ public class VacancyDao {
     }
 
     public List<Vacancy> getAllVacancies() {
-        String sql = "SELECT * FROM vacancies";
+        String sql = "SELECT * FROM vacancies where is_active = true";
         return jdbcTemplate.query(sql,new BeanPropertyRowMapper<>(Vacancy.class));
     }
 
