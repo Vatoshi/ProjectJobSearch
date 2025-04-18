@@ -18,7 +18,7 @@ public class ResumeDto {
     @Size(min = 1, max = 30, message = "Название от 1 до 30")
     @Pattern(regexp = ".*\\p{L}.*", message = "Название не может состоять только из цифр")
     private String name;
-    private Integer categoryId;
+    private Long categoryId;
     @PositiveOrZero
     private Double salary;
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -27,6 +27,8 @@ public class ResumeDto {
     private LocalDate createdDate;
     @PastOrPresent
     private LocalDate updateTime;
-    List<WorkExperienceInfoDto> workExperienceInfo = new ArrayList<>();
-    List<EducationInfoDto> educationInfo = new ArrayList<>();
+    @Valid
+    List<WorkExperienceInfoDto> workExperienceInfo;
+    @Valid
+    List<EducationInfoDto> educationInfo;
 }

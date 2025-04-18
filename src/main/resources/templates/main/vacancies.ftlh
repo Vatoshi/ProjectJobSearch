@@ -11,16 +11,20 @@
 <body>
 
 <#if user?has_content>
+    <div class="top-bar">
     <a href="/profile" class="profile">
         <div class="div-img">
             <img src="user/avatars/${user.avatar}" onerror="this.onerror=null; this.src='/image/Default.png'" alt="Фото профиля" class="avatar">
         </div>
         <p class="profile-text">Ваш <br> профиль</p>
     </a>
+    </div>
 <#else>
+    <div class="top-bar">
     <a href="/auth/login" class="profile" style="justify-content: center" >
         <div style="font-weight: 600;">Войти в аккаунт</div>
     </a>
+    </div>
 </#if>
 
 <div class="container">
@@ -68,7 +72,7 @@
                             <button class="action-btn">Подать заявку</button>
                         </div>
                     </div>
-                    <div class="vacancy-company">${vacancy.author}</div>
+                    <div class="vacancy-company">${vacancy.user.name}</div>
                     <div class="vacancy-salary">Зарплата: ${vacancy.salary!"Договорная"} ₽ </div>
                 </li>
                 </a>

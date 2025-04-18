@@ -14,9 +14,15 @@ spring:
 #    static-path-pattern: /static/**
   freemarker:
     expose-session-attributes: true
+#  jpa:
+#    hibernate:
+#      ddl-auto: validate
 logging:
   file:
     name: logs/app.log
+  level:
+    root: WARN
+
 
 
 

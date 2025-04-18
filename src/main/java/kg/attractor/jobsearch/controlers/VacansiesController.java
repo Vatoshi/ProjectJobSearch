@@ -1,6 +1,7 @@
 package kg.attractor.jobsearch.controlers;
 
-import kg.attractor.jobsearch.dto.VacancyEditDto;
+import kg.attractor.jobsearch.repositories.UserRepository;
+import kg.attractor.jobsearch.repositories.VacancyRepository;
 import kg.attractor.jobsearch.servise.UserService;
 import kg.attractor.jobsearch.servise.VacancyService;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import java.util.Objects;
 
 
@@ -20,20 +20,21 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @RequestMapping("vacancies")
 public class VacansiesController {
-    private final UserService userService;
     private final VacancyService vacancyService;
+    private final UserRepository userRepository;
+    private final VacancyRepository vacancyRepository;
 
     @GetMapping
     public String getMainPage(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken)) {
             String username = auth.getName();
-            model.addAttribute("user", userService.getEmail(username));
+            model.addAttribute("user", userRepository.findByEmail(username));
         } else {
             model.addAttribute("user", null);
         }
-        model.addAttribute("vacancies", vacancyService.getAllVacancies());
-        return "vacancies";
+        model.addAttribute("vacancies", vacancyRepository.findActiveVacancies());
+        return "main/vacancies";
     }
 
     @GetMapping("details")
@@ -43,6 +44,6 @@ public class VacansiesController {
                 .filter(v -> Objects.equals(v.getId(), id))
                 .findFirst()
                 .orElse(null));
-        return "vacancy-details";
+        return "main/vacancy-details";
     }
 }

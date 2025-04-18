@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserEditDto {
-    @Pattern(regexp = "^(|\\p{L}+)$", message = "Имя должно содержать только буквы")
+    @Pattern(regexp = "^(|\\p{L}+)$", message = "Имя должно содержать только буквы (без пробелов и цифр)")
     @Size(max = 20, message = "Максимум 20 символов")
     private String name;
     @Pattern(regexp = "^(|\\p{L}+)$", message = "Фамилия должна содержать только буквы")

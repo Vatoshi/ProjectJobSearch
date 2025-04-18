@@ -26,12 +26,12 @@
             <div class="form-group">
                 <label for="categoryId">Категория:</label>
                 <select id="categoryId" name="categoryId" required>
-                    <option value="" disabled selected>Выберите категорию</option>
-                    <option value="2">IT</option>
-                    <option value="3">Маркетинг</option>
-                    <option value="4">Дизайн</option>
-                    <option value="5">Финансы</option>
-                    <option value="6">Менеджмент</option>
+                    <option value="" disabled <#if resumeDto.categoryId?? && resumeDto.categoryId?string == "">selected</#if>>Выберите категорию</option>
+                    <option value="2" <#if resumeDto.categoryId?? && resumeDto.categoryId == 2>selected</#if>>IT</option>
+                    <option value="3" <#if resumeDto.categoryId?? && resumeDto.categoryId == 3>selected</#if>>Маркетинг</option>
+                    <option value="4" <#if resumeDto.categoryId?? && resumeDto.categoryId == 4>selected</#if>>Дизайн</option>
+                    <option value="5" <#if resumeDto.categoryId?? && resumeDto.categoryId == 5>selected</#if>>Финансы</option>
+                    <option value="6" <#if resumeDto.categoryId?? && resumeDto.categoryId == 6>selected</#if>>Менеджмент</option>
                 </select>
             </div>
 
@@ -44,7 +44,11 @@
 
         <div class="switch-container">
             <label class="switch">
-                <input type="checkbox" id="isActive" name="isActive" checked>
+                <#if resumeDto.isActive?? && resumeDto.isActive == true>
+                <input type="checkbox" id="isActive" name="isActive" checked/>
+                <#else>
+                    <input type="checkbox" id="isActive" name="isActive"/>
+                </#if>
                 <span class="slider"></span>
             </label>
             <span class="switch-label">Активно</span>

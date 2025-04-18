@@ -46,7 +46,7 @@
 
         <div class="form-group">
             <label for="email">Email:</label>
-            <@spring.formInput "userEditDto.email" 'placeholder="example@gmail.com"'/>
+            <@spring.formInput "userEditDto.email" 'placeholder="example@gmail.com" disabled'/>
             <@spring.showErrors "<br>" "error"/>
         </div>
 
@@ -59,9 +59,9 @@
         <div class="form-group">
             <label for="password">Пароль:</label>
             <input type="password" id="password" name="password" disabled placeholder="••••••••">
-            <div class="password-change">
-                <a href="/change-password">Изменить пароль</a>
-            </div>
+<#--            <div class="password-change">-->
+<#--                <a href="/change-password">Изменить пароль</a>-->
+<#--            </div>-->
         </div>
 
         <button type="submit" class="submit-btn">Сохранить изменения</button>

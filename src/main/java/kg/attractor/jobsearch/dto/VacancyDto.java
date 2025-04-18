@@ -1,10 +1,7 @@
 package kg.attractor.jobsearch.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.*;
-import kg.attractor.jobsearch.util.ValidExperienceRange;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -14,7 +11,6 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ValidExperienceRange
 public class VacancyDto {
     @NotNull(message = "имя не должно быть пустым")
     @Size(min = 3, max = 30, message = "имя должно содержать от 1 - 30 символов")

@@ -1,23 +1,36 @@
 package kg.attractor.jobsearch.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
 
-@Data
+import java.util.List;
+
+@Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
+@Table(name = "users")
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
     private String surname;
     private Integer age;
     private String email;
     private String password;
+    @Column(name = "phone_number")
     private String phoneNumber;
     private String avatar;
     private Boolean enabled;
-    private Long roleId;
+    @JoinColumn(name = "role_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Role role;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private List<Vacancy> vacancies;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private List<Resume> resumes;
 }

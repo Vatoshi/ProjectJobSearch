@@ -82,19 +82,20 @@
 
                     <div class="form-group">
                         <label for="educationInfo[0].program">Программа обучения:</label>
-                        <@spring.formInput "resumeDto.educationInfo[0].program" 'placeholder="Программа обучения"'></@spring.formInput>
+                        <@spring.formInput "resumeDto.educationInfo[0].program" 'placeholder="Программа обучения"'/>
                         <@spring.showErrors "<br>" "error"/>
                     </div>
 
                     <div class="form-group">
                         <label for="educationInfo[0].startDate">Дата начала:</label>
-<#--                        <@spring.formInput "educationInfo[0].startDate" 'type="date"'></@spring.formInput>-->
-                        <input name="resumeDto.educationInfo[0].startDate" type="date">
+                        <@spring.formInput "resumeDto.educationInfo[0].startDate" 'type="date"' 'date'></@spring.formInput>
+                        <@spring.showErrors "<br>" "error"/>
                     </div>
 
                     <div class="form-group">
                         <label for="educationInfo[0].endDate">Дата окончания:</label>
-                        <input name="resumeDto.educationInfo[0].endDate" type="date">
+                        <@spring.formInput "resumeDto.educationInfo[0].endDate" 'type="date"' 'date'></@spring.formInput>
+                        <@spring.showErrors "<br>" "error"/>
                     </div>
 
                     <div class="form-group">

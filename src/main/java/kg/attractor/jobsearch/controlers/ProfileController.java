@@ -2,16 +2,15 @@ package kg.attractor.jobsearch.controlers;
 
 import jakarta.validation.Valid;
 import kg.attractor.jobsearch.dto.*;
+import kg.attractor.jobsearch.repositories.UserRepository;
 import kg.attractor.jobsearch.servise.ResumeService;
 import kg.attractor.jobsearch.servise.UserService;
 import kg.attractor.jobsearch.servise.VacancyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,35 +25,35 @@ public class ProfileController {
 
     @GetMapping
     public String profile(Model model, Authentication auth) {
-        model.addAttribute("user", userService.getEmail(auth.getName()));
+        model.addAttribute("user", userService.getUserByEmail(auth.getName()));
         model.addAttribute("resumes", resumeService.getUserResume(auth.getName()));
         model.addAttribute("vacancies", vacancyService.getVacancyByUser(auth.getName()));
         model.addAttribute("userEditDto", new UserEditDto());
-        return "profile";
+        return "profile/profile";
     }
 
     @GetMapping("/response")
     public String profileResponse (Model model, Authentication auth) {
-        model.addAttribute("user", userService.getEmail(auth.getName()));
+        model.addAttribute("user", userService.getUserByEmail(auth.getName()));
         model.addAttribute("userEditDto", new UserEditDto());
-        return "profile-response";
+        return "profile/profile-response";
     }
 
     @GetMapping("/edit")
-    public String editUserProfile(Model model, Authentication authentication) {
-        model.addAttribute("user", userService.getEmail(authentication.getName()));
-        model.addAttribute("userEditDto", new UserEditDto());
-        return "profile-edit";
+    public String editUserProfile(Model model, Authentication auth) {
+        model.addAttribute("user", userService.getUserByEmail(auth.getName()));
+        model.addAttribute("userEditDto", userService.getUserByEmail(auth.getName()));
+        return "forms/profile-edit";
     }
 
     @PostMapping("/edit")
-    public String editUserProfile(@Valid @ModelAttribute("userEditDto") UserEditDto userEditDto, BindingResult bindingResult, Authentication authentication, Model model) {
+    public String editUserProfile(@Valid @ModelAttribute("userEditDto") UserEditDto userEditDto, BindingResult bindingResult, Authentication auth, Model model) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("user", userService.getEmail(authentication.getName()));
+            model.addAttribute("user", userService.getUserByEmail(auth.getName()));
             model.addAttribute("userEditDto", userEditDto);
-            return "profile-edit";
+            return "forms/profile-edit";
         }
-        userService.editAcc(userEditDto, userService.userId(authentication.getName()));
+        userService.editAcc(userEditDto, userService.userId(auth.getName()));
         return "redirect:/profile";
     }
 
@@ -66,20 +65,20 @@ public class ProfileController {
 
     @GetMapping("create-resume")
     public String showResumeForm(Authentication auth, Model model) {
-        model.addAttribute("user", userService.getEmail(auth.getName()));
+        model.addAttribute("user", userService.getUserByEmail(auth.getName()));
         model.addAttribute("resumeDto",new ResumeDto());
-        return "resume-form";
+        return "forms/resume-form";
     }
 
     @PostMapping("create-resume")
     public String createResume(
-            @Valid @ModelAttribute ResumeDto resumeDto,
+            @Valid ResumeDto resumeDto,
             BindingResult bindingResult,
             Authentication auth,
             Model model) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("user", userService.getEmail(auth.getName()));
-            return "resume-form";
+            model.addAttribute("user", userService.getUserByEmail(auth.getName()));
+            return "forms/resume-form";
         }
         resumeService.createResume(resumeDto, auth.getName());
         return "redirect:/profile";
@@ -87,16 +86,16 @@ public class ProfileController {
 
     @GetMapping("edit-resume")
     public String editResumeForm(Model model, Authentication auth, @RequestParam("id") Long id) {
-        model.addAttribute("user", userService.getEmail(auth.getName()));
+        model.addAttribute("user", userService.getUserByEmail(auth.getName()));
         model.addAttribute("resumeDto", resumeService.getResumeById(id,auth.getName()));
-        return "resume-edit";
+        return "forms/resume-edit";
     }
 
     @PostMapping("edit-resume")
     public String editResume(Authentication auth, ResumeDto resumeDto,BindingResult bindingResult, Model model, @RequestParam("id") Long id) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("user", userService.getEmail(auth.getName()));
-            return "resume-edit";
+            model.addAttribute("user", userService.getUserByEmail(auth.getName()));
+            return "forms/resume-edit";
         }
         resumeService.updateResume(id,resumeDto);
         return "redirect:/profile";
@@ -110,9 +109,9 @@ public class ProfileController {
 
     @GetMapping("create-vacancy")
     public String showVacancyForm(Authentication auth, Model model) {
-        model.addAttribute("user", userService.getEmail(auth.getName()));
+        model.addAttribute("user", userService.getUserByEmail(auth.getName()));
         model.addAttribute("vacancyDto",new VacancyDto());
-        return "vacancy-form";
+        return "forms/vacancy-form";
     }
 
     @PostMapping("create-vacancy")
@@ -120,20 +119,23 @@ public class ProfileController {
                                 BindingResult bindingResult,
                                 Authentication auth,
                                 Model model){
+        if (vacancyDto.getExpFrom() > vacancyDto.getExpTo()) {
+            bindingResult.rejectValue("expFrom", "error.expFrom","От не может быть больше чем до");
+        }
         if (bindingResult.hasErrors()) {
-            model.addAttribute("user", userService.getEmail(auth.getName()));
+            model.addAttribute("user", userService.getUserByEmail(auth.getName()));
             model.addAttribute("vacancyDto", vacancyDto);
-            return "vacancy-form";
+            return "forms/vacancy-form";
         }
         vacancyService.createVacancy(vacancyDto, auth.getName());
         return "redirect:/profile";
     }
 
     @GetMapping("edit-vacancy")
-    public String editVacancyForm(Model model, VacancyEditDto vacancyEditDto, Authentication auth, @RequestParam("id") Long id) {
-        model.addAttribute("user", userService.getEmail(auth.getName()));
+    public String editVacancyForm(Model model,Authentication auth, @RequestParam("id") Long id) {
+        model.addAttribute("user", userService.getUserByEmail(auth.getName()));
         model.addAttribute("vacancyEditDto", vacancyService.getVacancyById(id,auth.getName()));
-        return "vacancy-edit";
+        return "forms/vacancy-edit";
     }
 
     @PostMapping("edit-vacancy")
@@ -142,10 +144,13 @@ public class ProfileController {
                               Model model,
                               Authentication auth,
                               @RequestParam("id") Long id) {
+        if (vacancyEditDto.getExpFrom() > vacancyEditDto.getExpTo()) {
+            bindingResult.rejectValue("expFrom", "error.expFrom","От не может быть больше чем до");
+        }
         if (bindingResult.hasErrors()) {
-            model.addAttribute("user", userService.getEmail(auth.getName()));
+            model.addAttribute("user", userService.getUserByEmail(auth.getName()));
             model.addAttribute("vacancyDto", vacancyEditDto);
-            return "vacancy-edit";
+            return "forms/vacancy-edit";
         }
         vacancyService.updateVacancy(id,vacancyEditDto);
         return "redirect:/profile";
@@ -153,7 +158,7 @@ public class ProfileController {
 
     @GetMapping("update-vacancy-time")
     public String updateVacancyTime(@RequestParam("id") Long id) {
-        resumeService.updateTime(id);
+        vacancyService.updateTime(id);
         return "redirect:/profile";
     }
 }

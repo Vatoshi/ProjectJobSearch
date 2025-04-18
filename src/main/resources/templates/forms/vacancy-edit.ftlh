@@ -26,12 +26,12 @@
             <div class="form-group">
                 <label for="categoryId">Категория:</label>
                 <select id="categoryId" name="categoryId" required>
-                    <option value="" disabled selected>Выберите категорию</option>
-                    <option value="2">IT</option>
-                    <option value="3">Маркетинг</option>
-                    <option value="4">Дизайн</option>
-                    <option value="5">Финансы</option>
-                    <option value="6">Менеджмент</option>
+                    <option value="" disabled <#if vacancyEditDto.categoryId?? && vacancyEditDto.categoryId?string == "">selected</#if>>Выберите категорию</option>
+                    <option value="2" <#if vacancyEditDto.categoryId?? && vacancyEditDto.categoryId == 2>selected</#if>>IT</option>
+                    <option value="3" <#if vacancyEditDto.categoryId?? && vacancyEditDto.categoryId == 3>selected</#if>>Маркетинг</option>
+                    <option value="4" <#if vacancyEditDto.categoryId?? && vacancyEditDto.categoryId == 4>selected</#if>>Дизайн</option>
+                    <option value="5" <#if vacancyEditDto.categoryId?? && vacancyEditDto.categoryId == 5>selected</#if>>Финансы</option>
+                    <option value="6" <#if vacancyEditDto.categoryId?? && vacancyEditDto.categoryId == 6>selected</#if>>Менеджмент</option>
                 </select>
             </div>
 
@@ -62,7 +62,11 @@
 
         <div class="switch-container">
             <label class="switch">
-                <input type="checkbox" id="isActive" name="isActive" checked>
+                <#if vacancyEditDto.isActive?? && vacancyEditDto.isActive == true>
+                    <input type="checkbox" id="isActive" name="isActive" checked/>
+                <#else>
+                    <input type="checkbox" id="isActive" name="isActive"/>
+                </#if>
                 <span class="slider"></span>
             </label>
             <span class="switch-label">Активно</span>

@@ -1,19 +1,19 @@
 insert into users(name, surname, age, email, password, phone_number, avatar, enabled, role_id)
 values
-    ('Иван', 'Иванов', 30, 'ivan@example.com', '$2a$12$WB2YUbFcCN0tm44SBcKUjua9yiFBsfB3vW02IjuwzY7HGtlQIKzy2', '+1234567890', 'Default.png', true, 1),
-    ('Петр', 'Петров', 40, 'petr@example.com', '$2a$12$WB2YUbFcCN0tm44SBcKUjua9yiFBsfB3vW02IjuwzY7HGtlQIKzy2', '+0987654321', '9c3bedbe-3221-43ca-b49e-c242442b3418_Снимок экрана 2025-03-02 002559.png', true, 2),
-    ('Эмир', 'Кадыров', 16, 'emirchik@gmail.com', '$2a$12$WB2YUbFcCN0tm44SBcKUjua9yiFBsfB3vW02IjuwzY7HGtlQIKzy2', '+1231342345', 'Default.png', true, 1),
-    ('Александр', 'Сидоров', 35, 'alexandr.sidorov@example.com', '$2a$12$WB2YUbFcCN0tm44SBcKUjua9yiFBsfB3vW02IjuwzY7HGtlQIKzy2', '+1122334455', 'Default.png', true, 1),
-    ('Анна', 'Петрова', 28, 'anna.petrovna@example.com', '$2a$12$WB2YUbFcCN0tm44SBcKUjua9yiFBsfB3vW02IjuwzY7HGtlQIKzy2', '+1222333445', 'Default.png', true, 2),
-    ('Дмитрий', 'Смирнов', 32, 'dmitriy.smirnov@example.com', '$2a$12$WB2YUbFcCN0tm44SBcKUjua9yiFBsfB3vW02IjuwzY7HGtlQIKzy2', '+1332444556', 'Default.png', true, 1),
-    ('Мария', 'Михайлова', 25, 'maria.mikhaylova@example.com', '$2a$12$WB2YUbFcCN0tm44SBcKUjua9yiFBsfB3vW02IjuwzY7HGtlQIKzy2', '+1443556677', 'Default.png', true, 2),
-    ('Николай', 'Горбунов', 40, 'nikolay.gorbunov@example.com', '$2a$12$WB2YUbFcCN0tm44SBcKUjua9yiFBsfB3vW02IjuwzY7HGtlQIKzy2', '+1554667788', 'Default.png', true, 1),
-    ('Светлана', 'Орлова', 29, 'svetlana.orlova@example.com', '$2a$12$WB2YUbFcCN0tm44SBcKUjua9yiFBsfB3vW02IjuwzY7HGtlQIKzy2', '+1665778899', 'Default.png', true, 2),
-    ('Ирина', 'Соколова', 26, 'irina.sokolova@example.com', '$2a$12$WB2YUbFcCN0tm44SBcKUjua9yiFBsfB3vW02IjuwzY7HGtlQIKzy2', '+1776889900', 'Default.png', true, 2),
-    ('Максим', 'Лебедев', 37, 'maksim.lebedev@example.com', '$2a$12$WB2YUbFcCN0tm44SBcKUjua9yiFBsfB3vW02IjuwzY7HGtlQIKzy2', '+1887990011', 'Default.png', true, 1),
-    ('Татьяна', 'Новикова', 31, 'tatiana.novikova@example.com', '$2a$12$WB2YUbFcCN0tm44SBcKUjua9yiFBsfB3vW02IjuwzY7HGtlQIKzy2', '+1999001122', 'Default.png', true, 2),
-    ('Екатерина', 'Сухова', 23, 'ekaterina.sukhova@example.com', '$2a$12$WB2YUbFcCN0tm44SBcKUjua9yiFBsfB3vW02IjuwzY7HGtlQIKzy2', '+1000112233', 'Default.png', true, 1),
-    ('Константин', 'Рыбаков', 33, 'konstantin.rybakov@example.com', '$2a$12$WB2YUbFcCN0tm44SBcKUjua9yiFBsfB3vW02IjuwzY7HGtlQIKzy2', '+1112233444', 'Default.png', true, 2);
+    ('Иван', 'Иванов', 30, 'ivan@example.com', '$2a$12$WB2YUbFcCN0tm44SBcKUjua9yiFBsfB3vW02IjuwzY7HGtlQIKzy2', '1234567890', 'Default.png', true, 1),
+    ('Петр', 'Петров', 40, 'petr@example.com', '$2a$12$WB2YUbFcCN0tm44SBcKUjua9yiFBsfB3vW02IjuwzY7HGtlQIKzy2', '0987654321', '9c3bedbe-3221-43ca-b49e-c242442b3418_Снимок экрана 2025-03-02 002559.png', true, 2),
+    ('Эмир', 'Кадыров', 16, 'emirchik@gmail.com', '$2a$12$WB2YUbFcCN0tm44SBcKUjua9yiFBsfB3vW02IjuwzY7HGtlQIKzy2', '1231342345', 'Default.png', true, 1),
+    ('Александр', 'Сидоров', 35, 'alexandr.sidorov@example.com', '$2a$12$WB2YUbFcCN0tm44SBcKUjua9yiFBsfB3vW02IjuwzY7HGtlQIKzy2', '1122334455', 'Default.png', true, 1),
+    ('Анна', 'Петрова', 28, 'anna.petrovna@example.com', '$2a$12$WB2YUbFcCN0tm44SBcKUjua9yiFBsfB3vW02IjuwzY7HGtlQIKzy2', '1222333445', 'Default.png', true, 2),
+    ('Дмитрий', 'Смирнов', 32, 'dmitriy.smirnov@example.com', '$2a$12$WB2YUbFcCN0tm44SBcKUjua9yiFBsfB3vW02IjuwzY7HGtlQIKzy2', '1332444556', 'Default.png', true, 1),
+    ('Мария', 'Михайлова', 25, 'maria.mikhaylova@example.com', '$2a$12$WB2YUbFcCN0tm44SBcKUjua9yiFBsfB3vW02IjuwzY7HGtlQIKzy2', '1443556677', 'Default.png', true, 2),
+    ('Николай', 'Горбунов', 40, 'nikolay.gorbunov@example.com', '$2a$12$WB2YUbFcCN0tm44SBcKUjua9yiFBsfB3vW02IjuwzY7HGtlQIKzy2', '1554667788', 'Default.png', true, 1),
+    ('Светлана', 'Орлова', 29, 'svetlana.orlova@example.com', '$2a$12$WB2YUbFcCN0tm44SBcKUjua9yiFBsfB3vW02IjuwzY7HGtlQIKzy2', '1665778899', 'Default.png', true, 2),
+    ('Ирина', 'Соколова', 26, 'irina.sokolova@example.com', '$2a$12$WB2YUbFcCN0tm44SBcKUjua9yiFBsfB3vW02IjuwzY7HGtlQIKzy2', '1776889900', 'Default.png', true, 2),
+    ('Максим', 'Лебедев', 37, 'maksim.lebedev@example.com', '$2a$12$WB2YUbFcCN0tm44SBcKUjua9yiFBsfB3vW02IjuwzY7HGtlQIKzy2', '1887990011', 'Default.png', true, 1),
+    ('Татьяна', 'Новикова', 31, 'tatiana.novikova@example.com', '$2a$12$WB2YUbFcCN0tm44SBcKUjua9yiFBsfB3vW02IjuwzY7HGtlQIKzy2', '1999001122', 'Default.png', true, 2),
+    ('Екатерина', 'Сухова', 23, 'ekaterina.sukhova@example.com', '$2a$12$WB2YUbFcCN0tm44SBcKUjua9yiFBsfB3vW02IjuwzY7HGtlQIKzy2', '1000112233', 'Default.png', true, 1),
+    ('Константин', 'Рыбаков', 33, 'konstantin.rybakov@example.com', '$2a$12$WB2YUbFcCN0tm44SBcKUjua9yiFBsfB3vW02IjuwzY7HGtlQIKzy2', '1112233444', 'Default.png', true, 2);
 
 insert into categories (name) values ('основные категории');
 insert into categories (name, parent_id) values
