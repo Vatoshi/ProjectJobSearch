@@ -44,9 +44,11 @@
 
         <div class="switch-container">
             <label class="switch">
-                <input type="hidden" name="isActive" value="false" />
-                <input type="checkbox" id="isActive" name="isActive" value="true"
-                       <#if resumeDto.isActive?? && resumeDto.isActive == true>checked</#if> />
+                <#if resumeDto.isActive?? && resumeDto.isActive == true>
+                <input type="checkbox" id="isActive" name="isActive" checked/>
+                <#else>
+                    <input type="checkbox" id="isActive" name="isActive"/>
+                </#if>
                 <span class="slider"></span>
             </label>
             <span class="switch-label">Активно</span>

@@ -103,13 +103,6 @@ public class ResumeDao {
     }
 
     public ResumeDto createResume(ResumeDto resumeDto, Resume resume) {
-        String sqltype = "select role_id from users where id = ?";
-        Integer typename = jdbcTemplate.queryForObject(sqltype, Integer.class, resume.getUser());
-
-        if (typename == 2) {
-            throw new UserStatusExeption("wrong user status");
-        }
-
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(

@@ -73,7 +73,7 @@ public class ProfileController {
 
     @PostMapping("create-resume")
     public String createResume(
-            @Valid @ModelAttribute ResumeDto resumeDto,
+            @Valid ResumeDto resumeDto,
             BindingResult bindingResult,
             Authentication auth,
             Model model) {

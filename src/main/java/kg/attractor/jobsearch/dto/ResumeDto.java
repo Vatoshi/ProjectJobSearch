@@ -27,6 +27,8 @@ public class ResumeDto {
     private LocalDate createdDate;
     @PastOrPresent
     private LocalDate updateTime;
-    List<WorkExperienceInfoDto> workExperienceInfo = new ArrayList<>();
-    List<EducationInfoDto> educationInfo = new ArrayList<>();
+    @Valid
+    List<WorkExperienceInfoDto> workExperienceInfo;
+    @Valid
+    List<EducationInfoDto> educationInfo;
 }

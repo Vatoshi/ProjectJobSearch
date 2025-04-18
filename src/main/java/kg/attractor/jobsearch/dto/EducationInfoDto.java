@@ -1,9 +1,8 @@
 package kg.attractor.jobsearch.dto;
 
+import jakarta.validation.constraints.Past;
 import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -13,9 +12,9 @@ import java.time.LocalDateTime;
 public class EducationInfoDto {
     private String institution;
     private String program;
-    @DateTimeFormat(pattern = "dd-MM-yyyy")
-    private LocalDateTime startDate;
-    @DateTimeFormat(pattern = "dd-MM-yyyy")
-    private LocalDateTime endDate;
+    @Past(message = "укажите действительную дату")
+    private LocalDate startDate;
+    @Past(message = "укажите действительную дату")
+    private LocalDate endDate;
     private String degree;
 }

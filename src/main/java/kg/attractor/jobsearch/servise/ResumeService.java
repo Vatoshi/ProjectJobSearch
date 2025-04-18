@@ -133,8 +133,7 @@ public class ResumeService {
                 resumeDto.setCategoryId(oldResume.getCategory().getId());}
             if (resumeDto.getSalary() == null || resumeDto.getSalary() <= 0) {
                 resumeDto.setSalary(oldResume.getSalary());}
-            if (resumeDto.getIsActive() == null || resumeDto.getIsActive()) {
-                resumeDto.setIsActive(oldResume.getIsActive());}
+            if (resumeDto.getIsActive() == null){resumeDto.setIsActive(false);}
 
             if (resumeDto.getEducationInfo() == null || resumeDto.getEducationInfo().isEmpty()) {
                 EducationInfoDto oldEduc = resumeDao.getEducationInfo(oldResume.getId());
