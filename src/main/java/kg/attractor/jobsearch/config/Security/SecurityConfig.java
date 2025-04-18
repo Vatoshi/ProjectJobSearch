@@ -1,6 +1,5 @@
 package kg.attractor.jobsearch.config.Security;
 
-import kg.attractor.jobsearch.util.CustomAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.Customizer;

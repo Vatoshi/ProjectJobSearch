@@ -14,4 +14,6 @@ public interface VacancyRepository extends JpaRepository<Vacancy, Long> {
 
     @Query("select v from Vacancy v where v.isActive = true")
     List<Vacancy> findActiveVacancies();
+
+    List<Vacancy> getVacanciesByUserId(Long userId);
 }

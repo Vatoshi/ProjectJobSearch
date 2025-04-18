@@ -33,6 +33,11 @@ public class AuthController {
 
     @PostMapping("register")
     public String postRegister(@Valid UserFormDto userFormDto, BindingResult bindingResult, Model model) {
+        if (userService.existEmail(userFormDto.getEmail())) {
+            bindingResult.rejectValue("email","error.email", "Пользователь с такой почтой уже существует");
+            model.addAttribute("userFormDto", userFormDto);
+            return "login/register";
+        }
         if (bindingResult.hasErrors()) {
             model.addAttribute("userFormDto", userFormDto);
             return "login/register";
