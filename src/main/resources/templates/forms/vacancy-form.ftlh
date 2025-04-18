@@ -47,7 +47,7 @@
             </div>
 
             <div class="form-group experience-block">
-                <label>Требуемый опыт: (от не может быть больше чем до)</label>
+                <label>Требуемый опыт:</label>
                 <div class="experience-range">
                     <label for="experienceFrom">от</label>
                     <@spring.formInput "vacancyDto.expFrom" 'type="number" id="experienceFrom" name="experienceFrom" min="0" step="1" placeholder="лет"'></@spring.formInput>
