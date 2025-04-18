@@ -43,7 +43,7 @@ public class ProfileController {
     @GetMapping("/edit")
     public String editUserProfile(Model model, Authentication auth) {
         model.addAttribute("user", userRepository.findByEmail(auth.getName()));
-        model.addAttribute("userEditDto", new UserEditDto());
+        model.addAttribute("userEditDto", userRepository.findByEmail(auth.getName()));
         return "forms/profile-edit";
     }
 
