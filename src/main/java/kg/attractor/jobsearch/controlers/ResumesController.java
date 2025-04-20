@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequiredArgsConstructor
 @RequestMapping("resumes")
 public class ResumesController {
-    private final UserService userService;
     private final ResumeService resumeService;
     private final UserRepository userRepository;
 

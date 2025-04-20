@@ -96,18 +96,18 @@ public class VacancyService {
     public ResponseEntity<VacancyEditDto> updateVacancy(Long vacancyId, VacancyEditDto vacancyDto) throws NotFound {
         Vacancy oldVacancy = vacancyRepository.findById(vacancyId)
                 .orElseThrow(() -> new NotFound("Vacancy not found"));
-        if (vacancyDto.getName() == null) {
-            vacancyDto.setName(oldVacancy.getName());}
-        if (vacancyDto.getDescription() == null) {
-            vacancyDto.setDescription(oldVacancy.getDescription());}
+        if (vacancyDto.getName() == null || vacancyDto.getName().isBlank()) {
+            vacancyDto.setName(oldVacancy.getName());} else {oldVacancy.setName(vacancyDto.getName());}
+        if (vacancyDto.getDescription() == null || vacancyDto.getDescription().isBlank()) {
+            vacancyDto.setDescription(oldVacancy.getDescription());}else {oldVacancy.setDescription(vacancyDto.getDescription());}
         if (vacancyDto.getCategoryId() == null) {
-            vacancyDto.setCategoryId(oldVacancy.getCategory().getId());}
+            vacancyDto.setCategoryId(oldVacancy.getCategory().getId());}else { oldVacancy.setCategory(categoryRepository.findById(vacancyDto.getCategoryId()).get());
         if (vacancyDto.getSalary() == null || vacancyDto.getSalary() < 0) {
-            vacancyDto.setSalary(oldVacancy.getSalary());}
-        if (vacancyDto.getExpFrom() == null || vacancyDto.getExpFrom() < 0) {
-            vacancyDto.setExpFrom(oldVacancy.getExpFrom());}
-        if (vacancyDto.getExpTo() == null || vacancyDto.getExpTo() < 0) {
-            vacancyDto.setExpTo(oldVacancy.getExpTo());}
+            vacancyDto.setSalary(oldVacancy.getSalary());} else {oldVacancy.setSalary(vacancyDto.getSalary());}
+        if (vacancyDto.getExpFrom() == null || vacancyDto.getExpFrom() <= 0) {
+            vacancyDto.setExpFrom(oldVacancy.getExpFrom());} else {oldVacancy.setExpFrom(vacancyDto.getExpFrom());}
+        if (vacancyDto.getExpTo() == null || vacancyDto.getExpTo() <= 0) {
+            vacancyDto.setExpTo(oldVacancy.getExpTo());} else {oldVacancy.setExpTo(vacancyDto.getExpTo());}}
         if (vacancyDto.getIsActive() == null){oldVacancy.setIsActive(false);}else {
             if (vacancyDto.getIsActive()){
                 oldVacancy.setIsActive(true);

@@ -23,8 +23,6 @@ import javax.sql.DataSource;
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final DataSource dataSource;
-//    @Autowired
-//    private CustomAuthenticationProvider customAuthenticationProvider;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -41,7 +39,6 @@ public class SecurityConfig {
                 "where u.email = ? " +
                 "and u.role_id = r.id";
 
-//        auth.authenticationProvider(customAuthenticationProvider);
         auth.jdbcAuthentication()
                 .dataSource(dataSource)
                 .usersByUsernameQuery(fetchUser)
