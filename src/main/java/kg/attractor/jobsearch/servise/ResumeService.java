@@ -131,5 +131,6 @@ public class ResumeService {
         public void updateTime(Long resumeId) {
             Resume resume = resumeRepository.findById(resumeId).orElseThrow(() -> new NotFound("Could not find resume with id: " + resumeId));
             resume.setUpdateTime(LocalDate.now());
+            resumeRepository.save(resume);
         }
 }

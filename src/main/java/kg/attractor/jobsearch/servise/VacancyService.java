@@ -12,12 +12,16 @@ import kg.attractor.jobsearch.repositories.CategoryRepository;
 import kg.attractor.jobsearch.repositories.UserRepository;
 import kg.attractor.jobsearch.repositories.VacancyRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import javax.swing.text.html.Option;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -53,8 +57,12 @@ public class VacancyService {
                 .build();
     }
 
-    public List<VacancyForWebDto> getAllVacancies() throws NotFound {
-        return vacancyRepository.findActiveVacancies()
+    public Optional<Vacancy> getVacancyById(Long vacancyId) {
+        return vacancyRepository.getVacancyById(vacancyId);
+    }
+
+    public List<VacancyForWebDto> getAllVacancies(Pageable pageable) throws NotFound {
+        return vacancyRepository.findActiveVacancies(pageable)
                 .stream()
                 .map(vacancy -> VacancyForWebDto.builder()
                         .id(vacancy.getId())
@@ -123,5 +131,6 @@ public class VacancyService {
     public void updateTime(Long resumeId) {
         Vacancy vacancy = vacancyRepository.findById(resumeId).orElseThrow(() -> new NotFound("Vacancy not found"));
         vacancy.setUpdateTime(LocalDateTime.now());
+        vacancyRepository.save(vacancy);
     }
 }
