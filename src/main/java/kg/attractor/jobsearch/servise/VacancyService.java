@@ -2,7 +2,6 @@ package kg.attractor.jobsearch.servise;
 
 import kg.attractor.jobsearch.dto.VacancyDto;
 import kg.attractor.jobsearch.dto.VacancyEditDto;
-import kg.attractor.jobsearch.dto.mutal.ProfileVacancyDto;
 import kg.attractor.jobsearch.dto.mutal.VacancyForWebDto;
 import kg.attractor.jobsearch.exeptions.NotFound;
 import kg.attractor.jobsearch.models.Category;
@@ -18,7 +17,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -31,15 +29,6 @@ public class VacancyService {
     private final CategoryRepository categoryRepository;
     private final VacancyRepository vacancyRepository;
     private final ResponseAplicantsRepository responseAplicantsRepository;
-
-    public List<ProfileVacancyDto> getVacancyByUser(String username) {
-        User user = userRepository.findByEmail(username);
-        List<Vacancy> vacancies = vacancyRepository.getVacanciesByUserId(user.getId());
-        List<ProfileVacancyDto> dtos = vacancies.stream()
-                .map(vacancy -> new ProfileVacancyDto(vacancy.getId(),vacancy.getName(),vacancy.getUpdateTime().toLocalDate()))
-                .toList();
-        return dtos;
-    }
 
     public VacancyEditDto getVacancyById(Long vacancyId,String username) {
         User user = userRepository.findByEmail(username);

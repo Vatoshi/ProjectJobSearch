@@ -3,17 +3,16 @@ import kg.attractor.jobsearch.dao.ResumeDao;
 import kg.attractor.jobsearch.dto.EducationInfoDto;
 import kg.attractor.jobsearch.dto.ResumeDto;
 import kg.attractor.jobsearch.dto.WorkExperienceInfoDto;
-import kg.attractor.jobsearch.dto.mutal.ProfileResumeDto;
 import kg.attractor.jobsearch.dto.mutal.ResumeForWeb;
 import kg.attractor.jobsearch.exeptions.NotFound;
 import kg.attractor.jobsearch.models.*;
 import kg.attractor.jobsearch.repositories.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -27,8 +26,8 @@ public class ResumeService {
     private final EducationInfoRepository educationInfoRepository;
     private final WorkExperienceRepository workExperienceRepository;
 
-    public List<ResumeForWeb> getResumes() {
-        return resumeRepository.findByIsActiveTrue()
+    public List<ResumeForWeb> getResumes(Pageable pageable) {
+        return resumeRepository.findByIsActiveTrue(pageable)
                 .stream()
                 .map(resume -> ResumeForWeb.builder()
                         .name(resume.getName())
@@ -36,18 +35,6 @@ public class ResumeService {
                         .updateTime(resume.getUpdateTime())
                         .categoryId(resume.getCategory().getId())
                         .author(resume.getUser().getName())
-                        .build())
-                .toList();
-    }
-
-    public List<ProfileResumeDto> getUserResume(String username) {
-        User user = userRepository.findByEmail(username);
-        return resumeRepository.getResumesByUserId(user.getId())
-                .stream()
-                .map(resume -> ProfileResumeDto.builder()
-                        .id(resume.getId())
-                        .updated(resume.getUpdateTime())
-                        .name(resume.getName())
                         .build())
                 .toList();
     }
@@ -132,5 +119,10 @@ public class ResumeService {
             Resume resume = resumeRepository.findById(resumeId).orElseThrow(() -> new NotFound("Could not find resume with id: " + resumeId));
             resume.setUpdateTime(LocalDate.now());
             resumeRepository.save(resume);
+        }
+
+        public int getTotalPages(int size) {
+            int total = resumeRepository.getResumesCount() / size;
+            return (int) Math.ceil((double) total / size);
         }
 }

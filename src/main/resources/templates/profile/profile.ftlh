@@ -59,12 +59,25 @@
             <ul class="resume-list">
 
                 <#if user.role.id==1>
-                <#if resumes?has_content>
-                    <#list resumes as resume>
+                <#if user.resumes?has_content>
+                <#if (resumePages != 1)>
+                    <div class="pagination">
+                        <#if (currentPage != 0)>
+                            <a href="?page=${currentPage - 1}" class="page-link">${currentPage}</a>
+                        </#if>
+
+                        <a href="?page=${currentPage}" class="page-link active">${currentPage + 1}</a>
+
+                        <#if (currentPage - 1 <= resumePages)>
+                            <a href="?page=${currentPage + 1}" class="page-link">${currentPage + 2}</a>
+                        </#if>
+                    </div>
+                </#if>
+                    <#list user.resumes as resume>
                 <li class="resume-item">
                     <div class="resume-header">
                         <h3 class="resume-title">${resume.name}</h3>
-                        <div class="resume-date">Дата обновления: ${resume.updated!}</div>
+                        <div class="resume-date">Дата обновления: ${resume.updateTime!}</div>
                     </div>
                     <div class="resume-actions">
                         <form id="updateTimeResume${resume.id}" method="get" action="/profile/update-resume-time">
@@ -81,12 +94,27 @@
                 </#if>
 
                 <#if user.role.id==2>
-                    <#if vacancies?has_content>
-                        <#list vacancies as vacancy>
+                    <#if user.vacancies?has_content>
+
+                        <#if (vacancyPages !=0)>
+                        <div class="pagination">
+                            <#if (currentPage != 0)>
+                                <a href="?page=${currentPage - 1}" class="page-link">${currentPage}</a>
+                            </#if>
+
+                            <a href="?page=${currentPage}" class="page-link active">${currentPage + 1}</a>
+
+                            <#if (currentPage - 1 <= vacancyPages)>
+                                <a href="?page=${currentPage + 1}" class="page-link">${currentPage + 2}</a>
+                            </#if>
+                        </div>
+                        </#if>
+
+                        <#list user.vacancies as vacancy>
                         <li class="resume-item">
                             <div class="resume-header">
                                 <h3 class="resume-title">${vacancy.name}</h3>
-                                <div class="resume-date">Дата обновления: ${vacancy.updated!}</div>
+                                <div class="resume-date">Дата обновления: ${vacancy.updateTime!}</div>
                             </div>
                             <div class="resume-actions">
                                 <form id="updateTime${vacancy.id}" method="get" action="/profile/update-vacancy-time">

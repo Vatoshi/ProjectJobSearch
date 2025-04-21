@@ -30,27 +30,39 @@
 <div class="container">
     <div class="sidebar">
         <h3>Фильтры</h3>
+
+        <form id="page" action="/vacancies">
         <div class="filter-section">
-            <label for="category">Категория</label>
-            <select id="category">
-                <option value="">Все</option>
-                <option value="frontend">Frontend</option>
-                <option value="backend">Backend</option>
-                <option value="designer">Дизайнер</option>
+            <label for="category">Отсортировать по</label>
+            <select id="category" name="order">
+                <option value="updateTime" <#if order?string == "updateTime"> selected </#if>>Дате публикации</option>
+                <option value="responses" <#if order?string == "responses"> selected </#if>>Количеству откликов</option>
             </select>
         </div>
+        </form>
+            <button class="action-btn" form="page" type="submit">Применить фильтры</button>
 
-        <div class="filter-section">
-            <label for="location">Местоположение</label>
-            <select id="location">
-                <option value="">Все</option>
-                <option value="moscow">Москва</option>
-                <option value="spb">Санкт-Петербург</option>
-                <option value="kazan">Казань</option>
-            </select>
+
+        <div class="pagination">
+            <#if (currentPage >= 3)>
+                <a href="?page=0" class="page-link" style="margin-right: 8px">1 ...</a>
+            </#if>
+
+            <#if (currentPage != 0)>
+                <a href="?page=${currentPage - 1}" class="page-link">${currentPage}</a>
+            </#if>
+
+                <a href="?page=${currentPage}" class="page-link active">${currentPage + 1}</a>
+
+            <#if (currentPage != totalPages)>
+                <a href="?page=${currentPage + 1}" class="page-link">${currentPage + 2}</a>
+            </#if>
+
+            <#if (currentPage < 5 && totalPages > 3)>
+                <a href="?page=${totalPages}" class="page-link" style="margin-left: 8px">... ${totalPages + 1}</a>
+            </#if>
         </div>
 
-        <button class="action-btn" onclick="filterJobs()">Применить фильтры</button>
     </div>
 
     <div class="main-content">
@@ -63,7 +75,7 @@
                 <li class="vacancy-item">
                     <div class="vacancy-left">
                         <div class="vacancy-header">
-                            <h3 class="vacancy-title">${vacancy.name}</h3>
+                            <h3 class="vacancy-title">${vacancy.name!"Unknown"}</h3>
                         </div>
                         <div class="vacancy-date">Последнее обновление: ${vacancy.updateTime}</div>
                         <div class="vacancy-experience">Опыт работы: ${vacancy.expFrom} года</div>
@@ -72,7 +84,8 @@
                             <button class="action-btn">Подать заявку</button>
                         </div>
                     </div>
-                    <div class="vacancy-company">${vacancy.user.name}</div>
+                    <div class="vacancy-company">${vacancy.name}</div>
+                    <div class="vacancy-responses">Откликнувшихся пользователей: ${vacancy.responses!"0"}</div>
                     <div class="vacancy-salary">Зарплата: ${vacancy.salary!"Договорная"} ₽ </div>
                 </li>
                 </a>
