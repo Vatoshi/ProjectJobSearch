@@ -22,4 +22,5 @@ public class VacancyForWebDto {
     private String author;
     private Boolean isActive;
     private LocalDate updateTime;
+    private Integer responses;
 }

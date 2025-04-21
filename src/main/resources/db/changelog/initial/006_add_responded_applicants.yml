@@ -1,0 +1,30 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-responded-applicants-sql
+      author: eric
+      changes:
+        - sql: |
+            INSERT INTO responded_applicants (resume_id, vacancy_id, confirmation) VALUES
+            (1, 1, false),
+            (2, 1, false),
+              (3, 1, false),
+              (4, 1, false),
+              (5, 1, false),
+              (6, 1, false),
+              (7, 1, false),
+              (8, 1, false),
+              (9, 1, false),
+            (3, 2, false),
+            (4, 2, false),
+              (5, 2, false),
+              (1, 2, false),
+              (2, 2, false),
+            (5, 3, false),
+            (6, 3, false),
+            (7, 4, false),
+            (8, 4, false),
+            (9, 5, false),
+            (10, 5, false),
+            (11, 6, false),
+            (12, 6, false),
+            (13, 7, true)

@@ -9,6 +9,7 @@ import kg.attractor.jobsearch.models.Category;
 import kg.attractor.jobsearch.models.User;
 import kg.attractor.jobsearch.models.Vacancy;
 import kg.attractor.jobsearch.repositories.CategoryRepository;
+import kg.attractor.jobsearch.repositories.ResponseAplicantsRepository;
 import kg.attractor.jobsearch.repositories.UserRepository;
 import kg.attractor.jobsearch.repositories.VacancyRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,7 @@ public class VacancyService {
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
     private final VacancyRepository vacancyRepository;
+    private final ResponseAplicantsRepository responseAplicantsRepository;
 
     public List<ProfileVacancyDto> getVacancyByUser(String username) {
         User user = userRepository.findByEmail(username);
@@ -74,6 +76,7 @@ public class VacancyService {
                         .updateTime(LocalDate.from(vacancy.getUpdateTime()))
                         .author(vacancy.getUser().getName())
                         .category(vacancy.getCategory().getName())
+                        .responses(responseAplicantsRepository.getRespondedCount(vacancy.getId()))
                         .build())
                 .toList();
     }
@@ -132,5 +135,10 @@ public class VacancyService {
         Vacancy vacancy = vacancyRepository.findById(resumeId).orElseThrow(() -> new NotFound("Vacancy not found"));
         vacancy.setUpdateTime(LocalDateTime.now());
         vacancyRepository.save(vacancy);
+    }
+
+    public Integer getTotalPages(Integer pageSize) {
+        int totalCount = vacancyRepository.getVacancyCount();
+        return (int) Math.ceil((double) totalCount / pageSize);
     }
 }

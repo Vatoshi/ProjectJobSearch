@@ -146,6 +146,15 @@ body {
     box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
 }
 
+.vacancy-responses {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: gray;
+    position: absolute;
+    bottom: 50px;
+    right: 20px;
+}
+
 .vacancy-salary {
     font-size: 1.1rem;
     font-weight: 600;
@@ -253,3 +262,39 @@ select {
     margin-left: 10px;
     line-height: 1.2;
 }
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 30px;
+    flex-wrap: nowrap;
+}
+
+.page-link {
+    margin-top: 20px;
+    padding: 7px 13px;
+    font-size: 0.65rem;
+    font-weight: 500;
+    color: var(--dark);
+    text-decoration: none;
+    background-color: white;
+    border: 1px solid var(--light-gray);
+    border-radius: 8px;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.page-link:hover {
+    color: white;
+    background: linear-gradient(to right, var(--primary), var(--secondary));
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+}
+
+.page-link.active {
+    background: linear-gradient(to right, var(--primary), var(--secondary));
+    color: white;
+    font-weight: 600;
+    pointer-events: none;
+}
+
