@@ -1,3 +1,4 @@
+<#import "navbar.ftlh" as nav>
 <!DOCTYPE html>
 <html lang="ru">
 

@@ -2,11 +2,12 @@ package kg.attractor.jobsearch.controlers;
 
 import jakarta.validation.Valid;
 import kg.attractor.jobsearch.dto.*;
-import kg.attractor.jobsearch.repositories.UserRepository;
 import kg.attractor.jobsearch.servise.ResumeService;
 import kg.attractor.jobsearch.servise.UserService;
 import kg.attractor.jobsearch.servise.VacancyService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,10 +25,16 @@ public class ProfileController {
     private final VacancyService vacancyService;
 
     @GetMapping
-    public String profile(Model model, Authentication auth) {
-        model.addAttribute("user", userService.getUserByEmail(auth.getName()));
-        model.addAttribute("resumes", resumeService.getUserResume(auth.getName()));
-        model.addAttribute("vacancies", vacancyService.getVacancyByUser(auth.getName()));
+    public String profile(Model model, Authentication auth,
+                          @RequestParam(defaultValue = "0") int page,
+                          @RequestParam(defaultValue = "3") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("user", userService.getUserForProfile(auth.getName(), pageable));
+        model.addAttribute("resumePages", userService.totalVacancyByUser(size, auth.getName()));
+        model.addAttribute("vacancyPages", userService.totalResumeByUser(size, auth.getName()));
+
+
         model.addAttribute("userEditDto", new UserEditDto());
         return "profile/profile";
     }

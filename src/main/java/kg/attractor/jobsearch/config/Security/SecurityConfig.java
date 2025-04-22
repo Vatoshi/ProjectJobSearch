@@ -23,8 +23,6 @@ import javax.sql.DataSource;
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final DataSource dataSource;
-//    @Autowired
-//    private CustomAuthenticationProvider customAuthenticationProvider;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -41,7 +39,6 @@ public class SecurityConfig {
                 "where u.email = ? " +
                 "and u.role_id = r.id";
 
-//        auth.authenticationProvider(customAuthenticationProvider);
         auth.jdbcAuthentication()
                 .dataSource(dataSource)
                 .usersByUsernameQuery(fetchUser)
@@ -66,7 +63,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers("/vacancy/create**","/vacancy/edit/**","vacancy/delete/**","resumes").hasAnyAuthority("EMPLOYER")
                         .requestMatchers("/resume/category/**", "/resume/by-user/**", "/resume/id/**").hasAnyAuthority("APPLICANT","EMPLOYER")
-                        .requestMatchers("/resume/create**","/resume/edit/**","resume/delete/**").hasAnyAuthority("APPLICANT", "ADMIN")
+                        .requestMatchers("/resume/create**","/resume/edit/**","resume/delete/**","vacancies/company","vacancies/company-details").hasAnyAuthority("APPLICANT")
                         .requestMatchers("/user/add-avatar**","/user/edit/**","/user/delete/**").hasAnyAuthority("APPLICANT","EMPLOYER")
                         .anyRequest().permitAll());
 

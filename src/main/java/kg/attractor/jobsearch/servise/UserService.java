@@ -1,14 +1,19 @@
 package kg.attractor.jobsearch.servise;
 
+import kg.attractor.jobsearch.dto.UserDto;
 import kg.attractor.jobsearch.dto.UserEditDto;
 import kg.attractor.jobsearch.dto.UserFormDto;
+import kg.attractor.jobsearch.dto.mutal.UserProfile;
 import kg.attractor.jobsearch.exeptions.NotFound;
 import kg.attractor.jobsearch.models.Role;
 import kg.attractor.jobsearch.models.User;
+import kg.attractor.jobsearch.repositories.ResumeRepository;
 import kg.attractor.jobsearch.repositories.RoleRepository;
 import kg.attractor.jobsearch.repositories.UserRepository;
+import kg.attractor.jobsearch.repositories.VacancyRepository;
 import kg.attractor.jobsearch.util.FileUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,6 +25,8 @@ public class UserService {
     public final UserRepository userRepository;
     private final FileUtil fileUtil;
     private final RoleRepository roleRepository;
+    private final ResumeRepository resumeRepository;
+    private final VacancyRepository vacancyRepository;
 
     public Long userId(String username) {
         User user = userRepository.findByEmail(username);
@@ -28,6 +35,45 @@ public class UserService {
 
     public User getUserByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    public UserProfile getUserForProfile(String email, Pageable pageable) {
+        User user = userRepository.findByEmail(email);
+        return UserProfile.builder()
+                .name(user.getName())
+                .surname(user.getSurname())
+                .phoneNumber(user.getPhoneNumber())
+                .avatar(user.getAvatar())
+                .enabled(user.getEnabled())
+                .role(user.getRole())
+                .vacancies(user.getVacancies())
+                .resumes(resumeRepository.getResumesByUserId(user.getId(), pageable))
+                .vacancies(vacancyRepository.getVacanciesByUserId(user.getId(), pageable))
+                .age(user.getAge())
+                .email(user.getEmail())
+                .build();
+    }
+
+    public int totalResumeByUser(int size, String username){
+        User user = userRepository.findByEmail(username);
+        int count = resumeRepository.getResumesCountNonActive(user.getId());
+        int page = count / size;
+        if (count%size == 0 || count < size){
+            return page;
+        } else {
+            return page + 1;
+        }
+    }
+
+    public int totalVacancyByUser(int size, String username){
+        User user = userRepository.findByEmail(username);
+        int count = vacancyRepository.getVacancyCountNotActive(user.getId());
+        int page = count / size;
+        if (count%size == 0 || count < size){
+            return page;
+        } else {
+            return page + 1;
+        }
     }
 
     public String saveImage(MultipartFile image, String username) {

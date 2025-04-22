@@ -2,22 +2,28 @@ package kg.attractor.jobsearch.servise;
 
 import kg.attractor.jobsearch.dto.VacancyDto;
 import kg.attractor.jobsearch.dto.VacancyEditDto;
-import kg.attractor.jobsearch.dto.mutal.ProfileVacancyDto;
+import kg.attractor.jobsearch.dto.mutal.CompanyDto;
 import kg.attractor.jobsearch.dto.mutal.VacancyForWebDto;
 import kg.attractor.jobsearch.exeptions.NotFound;
 import kg.attractor.jobsearch.models.Category;
 import kg.attractor.jobsearch.models.User;
 import kg.attractor.jobsearch.models.Vacancy;
 import kg.attractor.jobsearch.repositories.CategoryRepository;
+import kg.attractor.jobsearch.repositories.ResponseAplicantsRepository;
 import kg.attractor.jobsearch.repositories.UserRepository;
 import kg.attractor.jobsearch.repositories.VacancyRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,15 +31,7 @@ public class VacancyService {
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
     private final VacancyRepository vacancyRepository;
-
-    public List<ProfileVacancyDto> getVacancyByUser(String username) {
-        User user = userRepository.findByEmail(username);
-        List<Vacancy> vacancies = vacancyRepository.getVacanciesByUserId(user.getId());
-        List<ProfileVacancyDto> dtos = vacancies.stream()
-                .map(vacancy -> new ProfileVacancyDto(vacancy.getId(),vacancy.getName(),vacancy.getUpdateTime().toLocalDate()))
-                .toList();
-        return dtos;
-    }
+    private final ResponseAplicantsRepository responseAplicantsRepository;
 
     public VacancyEditDto getVacancyById(Long vacancyId,String username) {
         User user = userRepository.findByEmail(username);
@@ -53,8 +51,12 @@ public class VacancyService {
                 .build();
     }
 
-    public List<VacancyForWebDto> getAllVacancies() throws NotFound {
-        return vacancyRepository.findActiveVacancies()
+    public Optional<Vacancy> getVacancyById(Long vacancyId) {
+        return vacancyRepository.getVacancyById(vacancyId);
+    }
+
+    public List<VacancyForWebDto> getAllVacancies(Pageable pageable) throws NotFound {
+        return vacancyRepository.findActiveVacancies(pageable)
                 .stream()
                 .map(vacancy -> VacancyForWebDto.builder()
                         .id(vacancy.getId())
@@ -66,6 +68,7 @@ public class VacancyService {
                         .updateTime(LocalDate.from(vacancy.getUpdateTime()))
                         .author(vacancy.getUser().getName())
                         .category(vacancy.getCategory().getName())
+                        .responses(responseAplicantsRepository.getRespondedCount(vacancy.getId()))
                         .build())
                 .toList();
     }
@@ -96,18 +99,18 @@ public class VacancyService {
     public ResponseEntity<VacancyEditDto> updateVacancy(Long vacancyId, VacancyEditDto vacancyDto) throws NotFound {
         Vacancy oldVacancy = vacancyRepository.findById(vacancyId)
                 .orElseThrow(() -> new NotFound("Vacancy not found"));
-        if (vacancyDto.getName() == null) {
-            vacancyDto.setName(oldVacancy.getName());}
-        if (vacancyDto.getDescription() == null) {
-            vacancyDto.setDescription(oldVacancy.getDescription());}
+        if (vacancyDto.getName() == null || vacancyDto.getName().isBlank()) {
+            vacancyDto.setName(oldVacancy.getName());} else {oldVacancy.setName(vacancyDto.getName());}
+        if (vacancyDto.getDescription() == null || vacancyDto.getDescription().isBlank()) {
+            vacancyDto.setDescription(oldVacancy.getDescription());}else {oldVacancy.setDescription(vacancyDto.getDescription());}
         if (vacancyDto.getCategoryId() == null) {
-            vacancyDto.setCategoryId(oldVacancy.getCategory().getId());}
+            vacancyDto.setCategoryId(oldVacancy.getCategory().getId());}else { oldVacancy.setCategory(categoryRepository.findById(vacancyDto.getCategoryId()).get());
         if (vacancyDto.getSalary() == null || vacancyDto.getSalary() < 0) {
-            vacancyDto.setSalary(oldVacancy.getSalary());}
-        if (vacancyDto.getExpFrom() == null || vacancyDto.getExpFrom() < 0) {
-            vacancyDto.setExpFrom(oldVacancy.getExpFrom());}
-        if (vacancyDto.getExpTo() == null || vacancyDto.getExpTo() < 0) {
-            vacancyDto.setExpTo(oldVacancy.getExpTo());}
+            vacancyDto.setSalary(oldVacancy.getSalary());} else {oldVacancy.setSalary(vacancyDto.getSalary());}
+        if (vacancyDto.getExpFrom() == null || vacancyDto.getExpFrom() <= 0) {
+            vacancyDto.setExpFrom(oldVacancy.getExpFrom());} else {oldVacancy.setExpFrom(vacancyDto.getExpFrom());}
+        if (vacancyDto.getExpTo() == null || vacancyDto.getExpTo() <= 0) {
+            vacancyDto.setExpTo(oldVacancy.getExpTo());} else {oldVacancy.setExpTo(vacancyDto.getExpTo());}}
         if (vacancyDto.getIsActive() == null){oldVacancy.setIsActive(false);}else {
             if (vacancyDto.getIsActive()){
                 oldVacancy.setIsActive(true);
@@ -123,5 +126,38 @@ public class VacancyService {
     public void updateTime(Long resumeId) {
         Vacancy vacancy = vacancyRepository.findById(resumeId).orElseThrow(() -> new NotFound("Vacancy not found"));
         vacancy.setUpdateTime(LocalDateTime.now());
+        vacancyRepository.save(vacancy);
+    }
+
+    public Integer getTotalPages(Integer pageSize) {
+        int totalCount = vacancyRepository.getVacancyCount();
+        return (int) Math.ceil((double) totalCount / pageSize);
+    }
+
+    public List<CompanyDto> getCompanies(Pageable pageable) {
+        List<User> users = userRepository.getUsersByRoleId(pageable,2L);
+        return  users.stream()
+                .map(user -> CompanyDto.builder()
+                        .phoneNumber(user.getPhoneNumber())
+                        .name(user.getName())
+                        .email(user.getEmail())
+                        .id(user.getId())
+                        .avatar(user.getAvatar())
+                        .vacancies(user.getVacancies())
+                        .build())
+                .toList();
+
+    }
+
+    public CompanyDto getCompany(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFound("User not found"));
+        return CompanyDto.builder()
+                .id(user.getId())
+                .phoneNumber(user.getPhoneNumber())
+                .name(user.getName())
+                .email(user.getEmail())
+                .avatar(user.getAvatar())
+                .vacancies(user.getVacancies())
+                .build();
     }
 }

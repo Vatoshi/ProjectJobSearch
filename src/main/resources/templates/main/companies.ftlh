@@ -39,24 +39,21 @@
     </div>
 
     <div class="main-content">
-        <h2 class="section-title">Вакансии</h2>
+        <h2 class="section-title">Компании</h2>
         <ul class="vacancy-list" id="vacancy-list">
 
-            <#if resumes? has_content>
-                <#list resumes as resume>
+            <#if companies? has_content>
+                <#list companies as company>
+            <a href="company-details?id=${company.id}" style="text-decoration: none; transition: none; animation: none">
                     <li class="vacancy-item">
                         <div class="vacancy-left">
                             <div class="vacancy-header">
-                                <h3 class="vacancy-title">${resume.name}</h3>
-                            </div>
-                            <div class="vacancy-date">Последнее обновление: ${resume.updateTime}</div>
-                            <div class="vacancy-actions">
-                                <button class="action-btn">Откликнуться</button>
+                                <h3 class="vacancy-title">${company.name}</h3>
                             </div>
                         </div>
-                        <div class="vacancy-company">${resume.author}</div>
-                        <div class="vacancy-salary">Хочу зарплату: ${resume.salary!"Договорная"} ₽ </div>
+                        <div class="vacancy-company">${company.phoneNumber}</div>
                     </li>
+            </a>
                 </#list>
             </#if>
         </ul>

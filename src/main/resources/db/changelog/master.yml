@@ -3,17 +3,13 @@ databaseChangeLog:
       file: db/changelog/initial/001_create_table.yml
   - include:
       file: db/changelog/initial/002_create_foreigh_keys.yml
-#  - include:
-#      file: db/changelog/initial/003_authorites.yml
   - include:
-      file: db/changelog/initial/004_roles.yml
+      file: db/changelog/initial/003_roles.yml
   - include:
-      file: db/changelog/initial/005_edit_user.yml
-#  - include:
-#      file: db/changelog/initial/006_authority_data.yml
+      file: db/changelog/initial/004_edit_user.yml
   - include:
-      file: db/changelog/initial/007_role_data.yml
-#  - include:
-#      file: db/changelog/initial/008_user_data.yml
+      file: db/changelog/initial/005_role_data.yml
   - include:
       file: db/changelog/initial/insert.sql
+  - include:
+      file: db/changelog/initial/006_add_responded_applicants.yml
