@@ -1,6 +1,6 @@
 package kg.attractor.jobsearch.controlers;
 
-import kg.attractor.jobsearch.repositories.UserRepository;
+import kg.attractor.jobsearch.servise.UserService;
 import kg.attractor.jobsearch.servise.VacancyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -20,19 +20,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("vacancies")
 public class VacansiesController {
     private final VacancyService vacancyService;
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     @GetMapping
     public String getMainPage(Model model , @RequestParam(defaultValue = "0") int page,
-                                            @RequestParam(defaultValue = "2") int size,
+                                            @RequestParam(defaultValue = "5") int size,
                                             @RequestParam(defaultValue = "responses") String order) {
 
         Pageable pageable = PageRequest.of(page, size);
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken)) {
-            String username = auth.getName();
-            model.addAttribute("user", userRepository.findByEmail(username));
+            model.addAttribute("user", userService.getUserByEmail(auth.getName()));
         } else {
             model.addAttribute("user", null);
         }
@@ -49,7 +48,31 @@ public class VacansiesController {
 
     @GetMapping("details")
     public String getVacancy(@RequestParam("id") Long id,  Model model, Authentication auth) {
+        model.addAttribute("user", userService.getUserByEmail(auth.getName()));
         model.addAttribute("vacancy", vacancyService.getVacancyById(id).orElse(null));
         return "main/vacancy-details";
+    }
+
+    @GetMapping("company")
+    public String getMainPage(Model model , @RequestParam(defaultValue = "0") int page,
+                              @RequestParam(defaultValue = "5") int size)
+    {
+        Pageable pageable = PageRequest.of(page, size);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken)) {
+            model.addAttribute("user", userService.getUserByEmail(auth.getName()));
+        } else {
+            model.addAttribute("user", null);
+        }
+        model.addAttribute("totalPages",vacancyService.getTotalPages(size));
+        model.addAttribute("currentPage", pageable.getPageNumber());
+        model.addAttribute("companies",vacancyService.getCompanies(pageable));
+        return "main/companies";
+    }
+
+    @GetMapping("company-details")
+    public String getCompany(@RequestParam("id") Long id,  Model model) {
+        model.addAttribute("company", vacancyService.getCompany(id));
+        return "main/company-details";
     }
 }

@@ -1,9 +1,12 @@
 package kg.attractor.jobsearch.repositories;
 
 import kg.attractor.jobsearch.models.User;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
+import java.util.List;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
@@ -11,4 +14,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User findByEmail(@Param("email") String email);
 
     boolean existsByEmail(String email);
+
+    List<User> getUsersByRoleId(Pageable pageable,Long roleId);
 }

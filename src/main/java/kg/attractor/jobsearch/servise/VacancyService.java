@@ -2,6 +2,7 @@ package kg.attractor.jobsearch.servise;
 
 import kg.attractor.jobsearch.dto.VacancyDto;
 import kg.attractor.jobsearch.dto.VacancyEditDto;
+import kg.attractor.jobsearch.dto.mutal.CompanyDto;
 import kg.attractor.jobsearch.dto.mutal.VacancyForWebDto;
 import kg.attractor.jobsearch.exeptions.NotFound;
 import kg.attractor.jobsearch.models.Category;
@@ -19,8 +20,10 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -129,5 +132,32 @@ public class VacancyService {
     public Integer getTotalPages(Integer pageSize) {
         int totalCount = vacancyRepository.getVacancyCount();
         return (int) Math.ceil((double) totalCount / pageSize);
+    }
+
+    public List<CompanyDto> getCompanies(Pageable pageable) {
+        List<User> users = userRepository.getUsersByRoleId(pageable,2L);
+        return  users.stream()
+                .map(user -> CompanyDto.builder()
+                        .phoneNumber(user.getPhoneNumber())
+                        .name(user.getName())
+                        .email(user.getEmail())
+                        .id(user.getId())
+                        .avatar(user.getAvatar())
+                        .vacancies(user.getVacancies())
+                        .build())
+                .toList();
+
+    }
+
+    public CompanyDto getCompany(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFound("User not found"));
+        return CompanyDto.builder()
+                .id(user.getId())
+                .phoneNumber(user.getPhoneNumber())
+                .name(user.getName())
+                .email(user.getEmail())
+                .avatar(user.getAvatar())
+                .vacancies(user.getVacancies())
+                .build();
     }
 }
