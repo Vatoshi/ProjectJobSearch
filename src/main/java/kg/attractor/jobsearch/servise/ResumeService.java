@@ -1,5 +1,4 @@
 package kg.attractor.jobsearch.servise;
-import kg.attractor.jobsearch.dao.ResumeDao;
 import kg.attractor.jobsearch.dto.EducationInfoDto;
 import kg.attractor.jobsearch.dto.ResumeDto;
 import kg.attractor.jobsearch.dto.WorkExperienceInfoDto;
@@ -12,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -19,7 +20,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ResumeService {
-    private final ResumeDao resumeDao;
     private final CategoryRepository categoryRepository;
     private final ResumeRepository resumeRepository;
     private final UserRepository userRepository;
@@ -70,6 +70,7 @@ public class ResumeService {
                 .build();
     }
 
+    @Transactional
     public ResponseEntity<ResumeDto> createResume(ResumeDto resumeDto, String username) throws IllegalArgumentException {
             resumeDto.setCreatedDate(LocalDate.now());
             resumeDto.setUpdateTime(LocalDate.now());
@@ -84,8 +85,27 @@ public class ResumeService {
                 .updateTime(resumeDto.getUpdateTime())
                 .createdDate(resumeDto.getCreatedDate())
                 .build();
+            resumeRepository.saveAndFlush(resume);
 
-            resumeDao.createResume(resumeDto, resume);
+            List<WorkExperienceInfo> works = (resumeDto.getWorkExperienceInfo().stream().map(dto -> WorkExperienceInfo.builder()
+                    .years(dto.getYears())
+                    .responsibilities(dto.getResponsibilities())
+                    .position(dto.getPosition())
+                    .companyName(dto.getCompanyName())
+                    .resume(resume)
+                    .build())
+                    .toList());
+            workExperienceRepository.saveAll(works);
+
+            List<EducationInfo> educ = (resumeDto.getEducationInfo().stream().map(dto -> EducationInfo.builder()
+                    .degree(dto.getDegree())
+                    .endDate(dto.getEndDate())
+                    .institution(dto.getInstitution())
+                    .program(dto.getProgram())
+                    .startDate(dto.getStartDate())
+                    .resume(resume)
+                    .build()).toList());
+            educationInfoRepository.saveAll(educ);
             return ResponseEntity.status(HttpStatus.CREATED).body(resumeDto);
     }
 
