@@ -1,6 +1,6 @@
     package kg.attractor.jobsearch.controlers.api;
 
-    import kg.attractor.jobsearch.servise.UserService;
+    import kg.attractor.jobsearch.servise.mainServises.UserService;
     import lombok.RequiredArgsConstructor;
     import org.springframework.core.io.FileSystemResource;
     import org.springframework.core.io.Resource;

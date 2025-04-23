@@ -1,4 +1,4 @@
-package kg.attractor.jobsearch.servise;
+package kg.attractor.jobsearch.servise.mainServises;
 
 import kg.attractor.jobsearch.exeptions.ErrorResponseBody;
 import org.springframework.http.HttpStatus;

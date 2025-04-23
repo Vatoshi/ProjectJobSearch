@@ -1,7 +1,7 @@
 package kg.attractor.jobsearch.controlers;
 
-import kg.attractor.jobsearch.servise.UserService;
-import kg.attractor.jobsearch.servise.VacancyService;
+import kg.attractor.jobsearch.servise.mainServises.UserService;
+import kg.attractor.jobsearch.servise.mainServises.VacancyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

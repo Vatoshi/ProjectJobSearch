@@ -2,9 +2,9 @@ package kg.attractor.jobsearch.controlers;
 
 import jakarta.validation.Valid;
 import kg.attractor.jobsearch.dto.*;
-import kg.attractor.jobsearch.servise.ResumeService;
-import kg.attractor.jobsearch.servise.UserService;
-import kg.attractor.jobsearch.servise.VacancyService;
+import kg.attractor.jobsearch.servise.mainServises.ResumeService;
+import kg.attractor.jobsearch.servise.mainServises.UserService;
+import kg.attractor.jobsearch.servise.mainServises.VacancyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

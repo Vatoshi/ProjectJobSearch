@@ -2,7 +2,7 @@ package kg.attractor.jobsearch.controlers;
 
 import jakarta.validation.Valid;
 import kg.attractor.jobsearch.dto.UserFormDto;
-import kg.attractor.jobsearch.servise.UserService;
+import kg.attractor.jobsearch.servise.mainServises.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
