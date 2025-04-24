@@ -12,6 +12,10 @@
         <h1>Добро пожаловать</h1>
         
         <form method="post" action="/auth/login">
+            <#if _csrf??>
+                <input type="hidden" name="${(_csrf.parameterName)!'csrf-param-name'}"
+                       value="${(_csrf.token)!'csrf-token'}"/>
+            </#if>
             <div class="input-group">
                 <label for="email">Электронная почта</label>
                 <input type="text" name="username" id="email" placeholder="Введите ваш email" required>

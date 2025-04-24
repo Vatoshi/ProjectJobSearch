@@ -1,12 +1,12 @@
 package kg.attractor.jobsearch.config.Security;
 
+import kg.attractor.jobsearch.servise.helpers.AuthUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,6 +23,8 @@ import javax.sql.DataSource;
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final DataSource dataSource;
+    private final AuthUserDetailsService authUserDetailsService;
+    private final CustomSuccesHandler customSuccesHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -31,18 +33,7 @@ public class SecurityConfig {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        String fetchUser = "select email, password, enabled " +
-                "from users " +
-                "where email = ?";
-        String fetchRoles = "select email, role " +
-                "from users u, role r " +
-                "where u.email = ? " +
-                "and u.role_id = r.id";
-
-        auth.jdbcAuthentication()
-                .dataSource(dataSource)
-                .usersByUsernameQuery(fetchUser)
-                .authoritiesByUsernameQuery(fetchRoles);
+        auth.userDetailsService(authUserDetailsService);
     }
 
     @Bean
@@ -52,13 +43,13 @@ public class SecurityConfig {
                 .formLogin(login -> login
                         .loginPage("/auth/login")
                         .loginProcessingUrl("/auth/login")
-                        .defaultSuccessUrl("/vacancies", true)
+                        .successHandler(customSuccesHandler)
                         .failureUrl("/auth/login?error=true")
                         .permitAll())
                 .logout(logout -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                         .permitAll())
-                .csrf(AbstractHttpConfigurer::disable)
+//                .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers("/vacancy/create**","/vacancy/edit/**","vacancy/delete/**","resumes").hasAnyAuthority("EMPLOYER")
