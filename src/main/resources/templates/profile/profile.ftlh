@@ -97,6 +97,7 @@
                         </form>
                         <button form="updateTimeResume${resume.id}" type="submit" class="btn action-btn">Обновить</button>
                         <a href="/profile/edit-resume?id=${resume.id}"  class="btn btn-outline action-btn">Редактировать</a>
+<#--                        <a href="/resumes/details?id=${resume.id}" class="btn btn action-btn" style="justify-content: end; margin-left: auto">Посмотреть</a>-->
                     </div>
                 </li>
                 </#list>
@@ -134,8 +135,9 @@
                                 <form id="updateTime${vacancy.id}" method="get" action="/profile/update-vacancy-time">
                                     <input type="hidden" name="id" value="${vacancy.id}">
                                 </form>
-                                <button form="updateTime${vacancy.id}" type="submit" class="btn action-btn">Обновить</button>
+                                <button form="updateTime${vacancy.id}" type="submit" class="btn btn action-btn">Обновить</button>
                                 <a href="/profile/edit-vacancy?id=${vacancy.id}" class="btn btn-outline action-btn">Редактировать</a>
+                                <a href="/vacancies/details?id=${vacancy.id}" class="btn btn action-btn" style="justify-content: end; margin-left: auto">Посмотреть</a>
                             </div>
                         </li>
                         </#list>

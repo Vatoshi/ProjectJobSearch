@@ -1,6 +1,7 @@
 package kg.attractor.jobsearch.servise.helpers;
 
 
+import kg.attractor.jobsearch.exeptions.NotFound;
 import kg.attractor.jobsearch.models.Role;
 import kg.attractor.jobsearch.models.User;
 import kg.attractor.jobsearch.repositories.UserRepository;

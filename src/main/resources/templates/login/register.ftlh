@@ -20,42 +20,47 @@
             <#if _csrf??><input type="hidden" name="${(_csrf.parameterName)!'csrf-param-name'}"
                                 value="${(_csrf.token)!'csrf-token'}"/></#if>
             <div class="form-group">
-                <@spring.formInput "userFormDto.name" 'placeholder="Имя" required'/>
+                <@spring.formInput "userFormDto.name" 'placeholder="Имя"'/>
                 <@spring.showErrors "<br>" "error"/>
             </div>
 
             <div class="form-group">
-                <@spring.formInput "userFormDto.surname" 'placeholder="Фамилия" required'/>
+                <@spring.formInput "userFormDto.surname" 'placeholder="Фамилия"'/>
                 <@spring.showErrors "<br>" "error"/>
             </div>
 
             <div class="form-group">
-                <@spring.formInput "userFormDto.email" 'placeholder="Почта" required'/>
+                <@spring.formInput "userFormDto.email" 'placeholder="Почта"'/>
                 <@spring.showErrors "<br>" "error"/>
             </div>
 
             <div class="form-group">
-                <@spring.formInput "userFormDto.password" 'placeholder="Пароль" required'/>
+                <@spring.formInput "userFormDto.password" 'placeholder="Пароль"'/>
                 <@spring.showErrors "<br>" "error"/>
             </div>
 
             <div class="form-group">
-                <@spring.formInput "userFormDto.age" 'placeholder="Возраст" required'/>
+                <@spring.formInput "userFormDto.age" 'placeholder="Возраст"'/>
                 <@spring.showErrors "<br>" "error"/>
             </div>
 
             <div class="form-group">
-                <@spring.formInput "userFormDto.phoneNumber" 'placeholder="Номер телефона" required'/>
+                <@spring.formInput "userFormDto.phoneNumber" 'placeholder="Номер телефона"'/>
                 <@spring.showErrors "<br>" "error"/>
             </div>
 
             <div class="form-group">
                 <label for="accountType">Тип аккаунта:</label>
-                <select name="roleId" id="accountType" required>
+                <select name="roleId" id="accountType">
                     <option value="" disabled selected>Выберите тип</option>
                     <option value="1">Соискатель</option>
                     <option value="2">Работодатель</option>
                 </select>
+                <#if accountType?has_content>
+                    <p style="color:#e12e2e;font-size: 14px;">
+                        ${accountType}
+                    </p>
+                </#if>
             </div>
 
             <input type="submit" class="submit-btn" value="Зарегистрироваться">

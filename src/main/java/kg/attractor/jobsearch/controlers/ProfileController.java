@@ -38,7 +38,6 @@ public class ProfileController {
         UserProfile user = userService.getUserForProfile(auth.getName(),pageable);
         model.addAttribute("user", user);
         model.addAttribute("resumes", userResumeServise.getResumesByUserId(user.getUserId(), pageable));
-        System.out.println(userResumeServise.getResumesByUserId(user.getUserId(), pageable).getContent());
         model.addAttribute("vacancies", userVacancyServise.getVacanciesByUserId(user.getUserId(),pageable));
 
         model.addAttribute("userEditDto", new UserEditDto());
@@ -137,7 +136,6 @@ public class ProfileController {
             model.addAttribute("user", userService.getUserByEmail(auth.getName()));
             model.addAttribute("vacancyDto", vacancyDto);
             model.addAttribute("errorVacancy", "Выберите категорию");
-//            model.addAttribute("workExp", "Укажите нужное количество опыта работы");
             return "forms/vacancy-form";
         }
         if (vacancyDto.getExpFrom() > vacancyDto.getExpTo()) {
