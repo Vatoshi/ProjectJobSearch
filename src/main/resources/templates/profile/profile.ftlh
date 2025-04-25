@@ -49,14 +49,14 @@
                 </li>
                     <#else >
                         <li class="nav-item">
-                            <a href="/vacancies/company" class="nav-link">
+                            <a href="/company" class="nav-link">
                                 <span class="nav-icon">📌</span>
                                 <span> Страница компаний </span>
                             </a>
                         </li>
                 </#if>
                 <li class="nav-item">
-                    <a href="/vacancies" class="nav-link" data-target="resumes">
+                    <a href="/" class="nav-link" data-target="resumes">
                         <span class="nav-icon">🔄</span>
                         <span> К вакансиям </span>
                     </a>
@@ -137,7 +137,7 @@
                                 </form>
                                 <button form="updateTime${vacancy.id}" type="submit" class="btn btn action-btn">Обновить</button>
                                 <a href="/profile/edit-vacancy?id=${vacancy.id}" class="btn btn-outline action-btn">Редактировать</a>
-                                <a href="/vacancies/details?id=${vacancy.id}" class="btn btn action-btn" style="justify-content: end; margin-left: auto">Посмотреть</a>
+                                <a href="/details?id=${vacancy.id}" class="btn btn action-btn" style="justify-content: end; margin-left: auto">Посмотреть</a>
                             </div>
                         </li>
                         </#list>

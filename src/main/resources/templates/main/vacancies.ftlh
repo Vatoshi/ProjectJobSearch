@@ -57,7 +57,7 @@
 
             <#if vacancies? has_content>
             <#list vacancies as vacancy>
-                <a href="vacancies/details?id=${vacancy.id}" style="text-decoration: none; transition: none; animation: none">
+                <a href="/details?id=${vacancy.id}" style="text-decoration: none; transition: none; animation: none">
                 <li class="vacancy-item">
                     <div class="vacancy-left">
                         <div class="vacancy-header">

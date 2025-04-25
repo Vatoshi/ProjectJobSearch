@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("vacancies")
+@RequestMapping("")
 public class VacansiesController {
     private final VacancyService vacancyService;
     private final UserService userService;

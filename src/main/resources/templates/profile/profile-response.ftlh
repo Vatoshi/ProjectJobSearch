@@ -46,7 +46,7 @@
                 </li>
             </#if>
             <li class="nav-item">
-                <a href="/vacancies" class="nav-link" data-target="resumes">
+                <a href="/" class="nav-link" data-target="resumes">
                     <span class="nav-icon">🔄</span>
                     <span> К вакансиям </span>
                 </a>
