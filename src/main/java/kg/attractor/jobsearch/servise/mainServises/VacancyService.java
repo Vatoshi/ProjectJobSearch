@@ -5,6 +5,7 @@ import kg.attractor.jobsearch.dto.VacancyEditDto;
 import kg.attractor.jobsearch.dto.mutal.CompanyDto;
 import kg.attractor.jobsearch.dto.mutal.VacancyForWebDto;
 import kg.attractor.jobsearch.exeptions.NotFound;
+import kg.attractor.jobsearch.exeptions.NotOwnVacancy;
 import kg.attractor.jobsearch.models.Category;
 import kg.attractor.jobsearch.models.User;
 import kg.attractor.jobsearch.models.Vacancy;
@@ -33,7 +34,9 @@ public class VacancyService {
 
     public VacancyEditDto getVacancyById(Long vacancyId,String username) {
         User user = userService.getUserByEmail(username);
-        vacancyRepository.exist(user.getId(),vacancyId);
+        if (!vacancyRepository.existsByUserIdAndId(vacancyId, user.getId())) {
+            throw new NotOwnVacancy("Not own Vacancy");
+        }
         Vacancy vacancy = vacancyRepository.findById(vacancyId)
                 .orElseThrow(() -> new NotFound("Could not find vacancy with id: " + vacancyId));
         return VacancyEditDto.builder()

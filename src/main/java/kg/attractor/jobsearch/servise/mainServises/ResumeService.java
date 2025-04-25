@@ -4,6 +4,7 @@ import kg.attractor.jobsearch.dto.ResumeDto;
 import kg.attractor.jobsearch.dto.WorkExperienceInfoDto;
 import kg.attractor.jobsearch.dto.mutal.ResumeForWeb;
 import kg.attractor.jobsearch.exeptions.NotFound;
+import kg.attractor.jobsearch.exeptions.NotOwnVacancy;
 import kg.attractor.jobsearch.models.*;
 import kg.attractor.jobsearch.repositories.*;
 import kg.attractor.jobsearch.servise.CategoryServise;
@@ -47,7 +48,7 @@ public class ResumeService {
         List<WorkExperienceInfo> works = workExperienceServise.getWorkExperienceByResumeId(resumeId);
         User user = userService.getUserByEmail(username);
         if (!resumeRepository.existsByResumeIdAndUserId(resumeId, user.getId())) {
-            throw new NotFound("Resume with id " + resumeId + " not found");
+            throw new NotOwnVacancy("Resume with id " + resumeId + " not found");
         }
         Resume resume = resumeRepository.findById(resumeId)
                 .orElseThrow(() -> new NotFound("Could not find resume with id: " + resumeId));

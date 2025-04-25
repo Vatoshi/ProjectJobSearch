@@ -20,21 +20,26 @@ import java.util.NoSuchElementException;
 public class GlobalControllerAdvice {
     private final ErrorService errorService;
 
-    @ExceptionHandler(NotFound.class)
-    public String handleNoSuchElementException(Model model, HttpServletRequest request) {
-        model.addAttribute("status", HttpStatus.NOT_FOUND.value());
-        model.addAttribute("reason", HttpStatus.NOT_FOUND.getReasonPhrase());
-        model.addAttribute("details", request);
-        return "errors/error";
-    }
-
-    @ExceptionHandler(NullPointerException.class)
-    public String NullPointExep(Model model, HttpServletRequest request) {
+//    @ExceptionHandler(NotFound.class)
+//    public String handleNoSuchElementException(Model model, HttpServletRequest request) {
 //        model.addAttribute("status", HttpStatus.NOT_FOUND.value());
 //        model.addAttribute("reason", HttpStatus.NOT_FOUND.getReasonPhrase());
 //        model.addAttribute("details", request);
 //        return "errors/error";
-        return "redirect:/auth/login";
+//    }
+//
+//    @ExceptionHandler(NullPointerException.class)
+//    public String NullPointExep(Model model, HttpServletRequest request) {
+////        model.addAttribute("status", HttpStatus.NOT_FOUND.value());
+////        model.addAttribute("reason", HttpStatus.NOT_FOUND.getReasonPhrase());
+////        model.addAttribute("details", request);
+////        return "errors/error";
+//        return "redirect:/auth/login";
+//    }
+
+    @ExceptionHandler(NotOwnVacancy.class)
+    public String handleNotOwnVacancy() {
+        return "redirect:/profile";
     }
 
     @ExceptionHandler(NoSuchElementException.class)
