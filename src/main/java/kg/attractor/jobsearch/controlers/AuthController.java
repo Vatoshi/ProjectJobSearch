@@ -2,7 +2,7 @@ package kg.attractor.jobsearch.controlers;
 
 import jakarta.validation.Valid;
 import kg.attractor.jobsearch.dto.UserFormDto;
-import kg.attractor.jobsearch.servise.UserService;
+import kg.attractor.jobsearch.servise.mainServises.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -33,12 +33,13 @@ public class AuthController {
 
     @PostMapping("register")
     public String postRegister(@Valid UserFormDto userFormDto, BindingResult bindingResult, Model model) {
-        if (userService.existEmail(userFormDto.getEmail())) {
-            bindingResult.rejectValue("email","error.email", "Пользователь с такой почтой уже существует");
+        if (bindingResult.hasErrors()) {
             model.addAttribute("userFormDto", userFormDto);
+            model.addAttribute("accountType","Укажите тип аккаунта");
             return "login/register";
         }
-        if (bindingResult.hasErrors()) {
+        if (userService.existEmail(userFormDto.getEmail())) {
+            bindingResult.rejectValue("email","error.email", "Пользователь с такой почтой уже существует");
             model.addAttribute("userFormDto", userFormDto);
             return "login/register";
         }

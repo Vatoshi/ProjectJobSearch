@@ -2,9 +2,12 @@ package kg.attractor.jobsearch.controlers;
 
 import jakarta.validation.Valid;
 import kg.attractor.jobsearch.dto.*;
-import kg.attractor.jobsearch.servise.ResumeService;
-import kg.attractor.jobsearch.servise.UserService;
-import kg.attractor.jobsearch.servise.VacancyService;
+import kg.attractor.jobsearch.dto.mutal.UserProfile;
+import kg.attractor.jobsearch.servise.helpers.UserResumeServise;
+import kg.attractor.jobsearch.servise.helpers.UserVacancyServise;
+import kg.attractor.jobsearch.servise.mainServises.ResumeService;
+import kg.attractor.jobsearch.servise.mainServises.UserService;
+import kg.attractor.jobsearch.servise.mainServises.VacancyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +26,8 @@ public class ProfileController {
     private final UserService userService;
     private final ResumeService resumeService;
     private final VacancyService vacancyService;
+    private final UserResumeServise userResumeServise;
+    private final UserVacancyServise userVacancyServise;
 
     @GetMapping
     public String profile(Model model, Authentication auth,
@@ -30,10 +35,10 @@ public class ProfileController {
                           @RequestParam(defaultValue = "3") int size) {
         Pageable pageable = PageRequest.of(page, size);
         model.addAttribute("currentPage", page);
-        model.addAttribute("user", userService.getUserForProfile(auth.getName(), pageable));
-        model.addAttribute("resumePages", userService.totalVacancyByUser(size, auth.getName()));
-        model.addAttribute("vacancyPages", userService.totalResumeByUser(size, auth.getName()));
-
+        UserProfile user = userService.getUserForProfile(auth.getName(),pageable);
+        model.addAttribute("user", user);
+        model.addAttribute("resumes", userResumeServise.getResumesByUserId(user.getUserId(), pageable));
+        model.addAttribute("vacancies", userVacancyServise.getVacanciesByUserId(user.getUserId(),pageable));
 
         model.addAttribute("userEditDto", new UserEditDto());
         return "profile/profile";
@@ -85,6 +90,7 @@ public class ProfileController {
             Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("user", userService.getUserByEmail(auth.getName()));
+            model.addAttribute("errorResume", "Выберите категорию");
             return "forms/resume-form";
         }
         resumeService.createResume(resumeDto, auth.getName());
@@ -126,13 +132,14 @@ public class ProfileController {
                                 BindingResult bindingResult,
                                 Authentication auth,
                                 Model model){
-        if (vacancyDto.getExpFrom() > vacancyDto.getExpTo()) {
-            bindingResult.rejectValue("expFrom", "error.expFrom","От не может быть больше чем до");
-        }
         if (bindingResult.hasErrors()) {
             model.addAttribute("user", userService.getUserByEmail(auth.getName()));
             model.addAttribute("vacancyDto", vacancyDto);
+            model.addAttribute("errorVacancy", "Выберите категорию");
             return "forms/vacancy-form";
+        }
+        if (vacancyDto.getExpFrom() > vacancyDto.getExpTo()) {
+            bindingResult.rejectValue("expFrom", "error.expFrom","От не может быть больше чем до");
         }
         vacancyService.createVacancy(vacancyDto, auth.getName());
         return "redirect:/profile";

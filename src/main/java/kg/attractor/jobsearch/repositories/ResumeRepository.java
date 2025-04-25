@@ -1,6 +1,8 @@
 package kg.attractor.jobsearch.repositories;
 
 import kg.attractor.jobsearch.models.Resume;
+import kg.attractor.jobsearch.models.User;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -15,7 +17,7 @@ public interface ResumeRepository extends JpaRepository<Resume, Long> {
 
     List<Resume> findByIsActiveTrue(Pageable pageable);
 
-    List<Resume> getResumesByUserId(Long userId, Pageable pageable);
+    Page<Resume> getResumesByUserId(Long userId, Pageable pageable);
 
     @Query("select count(r) > 0 from Resume r where r.id = :resumeId and r.user.id = :userId")
     boolean existsByResumeIdAndUserId(@Param("resumeId") Long resumeId, @Param("userId") Long userId);
@@ -25,4 +27,6 @@ public interface ResumeRepository extends JpaRepository<Resume, Long> {
 
     @Query("select count(r) from Resume r where r.user.id = :id")
     int getResumesCountNonActive(Long id);
+
+    Long user(User user);
 }

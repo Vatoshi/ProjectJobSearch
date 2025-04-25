@@ -23,6 +23,7 @@ public class UserFormDto {
     @Min(value = 14, message = "возраст должен быть от 14")
     @Max(value = 120, message = "слишком стары")
     private Integer age;
+    @NotEmpty(message = "Ведите почту")
     @Email(message = "неправильный формат")
     private String email;
     @Pattern(regexp = "^(?=.*\\d).{5,}$", message = "длина должна быть минимум 5 символов и иметь хотя бы одну цифру")
@@ -31,7 +32,6 @@ public class UserFormDto {
     @NotNull(message = "ввод телефона обязателен")
     @Pattern(regexp = "^\\d{10}$", message = "10 цифр")
     private String phoneNumber;
-    @NotNull(message = "notnull")
-    @NotNull
+    @NotNull(message = "Выберите тип аккаунта")
     private Long roleId;
 }

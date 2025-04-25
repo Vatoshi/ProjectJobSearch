@@ -16,6 +16,8 @@
     </div>
 
     <form id="resumeForm" method="post">
+        <#if _csrf??><input type="hidden" name="${(_csrf.parameterName)!'csrf-param-name'}"
+                            value="${(_csrf.token)!'csrf-token'}"/></#if>
         <div class="form-section">
             <div class="form-group">
                 <label for="name">Название резюме:</label>
@@ -25,7 +27,7 @@
 
             <div class="form-group">
                 <label for="categoryId">Категория:</label>
-                <select id="categoryId" name="categoryId" required>
+                <select id="categoryId" name="categoryId">
                     <option value="" disabled selected>Выберите категорию</option>
                     <option value="2">IT</option>
                     <option value="3">Маркетинг</option>
@@ -33,6 +35,11 @@
                     <option value="5">Финансы</option>
                     <option value="6">Менеджмент</option>
                 </select>
+                <#if errorVacancy?has_content>
+                    <p style="color:#e12e2e;font-size: 14px;">
+                        ${errorVacancy}
+                    </p>
+                </#if>
             </div>
 
             <div class="form-group">

@@ -13,6 +13,8 @@
         <div class="icon">
             <div class="circle">
                 <form action="/profile/avatar" method="post" enctype="multipart/form-data" id="avatarForm">
+                    <#if _csrf??><input type="hidden" name="${(_csrf.parameterName)!'csrf-param-name'}"
+                               value="${(_csrf.token)!'csrf-token'}"/></#if>
                     <input type="file" name="image" id="upload" style="display: none" onchange="document.getElementById('avatarForm').submit();">
                     <label for="upload" class="plus">
                         <img class="plus" src="/image/icons8-знак-плюс-30.png" alt="plus">
@@ -25,7 +27,8 @@
         </div>
 
         <form id="profileForm" method="post" action="/profile/edit" enctype="multipart/form-data">
-
+            <#if _csrf??><input type="hidden" name="${(_csrf.parameterName)!'csrf-param-name'}"
+                                value="${(_csrf.token)!'csrf-token'}"/></#if>
         <div class="form-group">
             <label for="name">Имя:</label>
             <@spring.formInput "userEditDto.name" 'placeholder="Имя"'/>

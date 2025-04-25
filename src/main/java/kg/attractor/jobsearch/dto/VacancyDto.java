@@ -22,8 +22,10 @@ public class VacancyDto {
     @PositiveOrZero
     private Double salary;
     @PositiveOrZero
+    @NotNull(message = "укажите от")
     private Integer expFrom;
     @PositiveOrZero
+    @NotNull(message = "укажите до")
     @Max(value = 50, message = "Максимум 50 лет")
     private Integer expTo;
     @JsonInclude(JsonInclude.Include.NON_NULL)

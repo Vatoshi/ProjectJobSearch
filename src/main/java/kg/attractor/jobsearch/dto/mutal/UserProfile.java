@@ -16,6 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserProfile {
+    private Long userId;
     private String name;
     private String surname;
     private Integer age;

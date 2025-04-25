@@ -140,7 +140,7 @@
 
 <div class="container">
     <h1>Frontend Developer</h1>
-    <div class="subtitle">Последняя дата обновления : ${vacancy.updateTime} • Опыт: ${vacancy.expFrom} • Автор: ${vacancy.author}</div>
+    <div class="subtitle">Последняя дата обновления : ${vacancy.updateTime} • Опыт: ${vacancy.expFrom} • Автор: ${vacancy.user.name}</div>
 
     <div class="section">
         <h2>Описание</h2>
@@ -151,7 +151,9 @@
 
     <div class="info-row">
         <div class="salary">Зарплата: ${vacancy.salary} ₽</div>
-        <button class="apply-button">Подать заявку</button>
+        <#if user.name != vacancy.user.name>
+            <button class="apply-button">Подать заявку</button>
+        </#if>
     </div>
 </div>
 

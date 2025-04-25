@@ -2,7 +2,7 @@ package kg.attractor.jobsearch.exeptions.advice;
 
 import jakarta.servlet.http.HttpServletRequest;
 import kg.attractor.jobsearch.exeptions.*;
-import kg.attractor.jobsearch.servise.ErrorService;
+import kg.attractor.jobsearch.servise.mainServises.ErrorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,21 +20,22 @@ import java.util.NoSuchElementException;
 public class GlobalControllerAdvice {
     private final ErrorService errorService;
 
-//    @ExceptionHandler(NotFound.class)
-//    public String handleNoSuchElementException(Model model, HttpServletRequest request) {
+    @ExceptionHandler(NotFound.class)
+    public String handleNoSuchElementException(Model model, HttpServletRequest request) {
+        model.addAttribute("status", HttpStatus.NOT_FOUND.value());
+        model.addAttribute("reason", HttpStatus.NOT_FOUND.getReasonPhrase());
+        model.addAttribute("details", request);
+        return "errors/error";
+    }
+
+    @ExceptionHandler(NullPointerException.class)
+    public String NullPointExep(Model model, HttpServletRequest request) {
 //        model.addAttribute("status", HttpStatus.NOT_FOUND.value());
 //        model.addAttribute("reason", HttpStatus.NOT_FOUND.getReasonPhrase());
 //        model.addAttribute("details", request);
 //        return "errors/error";
-//    }
-//
-//    @ExceptionHandler(NullPointerException.class)
-//    public String NullPointExep(Model model, HttpServletRequest request) {
-//        model.addAttribute("status", HttpStatus.NOT_FOUND.value());
-//        model.addAttribute("reason", HttpStatus.NOT_FOUND.getReasonPhrase());
-//        model.addAttribute("details", request);
-//        return "errors/error";
-//    }
+        return "redirect:/auth/login";
+    }
 
     @ExceptionHandler(NoSuchElementException.class)
     private ResponseEntity<ErrorResponseBody> noSuchElementHandler(NoSuchElementException e) {

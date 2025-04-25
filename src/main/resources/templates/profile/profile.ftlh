@@ -69,21 +69,23 @@
             <ul class="resume-list">
 
                 <#if user.role.id==1>
-                    <#if user.resumes?has_content>
-                <#if (resumePages != 1)>
-                    <div class="pagination">
-                        <#if (currentPage != 0)>
-                            <a href="?page=${currentPage - 1}" class="page-link">${currentPage}</a>
-                        </#if>
+                    <#if resumes?has_content>
+                        <#if (resumes.totalPages > 1)>
+                            <div class="pagination">
 
-                        <a href="?page=${currentPage}" class="page-link active">${currentPage + 1}</a>
+                                <#if (currentPage > 0)>
+                                    <a href="?page=${currentPage - 1}" class="page-link">${currentPage}</a>
+                                </#if>
 
-                        <#if (currentPage != (resumePages - 1))>
-                            <a href="?page=${currentPage+1}" class="page-link">${currentPage+2}</a>
+                                <a href="?page=${currentPage}" class="page-link active">${currentPage + 1}</a>
+
+                                <#if currentPage + 1 < resumes.totalPages>
+                                    <a href="?page=${currentPage + 1}" class="page-link">${currentPage + 2}</a>
+                                </#if>
+
+                            </div>
                         </#if>
-                    </div>
-                </#if>
-                    <#list user.resumes as resume>
+                    <#list resumes.content as resume>
                 <li class="resume-item">
                     <div class="resume-header">
                         <h3 class="resume-title">${resume.name}</h3>
@@ -95,6 +97,7 @@
                         </form>
                         <button form="updateTimeResume${resume.id}" type="submit" class="btn action-btn">Обновить</button>
                         <a href="/profile/edit-resume?id=${resume.id}"  class="btn btn-outline action-btn">Редактировать</a>
+<#--                        <a href="/resumes/details?id=${resume.id}" class="btn btn action-btn" style="justify-content: end; margin-left: auto">Посмотреть</a>-->
                     </div>
                 </li>
                 </#list>
@@ -104,23 +107,25 @@
                 </#if>
 
                 <#if user.role.id==2>
-                    <#if user.vacancies?has_content>
+                    <#if vacancies?has_content>
 
-                        <#if (vacancyPages != 1)>
-                        <div class="pagination">
-                            <#if (currentPage != 0)>
-                                <a href="?page=${currentPage - 1}" class="page-link">${currentPage}</a>
-                            </#if>
+                        <#if (vacancies.totalPages > 1)>
+                            <div class="pagination">
 
-                            <a href="?page=${currentPage}" class="page-link active">${currentPage + 1}</a>
+                                <#if (currentPage > 0)>
+                                    <a href="?page=${currentPage - 1}" class="page-link">${currentPage}</a>
+                                </#if>
 
-                            <#if (currentPage != vacancyPages)>
-                                <a href="?page=${currentPage + 1}" class="page-link">${currentPage + 2}</a>
-                            </#if>
-                        </div>
+                                <a href="?page=${currentPage}" class="page-link active">${currentPage + 1}</a>
+
+                                <#if currentPage + 1 < vacancies.totalPages>
+                                    <a href="?page=${currentPage + 1}" class="page-link">${currentPage + 2}</a>
+                                </#if>
+
+                            </div>
                         </#if>
 
-                        <#list user.vacancies as vacancy>
+                        <#list vacancies.content as vacancy>
                         <li class="resume-item">
                             <div class="resume-header">
                                 <h3 class="resume-title">${vacancy.name}</h3>
@@ -130,8 +135,9 @@
                                 <form id="updateTime${vacancy.id}" method="get" action="/profile/update-vacancy-time">
                                     <input type="hidden" name="id" value="${vacancy.id}">
                                 </form>
-                                <button form="updateTime${vacancy.id}" type="submit" class="btn action-btn">Обновить</button>
+                                <button form="updateTime${vacancy.id}" type="submit" class="btn btn action-btn">Обновить</button>
                                 <a href="/profile/edit-vacancy?id=${vacancy.id}" class="btn btn-outline action-btn">Редактировать</a>
+                                <a href="/vacancies/details?id=${vacancy.id}" class="btn btn action-btn" style="justify-content: end; margin-left: auto">Посмотреть</a>
                             </div>
                         </li>
                         </#list>

@@ -1,4 +1,4 @@
-package kg.attractor.jobsearch.servise;
+package kg.attractor.jobsearch.servise.mainServises;
 
 import kg.attractor.jobsearch.dto.VacancyDto;
 import kg.attractor.jobsearch.dto.VacancyEditDto;
@@ -8,10 +8,9 @@ import kg.attractor.jobsearch.exeptions.NotFound;
 import kg.attractor.jobsearch.models.Category;
 import kg.attractor.jobsearch.models.User;
 import kg.attractor.jobsearch.models.Vacancy;
-import kg.attractor.jobsearch.repositories.CategoryRepository;
-import kg.attractor.jobsearch.repositories.ResponseAplicantsRepository;
-import kg.attractor.jobsearch.repositories.UserRepository;
 import kg.attractor.jobsearch.repositories.VacancyRepository;
+import kg.attractor.jobsearch.servise.CategoryServise;
+import kg.attractor.jobsearch.servise.ResponseAplicantsServise;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -20,21 +19,20 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class VacancyService {
-    private final UserRepository userRepository;
-    private final CategoryRepository categoryRepository;
+    private final UserService userService;
+    private final CategoryServise categoryServise;
     private final VacancyRepository vacancyRepository;
-    private final ResponseAplicantsRepository responseAplicantsRepository;
+    private final ResponseAplicantsServise responseAplicantsServise;
+
 
     public VacancyEditDto getVacancyById(Long vacancyId,String username) {
-        User user = userRepository.findByEmail(username);
+        User user = userService.getUserByEmail(username);
         vacancyRepository.exist(user.getId(),vacancyId);
         Vacancy vacancy = vacancyRepository.findById(vacancyId)
                 .orElseThrow(() -> new NotFound("Could not find vacancy with id: " + vacancyId));
@@ -68,17 +66,16 @@ public class VacancyService {
                         .updateTime(LocalDate.from(vacancy.getUpdateTime()))
                         .author(vacancy.getUser().getName())
                         .category(vacancy.getCategory().getName())
-                        .responses(responseAplicantsRepository.getRespondedCount(vacancy.getId()))
+                        .responses(responseAplicantsServise.getCountResponseToVacancy(vacancy.getId()))
                         .build())
                 .toList();
     }
 
-    public ResponseEntity<VacancyDto> createVacancy(VacancyDto vacancyDto, String username) throws IllegalArgumentException {
+    public void createVacancy(VacancyDto vacancyDto, String username) throws IllegalArgumentException {
         vacancyDto.setCreatedDate(LocalDateTime.now());
         vacancyDto.setUpdateTime(LocalDateTime.now());
-        User userId = userRepository.findByEmail(username);
-        Category category = categoryRepository.findById(vacancyDto.getCategoryId()).orElseThrow(() -> new NotFound("Could not find category with id: " + vacancyDto.getCategoryId()));
-        User user = userRepository.findById(userId.getId()).orElseThrow(() -> new NotFound("Could not find user with id: " + userId));
+        User user = userService.getUserByEmail(username);
+        Category category = categoryServise.getCategory(vacancyDto.getCategoryId());
         Vacancy vacancy = Vacancy.builder()
                 .user(user)
                 .name(vacancyDto.getName())
@@ -93,10 +90,10 @@ public class VacancyService {
                 .build();
 
         vacancyRepository.save(vacancy);
-        return ResponseEntity.status(HttpStatus.CREATED).body(vacancyDto);
+        ResponseEntity.status(HttpStatus.CREATED).body(vacancyDto);
     }
 
-    public ResponseEntity<VacancyEditDto> updateVacancy(Long vacancyId, VacancyEditDto vacancyDto) throws NotFound {
+    public void updateVacancy(Long vacancyId, VacancyEditDto vacancyDto) throws NotFound {
         Vacancy oldVacancy = vacancyRepository.findById(vacancyId)
                 .orElseThrow(() -> new NotFound("Vacancy not found"));
         if (vacancyDto.getName() == null || vacancyDto.getName().isBlank()) {
@@ -104,7 +101,7 @@ public class VacancyService {
         if (vacancyDto.getDescription() == null || vacancyDto.getDescription().isBlank()) {
             vacancyDto.setDescription(oldVacancy.getDescription());}else {oldVacancy.setDescription(vacancyDto.getDescription());}
         if (vacancyDto.getCategoryId() == null) {
-            vacancyDto.setCategoryId(oldVacancy.getCategory().getId());}else { oldVacancy.setCategory(categoryRepository.findById(vacancyDto.getCategoryId()).get());
+            vacancyDto.setCategoryId(oldVacancy.getCategory().getId());}else { oldVacancy.setCategory(categoryServise.getCategory(vacancyDto.getCategoryId()));
         if (vacancyDto.getSalary() == null || vacancyDto.getSalary() < 0) {
             vacancyDto.setSalary(oldVacancy.getSalary());} else {oldVacancy.setSalary(vacancyDto.getSalary());}
         if (vacancyDto.getExpFrom() == null || vacancyDto.getExpFrom() <= 0) {
@@ -120,7 +117,7 @@ public class VacancyService {
         vacancyDto.setUpdateTime(LocalDateTime.now());
         vacancyRepository.save(oldVacancy);
 
-        return ResponseEntity.status(HttpStatus.OK).body(vacancyDto);
+        ResponseEntity.status(HttpStatus.OK).body(vacancyDto);
     }
 
     public void updateTime(Long resumeId) {
@@ -135,7 +132,7 @@ public class VacancyService {
     }
 
     public List<CompanyDto> getCompanies(Pageable pageable) {
-        List<User> users = userRepository.getUsersByRoleId(pageable,2L);
+        List<User> users = userService.getUsersByRoleId(pageable,2L);
         return  users.stream()
                 .map(user -> CompanyDto.builder()
                         .phoneNumber(user.getPhoneNumber())
@@ -146,11 +143,10 @@ public class VacancyService {
                         .vacancies(user.getVacancies())
                         .build())
                 .toList();
-
     }
 
     public CompanyDto getCompany(Long id) {
-        User user = userRepository.findById(id).orElseThrow(() -> new NotFound("User not found"));
+        User user = userService.findById(id);
         return CompanyDto.builder()
                 .id(user.getId())
                 .phoneNumber(user.getPhoneNumber())

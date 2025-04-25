@@ -1,4 +1,4 @@
-package kg.attractor.jobsearch.servise;
+package kg.attractor.jobsearch.servise.mainServises;
 import kg.attractor.jobsearch.dto.EducationInfoDto;
 import kg.attractor.jobsearch.dto.ResumeDto;
 import kg.attractor.jobsearch.dto.WorkExperienceInfoDto;
@@ -6,6 +6,9 @@ import kg.attractor.jobsearch.dto.mutal.ResumeForWeb;
 import kg.attractor.jobsearch.exeptions.NotFound;
 import kg.attractor.jobsearch.models.*;
 import kg.attractor.jobsearch.repositories.*;
+import kg.attractor.jobsearch.servise.CategoryServise;
+import kg.attractor.jobsearch.servise.EducationInfoServise;
+import kg.attractor.jobsearch.servise.WorkExperienceServise;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -20,11 +23,11 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ResumeService {
-    private final CategoryRepository categoryRepository;
+    private final CategoryServise categoryServise;
     private final ResumeRepository resumeRepository;
-    private final UserRepository userRepository;
-    private final EducationInfoRepository educationInfoRepository;
-    private final WorkExperienceRepository workExperienceRepository;
+    private final UserService userService;
+    private final EducationInfoServise educationInfoServise;
+    private final WorkExperienceServise workExperienceServise;
 
     public List<ResumeForWeb> getResumes(Pageable pageable) {
         return resumeRepository.findByIsActiveTrue(pageable)
@@ -40,9 +43,9 @@ public class ResumeService {
     }
 
     public ResumeDto getResumeById(Long resumeId,String username) {
-        List<EducationInfo> educationInfos = educationInfoRepository.getEducationInfoByResumeId(resumeId);
-        List<WorkExperienceInfo> works = workExperienceRepository.getWorkExperienceInfoByResumeId(resumeId);
-        User user = userRepository.findByEmail(username);
+        List<EducationInfo> educationInfos = educationInfoServise.getEducationInfoByResumeId(resumeId);
+        List<WorkExperienceInfo> works = workExperienceServise.getWorkExperienceByResumeId(resumeId);
+        User user = userService.getUserByEmail(username);
         if (!resumeRepository.existsByResumeIdAndUserId(resumeId, user.getId())) {
             throw new NotFound("Resume with id " + resumeId + " not found");
         }
@@ -74,8 +77,8 @@ public class ResumeService {
     public ResponseEntity<ResumeDto> createResume(ResumeDto resumeDto, String username) throws IllegalArgumentException {
             resumeDto.setCreatedDate(LocalDate.now());
             resumeDto.setUpdateTime(LocalDate.now());
-            User user = userRepository.findByEmail(username);
-            Category category = categoryRepository.findById(resumeDto.getCategoryId()).orElseThrow(() -> new NotFound("Could not find category with id: " + resumeDto.getCategoryId()));
+            User user = userService.getUserByEmail(username);
+            Category category = categoryServise.getCategory(resumeDto.getCategoryId());
         Resume resume = Resume.builder()
                 .user(user)
                 .name(resumeDto.getName())
@@ -95,7 +98,7 @@ public class ResumeService {
                     .resume(resume)
                     .build())
                     .toList());
-            workExperienceRepository.saveAll(works);
+            workExperienceServise.saveAll(works);
 
             List<EducationInfo> educ = (resumeDto.getEducationInfo().stream().map(dto -> EducationInfo.builder()
                     .degree(dto.getDegree())
@@ -105,7 +108,7 @@ public class ResumeService {
                     .startDate(dto.getStartDate())
                     .resume(resume)
                     .build()).toList());
-            educationInfoRepository.saveAll(educ);
+            educationInfoServise.saveEducationInfo(educ);
             return ResponseEntity.status(HttpStatus.CREATED).body(resumeDto);
     }
 
@@ -117,7 +120,7 @@ public class ResumeService {
                 resumeDto.setName(oldResume.getName());} else {oldResume.setName(resumeDto.getName());}
             if (resumeDto.getCategoryId() == null || resumeDto.getCategoryId() <= 0) {
                 resumeDto.setCategoryId(oldResume.getCategory().getId());}else {
-                Category category = categoryRepository.findById(resumeDto.getCategoryId()).orElse(null);
+                Category category = categoryServise.getCategory(resumeDto.getCategoryId());
                 oldResume.setCategory(category);}
             if (resumeDto.getSalary() == null || resumeDto.getSalary() <= 0) {
                 resumeDto.setSalary(oldResume.getSalary());}else {

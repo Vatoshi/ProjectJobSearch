@@ -1,16 +1,15 @@
-package kg.attractor.jobsearch.servise;
+package kg.attractor.jobsearch.servise.mainServises;
 
-import kg.attractor.jobsearch.dto.UserDto;
 import kg.attractor.jobsearch.dto.UserEditDto;
 import kg.attractor.jobsearch.dto.UserFormDto;
 import kg.attractor.jobsearch.dto.mutal.UserProfile;
 import kg.attractor.jobsearch.exeptions.NotFound;
 import kg.attractor.jobsearch.models.Role;
 import kg.attractor.jobsearch.models.User;
-import kg.attractor.jobsearch.repositories.ResumeRepository;
-import kg.attractor.jobsearch.repositories.RoleRepository;
 import kg.attractor.jobsearch.repositories.UserRepository;
-import kg.attractor.jobsearch.repositories.VacancyRepository;
+import kg.attractor.jobsearch.servise.RoleServise;
+import kg.attractor.jobsearch.servise.helpers.UserResumeServise;
+import kg.attractor.jobsearch.servise.helpers.UserVacancyServise;
 import kg.attractor.jobsearch.util.FileUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -19,17 +18,27 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
     public final UserRepository userRepository;
     private final FileUtil fileUtil;
-    private final RoleRepository roleRepository;
-    private final ResumeRepository resumeRepository;
-    private final VacancyRepository vacancyRepository;
+    private final RoleServise roleServise;
+    private final UserResumeServise userResumeServise;
+    private final UserVacancyServise userVacancyServise;
+
+    public List<User> getUsersByRoleId(Pageable pageable, long roleId) {
+        return userRepository.getUsersByRoleId(pageable, roleId);
+    }
+
+    public User findById(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new NotFound("User not found"));
+    }
 
     public Long userId(String username) {
-        User user = userRepository.findByEmail(username);
+        User user = userRepository.findByEmail(username)    ;
         return user.getId();
     }
 
@@ -40,6 +49,7 @@ public class UserService {
     public UserProfile getUserForProfile(String email, Pageable pageable) {
         User user = userRepository.findByEmail(email);
         return UserProfile.builder()
+                .userId(user.getId())
                 .name(user.getName())
                 .surname(user.getSurname())
                 .phoneNumber(user.getPhoneNumber())
@@ -47,33 +57,11 @@ public class UserService {
                 .enabled(user.getEnabled())
                 .role(user.getRole())
                 .vacancies(user.getVacancies())
-                .resumes(resumeRepository.getResumesByUserId(user.getId(), pageable))
-                .vacancies(vacancyRepository.getVacanciesByUserId(user.getId(), pageable))
+                .resumes(null)
+                .vacancies(null)
                 .age(user.getAge())
                 .email(user.getEmail())
                 .build();
-    }
-
-    public int totalResumeByUser(int size, String username){
-        User user = userRepository.findByEmail(username);
-        int count = resumeRepository.getResumesCountNonActive(user.getId());
-        int page = count / size;
-        if (count%size == 0 || count < size){
-            return page;
-        } else {
-            return page + 1;
-        }
-    }
-
-    public int totalVacancyByUser(int size, String username){
-        User user = userRepository.findByEmail(username);
-        int count = vacancyRepository.getVacancyCountNotActive(user.getId());
-        int page = count / size;
-        if (count%size == 0 || count < size){
-            return page;
-        } else {
-            return page + 1;
-        }
     }
 
     public String saveImage(MultipartFile image, String username) {
@@ -86,7 +74,7 @@ public class UserService {
 
     public UserFormDto createAcc(UserFormDto u)  throws HttpMessageNotReadableException  {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        Role role = roleRepository.findById(u.getRoleId()).orElseThrow(() -> new NotFound("Role with id " + u.getRoleId() + " not found"));
+        Role role = roleServise.findById(u.getRoleId());
         if (u.getAvatar() == null) {
             u.setAvatar("Default.png");
         }
@@ -125,9 +113,6 @@ public class UserService {
         return u;
     }
 
-    public void deleteAcc(Long userId) {
-        userRepository.deleteById(userId);
-    }
 }
 
 
