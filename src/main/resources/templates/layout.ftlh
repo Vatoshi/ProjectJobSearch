@@ -1,0 +1,154 @@
+<#import "spring.ftl" as spring>
+<#macro layout>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="./css/style.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+        <title>Document</title>
+        <style>
+            :root {
+                --primary: #8739fb;
+                --secondary: #924eef;
+                --light: #f8f9fa;
+                --dark: #2d3748;
+                --gray: #718096;
+                --light-gray: #e2e8f0;
+            }
+
+            .full-width-navbar {
+                width: 100%;
+                background-color: var(--light);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            }
+
+            .navbar-content {
+                max-width: 1300px;
+                margin: 0 auto;
+                padding: 15px 30px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .nav-links {
+                display: flex;
+                gap: 20px;
+            }
+
+            .nav-link {
+                font-size: 16px;
+                font-weight: 600;
+                color: var(--gray);
+                text-decoration: none;
+                padding: 8px 12px;
+                border-radius: 6px;
+                transition: all 0.3s ease;
+            }
+
+            .nav-link:hover,
+            .nav-link.active {
+                background-color: rgba(135, 57, 251, 0.05);
+                color: var(--primary);
+                transform: translateY(-1px);
+                box-shadow: 0 2px 6px rgba(135, 57, 251, 0.1);
+            }
+
+            .profile-container {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .profile-avatar {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                object-fit: cover;
+            }
+
+            .profile-text {
+                margin: 0;
+                color: var(--dark);
+                font-size: 14px;
+                line-height: 1.2;
+                text-align: left;
+            }
+
+            .auth-links {
+                display: flex;
+                gap: 15px;
+            }
+
+            .btn-login {
+                padding: 10px 18px;
+                font-weight: 600;
+                font-size: 14px;
+                border: 1px solid var(--primary);
+                border-radius: 10px;
+                color: var(--primary);
+                background-color: white;
+                text-decoration: none;
+                transition: all 0.3s ease;
+            }
+
+            .btn-login:hover {
+                background-color: rgba(135, 57, 251, 0.05);
+                transform: translateY(-1px);
+                box-shadow: 0 2px 6px rgba(135, 57, 251, 0.1);
+            }
+
+            .btn-register {
+                padding: 10px 18px;
+                font-weight: 600;
+                font-size: 14px;
+                border-radius: 10px;
+                background: linear-gradient(to right, var(--primary), var(--secondary));
+                color: white;
+                text-decoration: none;
+                transition: all 0.3s ease;
+                border: none;
+            }
+
+            .btn-register:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 4px 12px rgba(135, 57, 251, 0.3);
+            }
+        </style>
+    </head>
+    <body>
+
+    <nav class="full-width-navbar">
+        <div class="navbar-content">
+            <div class="nav-links">
+                <a href="/" class="nav-link">Главная</a>
+                <#if user??><a href="/about" class="nav-link">Ваши отклики</a></#if>
+            </div>
+
+            <#if user?has_content>
+                <a href="/profile" class="profile-container">
+                    <img src="user/avatars/${user.avatar}?t=${.now}"
+                         onerror="this.onerror=null; this.src='/image/Default.png'"
+                         alt="Фото профиля"
+                         class="profile-avatar">
+                    <p class="profile-text">Ваш <br> профиль</p>
+                </a>
+            <#else>
+                <div class="auth-links">
+                    <a href="auth/login" class="btn-login">Войти</a>
+                    <a href="auth/register" class="btn-register">Зарегистрироваться</a>
+                </div>
+            </#if>
+        </div>
+    </nav>
+
+    <main>
+        <#nested spring>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    </body>
+    </html>
+</#macro>
