@@ -23,11 +23,8 @@ public class AuthUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) {
-        System.out.println(username);
         User user = userRepository.findByEmail(username);
-
         Role role = user.getRole();
-
         Collection<GrantedAuthority> authorities = getAuthorities(role);
 
         return new org.springframework.security.core.userdetails.User(
@@ -44,7 +41,6 @@ public class AuthUserDetailsService implements UserDetailsService {
     private Collection<GrantedAuthority> getAuthorities(Role role) {
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(role.getRole()));
-        System.out.println("role: " + role.getRole());
         return authorities;
     }
 }

@@ -17,6 +17,8 @@
         </div>
 
         <form id="registrationForm" method="POST" action="/auth/register">
+            <#if _csrf??><input type="hidden" name="${(_csrf.parameterName)!'csrf-param-name'}"
+                                value="${(_csrf.token)!'csrf-token'}"/></#if>
             <div class="form-group">
                 <@spring.formInput "userFormDto.name" 'placeholder="Имя" required'/>
                 <@spring.showErrors "<br>" "error"/>
