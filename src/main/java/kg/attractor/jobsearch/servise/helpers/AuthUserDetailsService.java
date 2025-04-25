@@ -3,7 +3,6 @@ package kg.attractor.jobsearch.servise.helpers;
 
 import kg.attractor.jobsearch.models.Role;
 import kg.attractor.jobsearch.models.User;
-import kg.attractor.jobsearch.repositories.RoleRepository;
 import kg.attractor.jobsearch.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;

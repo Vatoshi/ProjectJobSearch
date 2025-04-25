@@ -3,6 +3,7 @@ package kg.attractor.jobsearch.servise.helpers;
 import kg.attractor.jobsearch.models.Vacancy;
 import kg.attractor.jobsearch.repositories.VacancyRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +14,7 @@ import java.util.List;
 public class UserVacancyServise {
     private final VacancyRepository vacancyRepository;
 
-    public List<Vacancy> getVacanciesByUserId(Long userId, Pageable pageable){
+    public Page<Vacancy> getVacanciesByUserId(Long userId, Pageable pageable){
         return vacancyRepository.getVacanciesByUserId(userId, pageable);
     }
 

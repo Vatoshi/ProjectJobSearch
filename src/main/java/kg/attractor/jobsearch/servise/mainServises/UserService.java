@@ -49,6 +49,7 @@ public class UserService {
     public UserProfile getUserForProfile(String email, Pageable pageable) {
         User user = userRepository.findByEmail(email);
         return UserProfile.builder()
+                .userId(user.getId())
                 .name(user.getName())
                 .surname(user.getSurname())
                 .phoneNumber(user.getPhoneNumber())
@@ -56,33 +57,11 @@ public class UserService {
                 .enabled(user.getEnabled())
                 .role(user.getRole())
                 .vacancies(user.getVacancies())
-                .resumes(userResumeServise.getResumesByUserId(user.getId(), pageable))
-                .vacancies(userVacancyServise.getVacanciesByUserId(user.getId(), pageable))
+                .resumes(null)
+                .vacancies(null)
                 .age(user.getAge())
                 .email(user.getEmail())
                 .build();
-    }
-
-    public int totalResumeByUser(int size, String username){
-        User user = userRepository.findByEmail(username);
-        int count = userResumeServise.getResumesCountNonActive(user.getId());
-        int page = count / size;
-        if (count%size == 0 || count < size){
-            return page;
-        } else {
-            return page + 1;
-        }
-    }
-
-    public int totalVacancyByUser(int size, String username){
-        User user = userRepository.findByEmail(username);
-        int count = userVacancyServise.getVacancyCountNotActive(user.getId());
-        int page = count / size;
-        if (count%size == 0 || count < size){
-            return page;
-        } else {
-            return page + 1;
-        }
     }
 
     public String saveImage(MultipartFile image, String username) {
@@ -134,9 +113,6 @@ public class UserService {
         return u;
     }
 
-//    public void deleteAcc(Long userId) {
-//        userRepository.deleteById(userId);
-//    }
 }
 
 

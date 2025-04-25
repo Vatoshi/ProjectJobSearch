@@ -1,4 +1,5 @@
 package kg.attractor.jobsearch.servise.helpers;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import kg.attractor.jobsearch.models.Resume;
 import kg.attractor.jobsearch.repositories.ResumeRepository;
@@ -12,7 +13,7 @@ import java.util.List;
 public class UserResumeServise {
     private final ResumeRepository resumeRepository;
 
-    public List<Resume> getResumesByUserId(Long userId, Pageable pageable) {
+    public Page<Resume> getResumesByUserId(Long userId, Pageable pageable) {
         return resumeRepository.getResumesByUserId(userId, pageable);
     }
 

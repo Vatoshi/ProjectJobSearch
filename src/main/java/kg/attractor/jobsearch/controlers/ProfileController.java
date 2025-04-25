@@ -2,6 +2,9 @@ package kg.attractor.jobsearch.controlers;
 
 import jakarta.validation.Valid;
 import kg.attractor.jobsearch.dto.*;
+import kg.attractor.jobsearch.dto.mutal.UserProfile;
+import kg.attractor.jobsearch.servise.helpers.UserResumeServise;
+import kg.attractor.jobsearch.servise.helpers.UserVacancyServise;
 import kg.attractor.jobsearch.servise.mainServises.ResumeService;
 import kg.attractor.jobsearch.servise.mainServises.UserService;
 import kg.attractor.jobsearch.servise.mainServises.VacancyService;
@@ -23,6 +26,8 @@ public class ProfileController {
     private final UserService userService;
     private final ResumeService resumeService;
     private final VacancyService vacancyService;
+    private final UserResumeServise userResumeServise;
+    private final UserVacancyServise userVacancyServise;
 
     @GetMapping
     public String profile(Model model, Authentication auth,
@@ -30,10 +35,11 @@ public class ProfileController {
                           @RequestParam(defaultValue = "3") int size) {
         Pageable pageable = PageRequest.of(page, size);
         model.addAttribute("currentPage", page);
-        model.addAttribute("user", userService.getUserForProfile(auth.getName(), pageable));
-        model.addAttribute("resumePages", userService.totalVacancyByUser(size, auth.getName()));
-        model.addAttribute("vacancyPages", userService.totalResumeByUser(size, auth.getName()));
-
+        UserProfile user = userService.getUserForProfile(auth.getName(),pageable);
+        model.addAttribute("user", user);
+        model.addAttribute("resumes", userResumeServise.getResumesByUserId(user.getUserId(), pageable));
+        System.out.println(userResumeServise.getResumesByUserId(user.getUserId(), pageable).getContent());
+        model.addAttribute("vacancies", userVacancyServise.getVacanciesByUserId(user.getUserId(),pageable));
 
         model.addAttribute("userEditDto", new UserEditDto());
         return "profile/profile";
