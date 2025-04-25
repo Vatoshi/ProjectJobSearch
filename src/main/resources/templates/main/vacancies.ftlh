@@ -1,17 +1,3 @@
-<#--<#import "navbar.ftlh" as nav>-->
-<#--<!DOCTYPE html>-->
-<#--<html lang="ru">-->
-
-<#--<head>-->
-<#--    <meta charset="UTF-8">-->
-<#--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
-<#--    <link rel="stylesheet" href="/css/vacancy.css">-->
-<#--    <title>Вакансии</title>-->
-<#--</head>-->
-
-<#--<body>-->
-
-<#--<@nav.navbar/>-->
 <#import "../layout.ftlh" as main>
 <@main.layout >
 
@@ -89,7 +75,7 @@
         --secondary: #8739fb;
         --light: #f8f9fa;
         --dark: #2d3748;
-        --gray: #718096;
+        --gray: #181d25;
         --light-gray: #e2e8f0;
     }
 
@@ -385,5 +371,4 @@
     }
 </style>
 </@main.layout>
-<#--</body>-->
-<#--</html>-->
+
