@@ -91,6 +91,7 @@ public class ProfileController {
             Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("user", userService.getUserByEmail(auth.getName()));
+            model.addAttribute("errorResume", "Выберите категорию");
             return "forms/resume-form";
         }
         resumeService.createResume(resumeDto, auth.getName());
@@ -132,13 +133,15 @@ public class ProfileController {
                                 BindingResult bindingResult,
                                 Authentication auth,
                                 Model model){
-        if (vacancyDto.getExpFrom() > vacancyDto.getExpTo()) {
-            bindingResult.rejectValue("expFrom", "error.expFrom","От не может быть больше чем до");
-        }
         if (bindingResult.hasErrors()) {
             model.addAttribute("user", userService.getUserByEmail(auth.getName()));
             model.addAttribute("vacancyDto", vacancyDto);
+            model.addAttribute("errorVacancy", "Выберите категорию");
+//            model.addAttribute("workExp", "Укажите нужное количество опыта работы");
             return "forms/vacancy-form";
+        }
+        if (vacancyDto.getExpFrom() > vacancyDto.getExpTo()) {
+            bindingResult.rejectValue("expFrom", "error.expFrom","От не может быть больше чем до");
         }
         vacancyService.createVacancy(vacancyDto, auth.getName());
         return "redirect:/profile";

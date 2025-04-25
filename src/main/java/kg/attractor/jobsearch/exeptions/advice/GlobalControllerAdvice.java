@@ -1,11 +1,13 @@
 package kg.attractor.jobsearch.exeptions.advice;
 
+import jakarta.servlet.http.HttpServletRequest;
 import kg.attractor.jobsearch.exeptions.*;
 import kg.attractor.jobsearch.servise.mainServises.ErrorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
