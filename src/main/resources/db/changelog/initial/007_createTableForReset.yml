@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-reset-password-table
+      author: eric
+      changes:
+        - createTable:
+            tableName: reset_password
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: token
+                  type: varchar(255)
+                  constraints:
+                    nullable: false

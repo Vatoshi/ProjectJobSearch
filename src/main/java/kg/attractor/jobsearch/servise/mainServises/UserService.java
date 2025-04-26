@@ -110,6 +110,12 @@ public class UserService {
         userRepository.save(oldUser);
     }
 
+    public void changePassword(String email, String password) {
+        User user = userRepository.findByEmail(email);
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        user.setPassword(encoder.encode(password));
+        userRepository.save(user);
+    }
 }
 
 

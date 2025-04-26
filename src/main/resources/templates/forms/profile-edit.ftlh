@@ -63,7 +63,7 @@
             <label for="password">Пароль:</label>
             <input type="password" id="password" name="password" disabled placeholder="••••••••">
 <#--            <div class="password-change">-->
-<#--                <a href="/change-password">Изменить пароль</a>-->
+<#--                <a href="/new-password.ftlh">Изменить пароль</a>-->
 <#--            </div>-->
         </div>
 

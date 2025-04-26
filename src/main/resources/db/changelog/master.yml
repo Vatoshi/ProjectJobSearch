@@ -13,3 +13,5 @@ databaseChangeLog:
       file: db/changelog/initial/insert.sql
   - include:
       file: db/changelog/initial/006_add_responded_applicants.yml
+  - include:
+      file: db/changelog/initial/007_createTableForReset.yml

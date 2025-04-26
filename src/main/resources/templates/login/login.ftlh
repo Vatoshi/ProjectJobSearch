@@ -35,7 +35,7 @@
             <button type="submit" class="btn">Войти</button>
             
             <div class="links">
-                <a href="#">Забыли пароль?</a> · <a href="register">Регистрация</a>
+                <a href="/auth/reset">Забыли пароль?</a> · <a href="register">Регистрация</a>
             </div>
         </form>
     </div>

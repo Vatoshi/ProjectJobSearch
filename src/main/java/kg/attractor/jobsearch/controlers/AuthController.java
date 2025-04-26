@@ -1,11 +1,22 @@
 package kg.attractor.jobsearch.controlers;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import kg.attractor.jobsearch.dto.UserFormDto;
+import kg.attractor.jobsearch.dto.mutal.passwordChangeDto;
+import kg.attractor.jobsearch.servise.ResetPasswordServise;
 import kg.attractor.jobsearch.servise.mainServises.UserService;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.h2.engine.Mode;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("auth")
 public class AuthController {
     private final UserService userService;
+    private final ResetPasswordServise resetPasswordServise;
 
     @GetMapping("/login")
     public String showLoginForm(@RequestParam(required = false) String error, Model model) {
@@ -46,4 +58,100 @@ public class AuthController {
         userService.createAcc(userFormDto);
         return "redirect:/auth/login";
     }
+
+
+    //zabyl parol
+
+    @GetMapping("reset")
+    public String resetPassword(Model model) {
+        model.addAttribute("email");
+        return "/login/reset";
+    }
+
+    @PostMapping("reset")
+    public String resetPasswordPost(String email, Model model, HttpServletResponse response) {
+        model.addAttribute("email", email);
+        if (!userService.existEmail(email)) {
+            model.addAttribute("error","Почта не найдена");
+            return "login/reset";
+        }
+        Cookie emailCookie = new Cookie("email", email);
+        emailCookie.setMaxAge(60 * 5);
+        emailCookie.setPath("/auth");
+        response.addCookie(emailCookie);
+        resetPasswordServise.createToken(email);
+        return "redirect:/auth/reset-code";
+    }
+
+    @GetMapping("reset-code")
+    public String resetCode(HttpServletRequest request, Model model) {
+        String email = getCookieValue(request, "email");
+        model.addAttribute("email", email);
+        if (!resetPasswordServise.checkExistToken(email)) {
+            return "redirect:/auth/login";
+        }
+        return "/login/reset-code";
+    }
+
+    @PostMapping("reset-code")
+    public String resetCodePost(String fullCode, Model model, HttpServletRequest request) {
+        String email = getCookieValue(request, "email");
+        model.addAttribute("fullCode", fullCode);
+            if (email == null) {
+                return "redirect:/auth/reset";
+            }
+
+            if (!resetPasswordServise.checkToken(email, fullCode)) {
+            model.addAttribute("invalid", "Неправильный код");
+            model.addAttribute("email", email);
+            return "/login/reset-code";
+        }
+        return "redirect:/auth/change-form";
+    }
+
+    @GetMapping("change-form")
+    public String changeForm(Model model) {
+        // type password не дает сохранять веденные значения ???
+        model.addAttribute("passwordChangeDto", new passwordChangeDto());
+        return "/login/new-password";
+    }
+
+    @PostMapping("change-form")
+    @Transactional
+    public String changeFormPost(@Valid passwordChangeDto pas,
+                                 BindingResult bindingResult,
+                                 Model model,
+                                 HttpServletRequest request)
+    {
+        model.addAttribute("passwordChangeDto", pas);
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("error", bindingResult.getFieldError().getDefaultMessage());
+            return "/login/new-password";
+        }
+        if (!pas.getNewPassword().equals(pas.getConfirmPassword())) {
+            model.addAttribute("error", "пароли не совпадают");
+            return "/login/new-password";
+        }
+        String email = getCookieValue(request, "email");
+        if (email == null || email.isEmpty()) {
+            model.addAttribute("error", "Сессия истекла, пожалуйста, начните процесс снова");
+            return "redirect:/auth/reset";
+        }
+        userService.changePassword(email, pas.getNewPassword());
+        resetPasswordServise.deleteToken(email);
+        return "redirect:/auth/login";
+    }
+
+    private String getCookieValue(HttpServletRequest request, String cookieName) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookieName.equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
+    }
+
 }
