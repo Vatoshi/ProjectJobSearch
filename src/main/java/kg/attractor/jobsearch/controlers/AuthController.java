@@ -4,17 +4,13 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import kg.attractor.jobsearch.dto.UserFormDto;
 import kg.attractor.jobsearch.dto.mutal.passwordChangeDto;
+import kg.attractor.jobsearch.servise.EmailService;
 import kg.attractor.jobsearch.servise.ResetPasswordServise;
 import kg.attractor.jobsearch.servise.mainServises.UserService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.h2.engine.Mode;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -28,6 +24,8 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
     private final UserService userService;
     private final ResetPasswordServise resetPasswordServise;
+    private final EmailService emailService;
+    private final ResetPasswordServise resetPasswordServise2;
 
     @GetMapping("/login")
     public String showLoginForm(@RequestParam(required = false) String error, Model model) {
@@ -80,6 +78,7 @@ public class AuthController {
         emailCookie.setPath("/auth");
         response.addCookie(emailCookie);
         resetPasswordServise.createToken(email);
+        emailService.sendEmail(email,resetPasswordServise.getTokenByEmail(email));
         return "redirect:/auth/reset-code";
     }
 
@@ -87,7 +86,7 @@ public class AuthController {
     public String resetCode(HttpServletRequest request, Model model) {
         String email = getCookieValue(request, "email");
         model.addAttribute("email", email);
-        if (!resetPasswordServise.checkExistToken(email)) {
+                if (!resetPasswordServise.checkExistToken(email)) {
             return "redirect:/auth/login";
         }
         return "/login/reset-code";

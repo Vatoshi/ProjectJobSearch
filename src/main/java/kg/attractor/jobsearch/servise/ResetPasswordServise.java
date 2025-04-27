@@ -13,6 +13,11 @@ import java.security.SecureRandom;
 public class ResetPasswordServise {
     private final ResetPasswordRepository resetPasswordRepository;
 
+    public String getTokenByEmail(String email) {
+        ResetPassword resetPassword = resetPasswordRepository.findByEmail(email);
+        return resetPassword.getToken();
+    }
+
     public boolean checkExistToken(String email) {
         return resetPasswordRepository.existsByEmail(email);
     }

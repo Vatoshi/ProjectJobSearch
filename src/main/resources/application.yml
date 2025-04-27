@@ -17,11 +17,24 @@ spring:
 #  jpa:
 #    hibernate:
 #      ddl-auto: create
+  mail:
+    host: smtp.gmail.com
+    port: 465
+    username: "jobsearchnoreply149@gmail.com"
+    password: "ulja vaxg xkup uhoa"
+    properties:
+      mail:
+        smtp:
+          auth: true
+          ssl:
+            enable: true
 logging:
   file:
     name: logs/app.log
   level:
     root: WARN
+
+
 
 
 
