@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -36,7 +37,7 @@ public class ResumeService {
                 .map(resume -> ResumeForWeb.builder()
                         .name(resume.getName())
                         .salary(resume.getSalary())
-                        .updateTime(resume.getUpdateTime())
+                        .updateTime(LocalDate.from(resume.getUpdateTime()))
                         .categoryId(resume.getCategory().getId())
                         .author(resume.getUser().getName())
                         .build());
@@ -56,8 +57,8 @@ public class ResumeService {
                 .categoryId(resume.getCategory().getId())
                 .salary(resume.getSalary())
                 .isActive(resume.getIsActive())
-                .updateTime(resume.getUpdateTime())
-                .createdDate(resume.getCreatedDate())
+                .updateTime(LocalDate.from(resume.getUpdateTime()))
+                .createdDate(LocalDate.from(resume.getCreatedDate()))
                 .educationInfo(educationInfos.stream()
                         .map(educationInfo -> new EducationInfoDto(educationInfo.getInstitution()
                                 ,educationInfo.getProgram()
@@ -74,7 +75,7 @@ public class ResumeService {
     }
 
     @Transactional
-    public ResponseEntity<ResumeDto> createResume(ResumeDto resumeDto, String username) throws IllegalArgumentException {
+    public void createResume(ResumeDto resumeDto, String username) throws IllegalArgumentException {
             resumeDto.setCreatedDate(LocalDate.now());
             resumeDto.setUpdateTime(LocalDate.now());
             User user = userService.getUserByEmail(username);
@@ -85,8 +86,8 @@ public class ResumeService {
                 .category(category)
                 .salary(resumeDto.getSalary())
                 .isActive(resumeDto.getIsActive())
-                .updateTime(resumeDto.getUpdateTime())
-                .createdDate(resumeDto.getCreatedDate())
+                .updateTime(resumeDto.getUpdateTime().atStartOfDay())
+                .createdDate(resumeDto.getCreatedDate().atStartOfDay())
                 .build();
             resumeRepository.saveAndFlush(resume);
 
@@ -109,10 +110,10 @@ public class ResumeService {
                     .resume(resume)
                     .build()).toList());
             educationInfoServise.saveEducationInfo(educ);
-            return ResponseEntity.status(HttpStatus.CREATED).body(resumeDto);
+        ResponseEntity.status(HttpStatus.CREATED).body(resumeDto);
     }
 
-        public ResponseEntity<ResumeDto> updateResume(Long resumeId, ResumeDto resumeDto) {
+        public void updateResume(Long resumeId, ResumeDto resumeDto) {
             Resume oldResume = resumeRepository.findById(resumeId)
                     .orElseThrow(() -> new NotFound("Could not find resume with id: " + resumeId));
 
@@ -130,17 +131,15 @@ public class ResumeService {
                     oldResume.setIsActive(true);
                 }
             }
-            LocalDate oldCreatedDate = oldResume.getCreatedDate();
-            resumeDto.setCreatedDate(oldCreatedDate);
-            resumeDto.setUpdateTime(LocalDate.now());
+            oldResume.setUpdateTime(LocalDateTime.now());
 
             resumeRepository.save(oldResume);
-            return ResponseEntity.status(HttpStatus.OK).body(resumeDto);
+            ResponseEntity.status(HttpStatus.OK).body(resumeDto);
         }
 
         public void updateTime(Long resumeId) {
             Resume resume = resumeRepository.findById(resumeId).orElseThrow(() -> new NotFound("Could not find resume with id: " + resumeId));
-            resume.setUpdateTime(LocalDate.now());
+            resume.setUpdateTime(LocalDateTime.now());
             resumeRepository.save(resume);
         }
 

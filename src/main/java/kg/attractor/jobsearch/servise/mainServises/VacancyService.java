@@ -35,7 +35,7 @@ public class VacancyService {
 
     public VacancyEditDto getVacancyById(Long vacancyId,String username) {
         User user = userService.getUserByEmail(username);
-        if (!vacancyRepository.existsByUserIdAndId(vacancyId, user.getId())) {
+        if (!vacancyRepository.existsByUserIdAndId(user.getId(), vacancyId)) {
             throw new NotOwnVacancy("Not own Vacancy");
         }
         Vacancy vacancy = vacancyRepository.findById(vacancyId)
@@ -116,8 +116,7 @@ public class VacancyService {
                 oldVacancy.setIsActive(true);
             }
         }
-        vacancyDto.setCreatedDate(oldVacancy.getCreatedDate());
-        vacancyDto.setUpdateTime(LocalDateTime.now());
+        oldVacancy.setUpdateTime(LocalDateTime.now());
         vacancyRepository.save(oldVacancy);
 
         ResponseEntity.status(HttpStatus.OK).body(vacancyDto);

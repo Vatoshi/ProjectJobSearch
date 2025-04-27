@@ -77,7 +77,7 @@
                                 <li class="profile-isolated__item">
                                     <div class="profile-isolated__item-header">
                                         <h3 class="profile-isolated__item-title">${resume.name}</h3>
-                                        <div class="profile-isolated__item-date">Дата обновления: ${resume.updateTime!}</div>
+                                        <div class="profile-isolated__item-date">Дата обновления: ${resume.updateTime?datetime?string("dd.MM.yyyy HH:mm")}</div>
                                     </div>
                                     <div class="profile-isolated__item-actions">
                                         <form id="updateTimeResume${resume.id}" method="get" action="/profile/update-resume-time">
@@ -111,7 +111,7 @@
                                 <li class="profile-isolated__item">
                                     <div class="profile-isolated__item-header">
                                         <h3 class="profile-isolated__item-title">${vacancy.name}</h3>
-                                        <div class="profile-isolated__item-date">Дата обновления: ${vacancy.updateTime!}</div>
+                                        <div class="profile-isolated__item-date">Дата обновления: ${vacancy.updateTime?datetime?string("dd.MM.yyyy HH:mm")}</div>
                                     </div>
                                     <div class="profile-isolated__item-actions">
                                         <form id="updateTime${vacancy.id}" method="get" action="/profile/update-vacancy-time">

@@ -37,10 +37,10 @@ public class GlobalControllerAdvice {
         return "redirect:/auth/login";
     }
 
-    @ExceptionHandler(NotOwnVacancy.class)
-    public String handleNotOwnVacancy() {
-        return "redirect:/profile";
-    }
+//    @ExceptionHandler(NotOwnVacancy.class)
+//    public String handleNotOwnVacancy() {
+//        return "redirect:/profile";
+//    }
 
     @ExceptionHandler(NoSuchElementException.class)
     private ResponseEntity<ErrorResponseBody> noSuchElementHandler(NoSuchElementException e) {
