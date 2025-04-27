@@ -19,39 +19,39 @@
                         </a>
                     </li>
                     <li class="profile-isolated__nav-item">
-                        <a href="/profile/response" class="profile-isolated__nav-link">
-                            <span class="profile-isolated__nav-icon">✉️</span>
-                            <span>Отклики</span>
-                        </a>
-                    </li>
-                    <li class="profile-isolated__nav-item">
                         <a <#if user.role.id == 1> href="/profile/create-resume" <#else> href="/profile/create-vacancy" </#if>
                                 class="profile-isolated__nav-link">
                             <span class="profile-isolated__nav-icon">➕</span>
                             <span>Создать <#if user.role.id==1> резюме <#else> вакансию </#if></span>
                         </a>
                     </li>
-                    <#if user.role.id == 2>
-                        <li class="profile-isolated__nav-item">
-                            <a href="/resumes" class="profile-isolated__nav-link">
-                                <span class="profile-isolated__nav-icon">📌</span>
-                                <span>Доступные резюме</span>
-                            </a>
-                        </li>
-                    <#else>
-                        <li class="profile-isolated__nav-item">
-                            <a href="/company" class="profile-isolated__nav-link">
-                                <span class="profile-isolated__nav-icon">📌</span>
-                                <span>Страница компаний</span>
-                            </a>
-                        </li>
-                    </#if>
                     <li class="profile-isolated__nav-item">
-                        <a href="/" class="profile-isolated__nav-link">
-                            <span class="profile-isolated__nav-icon">🔄</span>
-                            <span>К вакансиям</span>
+                        <a href="#" class="profile-isolated__nav-link">
+                            <span class="profile-isolated__nav-icon">✉️</span>
+                            <span>Отклики</span>
                         </a>
                     </li>
+<#--                    <#if user.role.id == 2>-->
+<#--                        <li class="profile-isolated__nav-item">-->
+<#--                            <a href="/resumes" class="profile-isolated__nav-link">-->
+<#--                                <span class="profile-isolated__nav-icon">📌</span>-->
+<#--                                <span>Доступные резюме</span>-->
+<#--                            </a>-->
+<#--                        </li>-->
+<#--                    <#else>-->
+<#--                        <li class="profile-isolated__nav-item">-->
+<#--                            <a href="/company" class="profile-isolated__nav-link">-->
+<#--                                <span class="profile-isolated__nav-icon">📌</span>-->
+<#--                                <span>Страница компаний</span>-->
+<#--                            </a>-->
+<#--                        </li>-->
+<#--                    </#if>-->
+<#--                    <li class="profile-isolated__nav-item">-->
+<#--                        <a href="/" class="profile-isolated__nav-link">-->
+<#--                            <span class="profile-isolated__nav-icon">🔄</span>-->
+<#--                            <span>К вакансиям</span>-->
+<#--                        </a>-->
+<#--                    </li>-->
                 </ul>
             </div>
 

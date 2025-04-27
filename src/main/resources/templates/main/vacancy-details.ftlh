@@ -1,11 +1,5 @@
-<#import "navbar.ftlh" as nav>
-<!DOCTYPE html>
-<html lang="ru">
-
-<head>
-    <meta charset="UTF-8">
-    <title>Frontend Developer – Подробности</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<#import "../layout.ftlh" as main>
+<@main.layout >
     <style>
         body {
             margin: 0;
@@ -134,10 +128,6 @@
             opacity: 0;
         }
     </style>
-</head>
-
-<body>
-
 <div class="container">
     <h1>Frontend Developer</h1>
     <div class="subtitle">Последняя дата обновления : ${vacancy.updateTime} • Опыт: ${vacancy.expFrom} • Автор: ${vacancy.user.name}</div>
@@ -157,6 +147,4 @@
     </div>
 </div>
 
-</body>
-
-</html>
+</@main.layout >

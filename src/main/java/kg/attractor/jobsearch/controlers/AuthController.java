@@ -25,7 +25,6 @@ public class AuthController {
     private final UserService userService;
     private final ResetPasswordServise resetPasswordServise;
     private final EmailService emailService;
-    private final ResetPasswordServise resetPasswordServise2;
 
     @GetMapping("/login")
     public String showLoginForm(@RequestParam(required = false) String error, Model model) {

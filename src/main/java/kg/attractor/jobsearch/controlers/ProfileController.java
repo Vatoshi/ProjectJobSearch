@@ -34,6 +34,7 @@ public class ProfileController {
                           @RequestParam(defaultValue = "0") int page,
                           @RequestParam(defaultValue = "3") int size) {
         Pageable pageable = PageRequest.of(page, size);
+        model.addAttribute("logout","logout");
         model.addAttribute("currentPage", page);
         UserProfile user = userService.getUserForProfile(auth.getName(),pageable);
         model.addAttribute("user", user);

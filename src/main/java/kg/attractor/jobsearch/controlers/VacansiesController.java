@@ -71,7 +71,8 @@ public class VacansiesController {
     }
 
     @GetMapping("company-details")
-    public String getCompany(@RequestParam("id") Long id,  Model model) {
+    public String getCompany(@RequestParam("id") Long id,  Model model, Authentication auth) {
+        model.addAttribute("user", userService.getUserByEmail(auth.getName()));
         model.addAttribute("company", vacancyService.getCompany(id));
         return "main/company-details";
     }

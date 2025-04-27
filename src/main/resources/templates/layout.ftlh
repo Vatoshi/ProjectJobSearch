@@ -1,4 +1,3 @@
-<#import "spring.ftl" as spring>
 <#macro layout>
     <!DOCTYPE html>
     <html lang="en">
@@ -8,7 +7,6 @@
         <link rel="stylesheet" href="./css/style.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
         <title>Document</title>
-
     </head>
     <body>
 
@@ -16,16 +14,32 @@
         <div class="navbar-content">
             <div class="nav-links">
                 <a href="/" class="nav-link">Главная</a>
+                <div class="dropdown">
+                    <input type="checkbox" id="dropdownToggle" class="dropdown-toggle-checkbox" />
+                    <label for="dropdownToggle" class="nav-link dropdown-toggle">Перейти</label>
+
+                    <ul class="dropdown-menu">
+                        <#if user?? && user.role.id == 1><li><a class="dropdown-item" href="/company">Компании</a></li></#if>
+                        <#if user?? && user.role.id == 2><li><a class="dropdown-item" href="/resumes">Резюме</a></li></#if>
+                        <li><a class="dropdown-item" href="/">Вакансии</a></li>
+
+                    </ul>
+                </div>
                 <#if user??><a href="/about" class="nav-link">Ваши отклики</a></#if>
             </div>
 
             <#if user?has_content>
-                <a href="/profile" class="profile-container">
-                    <img src="user/avatars/${user.avatar}?t=${.now}"
-                         onerror="this.onerror=null; this.src='/image/Default.png'"
-                         alt="Фото профиля"
-                         class="profile-avatar">
-                </a>
+                <div class="profile-logout-container">
+                    <a href="/profile" class="profile-container">
+                        <img src="user/avatars/${user.avatar}?t=${.now}"
+                             onerror="this.onerror=null; this.src='/image/Default.png'"
+                             alt="Фото профиля"
+                             class="profile-avatar">
+                    </a>
+                    <#if logout?has_content>
+                        <a href="/logout" class="logout-button"><img src="image/logout.png" alt="logout"></a>
+                    </#if>
+                </div>
             <#else>
                 <div class="auth-links">
                     <a href="auth/login" class="btn-login">Войти</a>
@@ -69,6 +83,12 @@
             gap: 20px;
         }
 
+        .profile-logout-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
         .nav-link {
             font-size: 16px;
             font-weight: 600;
@@ -90,7 +110,6 @@
         .profile-container {
             display: flex;
             align-items: center;
-            gap: 10px;
         }
 
         .profile-avatar {
@@ -167,12 +186,83 @@
         }
 
         .profile-avatar img {
-            align-self: center;
             width: 100%;
-            height: auto;
-            display: block;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .logout-button {
+            margin-top: 22px;
+            width: 27px;
+            height: 27px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: transparent;
+            padding: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .logout-button img {
+            width: 100%;
+            height: 100%;
             object-fit: contain;
         }
+
+        .dropdown-toggle-checkbox {
+            display: none;
+        }
+
+        .nav-link.dropdown-toggle {
+            position: relative;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--gray);
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            background-color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            min-width: 160px;
+            border-radius: 8px;
+            padding: 8px 0;
+            z-index: 1;
+            margin-top: 5px;
+        }
+
+        .dropdown-toggle-checkbox:checked + .dropdown-toggle + .dropdown-menu {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 10px 16px;
+            color: var(--dark);
+            text-decoration: none;
+            display: block;
+            font-weight: 500;
+            border-radius: 6px;
+            transition: background-color 0.3s ease;
+        }
+
+        .dropdown-item:hover {
+            background-color: rgba(135, 57, 251, 0.1);
+            color: var(--primary);
+        }
+
+        .nav-link.dropdown-toggle:hover {
+            background-color: rgba(135, 57, 251, 0.05);
+            color: var(--primary);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 6px rgba(135, 57, 251, 0.1);
+        }
+
 
     </style>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
