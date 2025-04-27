@@ -5,7 +5,7 @@
     <div class="sidebar">
         <h5>Фильтры</h5>
 
-        <form id="page" action="/vacancies">
+        <form id="page" action="/">
         <div class="filter-section">
             <label for="category">Отсортировать по</label>
             <select id="category" name="order">

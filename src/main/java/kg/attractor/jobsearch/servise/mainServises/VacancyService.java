@@ -14,6 +14,7 @@ import kg.attractor.jobsearch.servise.CategoryServise;
 import kg.attractor.jobsearch.servise.ResponseAplicantsServise;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -58,7 +60,7 @@ public class VacancyService {
     }
 
     public Page<VacancyForWebDto> getAllVacancies(Pageable pageable) throws NotFound {
-        return vacancyRepository.findActiveVacancies(pageable)
+        Page<VacancyForWebDto> vacancies = vacancyRepository.findActiveVacancies(pageable)
                 .map(vacancy -> VacancyForWebDto.builder()
                         .id(vacancy.getId())
                         .name(vacancy.getName())
@@ -71,7 +73,15 @@ public class VacancyService {
                         .category(vacancy.getCategory().getName())
                         .responses(responseAplicantsServise.getCountResponseToVacancy(vacancy.getId()))
                         .build());
+
+        List<VacancyForWebDto> sortByResponse = vacancies.getContent().stream()
+                .sorted((v1, v2) -> Integer.compare(v2.getResponses(), v1.getResponses()))
+                .toList();
+
+        return new PageImpl<>(sortByResponse, pageable, vacancies.getTotalElements());
     }
+
+
 
 
     public void createVacancy(VacancyDto vacancyDto, String username) throws IllegalArgumentException {
