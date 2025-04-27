@@ -15,7 +15,7 @@ public interface VacancyRepository extends JpaRepository<Vacancy, Long> {
     boolean existsByUserIdAndId(Long userId, Long id);
 
     @Query("select v from Vacancy v where v.isActive = true")
-    List<Vacancy> findActiveVacancies(Pageable pageable);
+    Page<Vacancy> findActiveVacancies(Pageable pageable);
 
     @Query("select count(v) from Vacancy v where v.isActive = true")
     Integer getVacancyCount();

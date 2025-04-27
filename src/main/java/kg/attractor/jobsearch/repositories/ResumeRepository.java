@@ -15,7 +15,7 @@ public interface ResumeRepository extends JpaRepository<Resume, Long> {
     @Query("select r from Resume r where r.category.name = :name")
     List<Resume> findActiveByCategoryName(@Param("categoryName") String categoryName);
 
-    List<Resume> findByIsActiveTrue(Pageable pageable);
+    Page<Resume> findByIsActiveTrue(Pageable pageable);
 
     Page<Resume> getResumesByUserId(Long userId, Pageable pageable);
 

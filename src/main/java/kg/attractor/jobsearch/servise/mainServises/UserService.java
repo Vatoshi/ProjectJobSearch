@@ -10,6 +10,7 @@ import kg.attractor.jobsearch.repositories.UserRepository;
 import kg.attractor.jobsearch.servise.RoleServise;
 import kg.attractor.jobsearch.util.FileUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -25,7 +26,7 @@ public class UserService {
     private final FileUtil fileUtil;
     private final RoleServise roleServise;
 
-    public List<User> getUsersByRoleId(Pageable pageable, long roleId) {
+    public Page<User> getUsersByRoleId(Pageable pageable, long roleId) {
         return userRepository.getUsersByRoleId(pageable, roleId);
     }
 

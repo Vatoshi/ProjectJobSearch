@@ -11,6 +11,7 @@ import kg.attractor.jobsearch.servise.CategoryServise;
 import kg.attractor.jobsearch.servise.EducationInfoServise;
 import kg.attractor.jobsearch.servise.WorkExperienceServise;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,17 +31,15 @@ public class ResumeService {
     private final EducationInfoServise educationInfoServise;
     private final WorkExperienceServise workExperienceServise;
 
-    public List<ResumeForWeb> getResumes(Pageable pageable) {
+    public Page<ResumeForWeb> getResumes(Pageable pageable) {
         return resumeRepository.findByIsActiveTrue(pageable)
-                .stream()
                 .map(resume -> ResumeForWeb.builder()
                         .name(resume.getName())
                         .salary(resume.getSalary())
                         .updateTime(resume.getUpdateTime())
                         .categoryId(resume.getCategory().getId())
                         .author(resume.getUser().getName())
-                        .build())
-                .toList();
+                        .build());
     }
 
     public ResumeDto getResumeById(Long resumeId,String username) {
@@ -145,8 +144,4 @@ public class ResumeService {
             resumeRepository.save(resume);
         }
 
-        public int getTotalPages(int size) {
-            int total = resumeRepository.getResumesCount() / size;
-            return (int) Math.ceil((double) total / size);
-        }
 }

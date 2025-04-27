@@ -2,7 +2,7 @@
 <@main.layout >
 <div class="container">
     <div class="sidebar">
-        <h3>Фильтры</h3>
+        <h5>Фильтры</h5>
 
         <div class="pagination">
             <#if (currentPage >= 3)>
@@ -15,12 +15,12 @@
 
             <a href="?page=${currentPage}" class="page-link active">${currentPage + 1}</a>
 
-            <#if (currentPage != totalPages)>
+            <#if (currentPage != resumes.totalPages - 1)>
                 <a href="?page=${currentPage + 1}" class="page-link">${currentPage + 2}</a>
             </#if>
 
-            <#if (currentPage < 5 && totalPages > 3)>
-                <a href="?page=${totalPages}" class="page-link" style="margin-left: 8px">... ${totalPages + 1}</a>
+            <#if currentPage < (resumes.totalPages - 2)>
+                <a href="?page=${resumes.totalPages - 1}" class="page-link" style="margin-left: 8px">... ${resumes.totalPages}</a>
             </#if>
         </div>
     </div>
@@ -30,7 +30,7 @@
         <ul class="vacancy-list" id="vacancy-list">
 
             <#if resumes? has_content>
-                <#list resumes as resume>
+                <#list resumes.content as resume>
                     <li class="vacancy-item">
                         <div class="vacancy-left">
                             <div class="vacancy-header">
@@ -116,6 +116,7 @@
 
     .vacancy-list {
         list-style: none;
+        padding-left: 0;
     }
 
     .vacancy-item {

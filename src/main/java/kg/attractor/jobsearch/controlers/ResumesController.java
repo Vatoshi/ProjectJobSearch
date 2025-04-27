@@ -26,6 +26,7 @@ public class ResumesController {
     public String getResumes(Model model, Authentication auth,
                              @RequestParam(defaultValue = "5") int size,
                              @RequestParam(defaultValue = "0") int page) {
+
         Pageable pageable = PageRequest.of(page, size);
         if (auth != null && auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken)) {
             String username = auth.getName();
@@ -33,7 +34,6 @@ public class ResumesController {
         } else {
             model.addAttribute("user", null);
         }
-        model.addAttribute("totalPages",resumeService.getTotalPages(size));
         model.addAttribute("currentPage", pageable.getPageNumber());
         model.addAttribute("resumes", resumeService.getResumes(pageable));
         return "main/resumes";

@@ -3,7 +3,7 @@
 
 <div class="container">
     <div class="sidebar">
-        <h3>Фильтры</h3>
+        <h5>Фильтры</h5>
 
         <form id="page" action="/vacancies">
         <div class="filter-section">
@@ -28,12 +28,12 @@
 
                 <a href="?page=${currentPage}" class="page-link active">${currentPage + 1}</a>
 
-            <#if (currentPage != totalPages)>
+            <#if (currentPage != vacancies.totalPages - 1)>
                 <a href="?page=${currentPage + 1}" class="page-link">${currentPage + 2}</a>
             </#if>
 
-            <#if (currentPage < 5 && totalPages > 3)>
-                <a href="?page=${totalPages}" class="page-link" style="margin-left: 8px">... ${totalPages + 1}</a>
+            <#if currentPage < (vacancies.totalPages - 2)>
+                <a href="?page=${vacancies.totalPages - 1}" class="page-link" style="margin-left: 8px">... ${vacancies.totalPages}</a>
             </#if>
         </div>
 
@@ -44,7 +44,7 @@
         <ul class="vacancy-list" id="vacancy-list">
 
             <#if vacancies? has_content>
-            <#list vacancies as vacancy>
+            <#list vacancies.content as vacancy>
                 <a href="/details?id=${vacancy.id}" style="text-decoration: none; transition: none; animation: none">
                 <li class="vacancy-item">
                     <div class="vacancy-left">
@@ -136,6 +136,12 @@
 
     .vacancy-list {
         list-style: none;
+        padding-left: 0;
+    }
+
+    .vacancy-list a {
+        text-decoration: none;
+        color: inherit;
     }
 
     .vacancy-item {
@@ -368,6 +374,10 @@
         color: white;
         font-weight: 600;
         pointer-events: none;
+    }
+
+    h5 {
+        margin-bottom: 20px;
     }
 </style>
 </@main.layout>

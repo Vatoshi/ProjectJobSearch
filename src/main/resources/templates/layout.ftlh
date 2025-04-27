@@ -25,7 +25,7 @@
 
                     </ul>
                 </div>
-                <#if user??><a href="/about" class="nav-link">Ваши отклики</a></#if>
+                <#if user??><a href="#" class="nav-link">Ваши отклики</a></#if>
             </div>
 
             <#if user?has_content>

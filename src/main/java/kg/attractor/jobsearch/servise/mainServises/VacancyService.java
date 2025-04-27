@@ -13,6 +13,7 @@ import kg.attractor.jobsearch.repositories.VacancyRepository;
 import kg.attractor.jobsearch.servise.CategoryServise;
 import kg.attractor.jobsearch.servise.ResponseAplicantsServise;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -56,9 +57,8 @@ public class VacancyService {
         return vacancyRepository.getVacancyById(vacancyId);
     }
 
-    public List<VacancyForWebDto> getAllVacancies(Pageable pageable) throws NotFound {
+    public Page<VacancyForWebDto> getAllVacancies(Pageable pageable) throws NotFound {
         return vacancyRepository.findActiveVacancies(pageable)
-                .stream()
                 .map(vacancy -> VacancyForWebDto.builder()
                         .id(vacancy.getId())
                         .name(vacancy.getName())
@@ -70,9 +70,9 @@ public class VacancyService {
                         .author(vacancy.getUser().getName())
                         .category(vacancy.getCategory().getName())
                         .responses(responseAplicantsServise.getCountResponseToVacancy(vacancy.getId()))
-                        .build())
-                .toList();
+                        .build());
     }
+
 
     public void createVacancy(VacancyDto vacancyDto, String username) throws IllegalArgumentException {
         vacancyDto.setCreatedDate(LocalDateTime.now());
@@ -129,14 +129,9 @@ public class VacancyService {
         vacancyRepository.save(vacancy);
     }
 
-    public Integer getTotalPages(Integer pageSize) {
-        int totalCount = vacancyRepository.getVacancyCount();
-        return (int) Math.ceil((double) totalCount / pageSize);
-    }
-
-    public List<CompanyDto> getCompanies(Pageable pageable) {
-        List<User> users = userService.getUsersByRoleId(pageable,2L);
-        return  users.stream()
+    public Page<CompanyDto> getCompanies(Pageable pageable) {
+        Page<User> users = userService.getUsersByRoleId(pageable,2L);
+        return  users
                 .map(user -> CompanyDto.builder()
                         .phoneNumber(user.getPhoneNumber())
                         .name(user.getName())
@@ -144,8 +139,7 @@ public class VacancyService {
                         .id(user.getId())
                         .avatar(user.getAvatar())
                         .vacancies(user.getVacancies())
-                        .build())
-                .toList();
+                        .build());
     }
 
     public CompanyDto getCompany(Long id) {
