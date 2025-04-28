@@ -26,7 +26,7 @@
     </div>
 
     <div class="main-content">
-        <h2 class="section-title">Вакансии</h2>
+        <h2 class="section-title">Резюме</h2>
         <ul class="vacancy-list" id="vacancy-list">
 
             <#if resumes? has_content>
