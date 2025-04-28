@@ -6,7 +6,7 @@
     <title>Перенаправление...</title>
     <link rel="icon" href="/image/icon.png" type="image/png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="refresh" content="4;url=${redirect}">
+    <meta http-equiv="refresh" content="3;url=${redirect}">
     <style>
         * {
             margin: 0;

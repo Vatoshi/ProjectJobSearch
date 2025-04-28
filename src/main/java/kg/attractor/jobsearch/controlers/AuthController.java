@@ -133,6 +133,8 @@ public class AuthController {
         request.getSession().removeAttribute("userEmail");
         userService.changePassword(email, pas.getNewPassword());
         resetPasswordServise.deleteToken(email);
-        return "redirect:/auth/login";
+        model.addAttribute("error","Пароль успешно изменен");
+        model.addAttribute("redirect", "/auth/login");
+        return "/util/redirect";
     }
 }
