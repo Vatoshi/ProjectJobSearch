@@ -45,7 +45,7 @@
 
             <#if vacancies? has_content>
             <#list vacancies.content as vacancy>
-                <a href="/details?id=${vacancy.id}" style="text-decoration: none; transition: none; animation: none">
+            <a href="/details?id=${vacancy.id}" style="text-decoration: none; transition: none; animation: none">
                 <li class="vacancy-item">
                     <div class="vacancy-left">
                         <div class="vacancy-header">
@@ -54,9 +54,9 @@
                         <div class="vacancy-date">Последнее обновление: ${vacancy.updateTime}</div>
                         <div class="vacancy-experience">Опыт работы: ${vacancy.expFrom} года</div>
                         <p class="vacancy-description">${vacancy.description!"-"}</p>
-                        <div class="vacancy-actions">
+                        <#if user?? && user.id == 1><div class="vacancy-actions">
                             <button class="action-btn">Подать заявку</button>
-                        </div>
+                        </div></#if>
                     </div>
                     <div class="vacancy-company">${vacancy.name}</div>
                     <div class="vacancy-responses">Откликнувшихся пользователей: ${vacancy.responses!"0"}</div>

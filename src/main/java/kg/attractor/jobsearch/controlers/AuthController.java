@@ -56,9 +56,6 @@ public class AuthController {
         return "redirect:/auth/login";
     }
 
-
-    //zabyl parol
-
     @GetMapping("reset")
     public String resetPassword(Model model) {
         model.addAttribute("email");
@@ -133,7 +130,8 @@ public class AuthController {
         String email = getCookieValue(request, "email");
         if (email == null || email.isEmpty()) {
             model.addAttribute("error", "Сессия истекла, пожалуйста, начните процесс снова");
-            return "redirect:/auth/reset";
+            model.addAttribute("redirect", "/auth/reset");
+            return "/util/redirect";
         }
         userService.changePassword(email, pas.getNewPassword());
         resetPasswordServise.deleteToken(email);

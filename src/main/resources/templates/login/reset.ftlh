@@ -4,6 +4,7 @@
 
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" href="/image/icon.png" type="image/png">
     <title>Сброс пароля</title>
     <style>
         * {
@@ -38,7 +39,6 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
-
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -117,19 +117,14 @@
             text-decoration: underline;
         }
 
-        @keyframes fadeIn {
-            to {
-                opacity: 1;
-            }
-        }
-
         p {
             color: #e12e2e;
             font-size: 14px;
             opacity: 0;
-            animation: fadeIn 1s forwards;
+            animation: fadeIn 0.5s forwards;
             margin-top: 3px;
         }
+
     </style>
 </head>
 

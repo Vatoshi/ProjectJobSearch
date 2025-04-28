@@ -3,6 +3,7 @@
 <html lang="ru">
 
 <head>
+    <link rel="icon" href="/image/icon.png" type="image/png">
     <meta charset="UTF-8">
     <title>Смена пароля</title>
     <style>
