@@ -63,16 +63,13 @@ public class AuthController {
     }
 
     @PostMapping("reset")
-    public String resetPasswordPost(String email, Model model, HttpServletResponse response) {
+    public String resetPasswordPost(String email, Model model, HttpServletRequest request) {
         model.addAttribute("email", email);
         if (!userService.existEmail(email)) {
             model.addAttribute("error","Почта не найдена");
             return "login/reset";
         }
-        Cookie emailCookie = new Cookie("email", email);
-        emailCookie.setMaxAge(60 * 5);
-        emailCookie.setPath("/auth");
-        response.addCookie(emailCookie);
+        request.getSession().setAttribute("userEmail", email);
         resetPasswordServise.createToken(email);
         emailService.sendEmail(email,resetPasswordServise.getTokenByEmail(email));
         return "redirect:/auth/reset-code";
@@ -80,7 +77,7 @@ public class AuthController {
 
     @GetMapping("reset-code")
     public String resetCode(HttpServletRequest request, Model model) {
-        String email = getCookieValue(request, "email");
+        String email = (String) request.getSession().getAttribute("userEmail");
         model.addAttribute("email", email);
                 if (!resetPasswordServise.checkExistToken(email)) {
             return "redirect:/auth/login";
@@ -90,7 +87,7 @@ public class AuthController {
 
     @PostMapping("reset-code")
     public String resetCodePost(String fullCode, Model model, HttpServletRequest request) {
-        String email = getCookieValue(request, "email");
+        String email = (String) request.getSession().getAttribute("userEmail");
         model.addAttribute("fullCode", fullCode);
             if (email == null) {
                 return "redirect:/auth/reset";
@@ -127,27 +124,15 @@ public class AuthController {
             model.addAttribute("error", "пароли не совпадают");
             return "/login/new-password";
         }
-        String email = getCookieValue(request, "email");
+        String email = (String) request.getSession().getAttribute("userEmail");
         if (email == null || email.isEmpty()) {
             model.addAttribute("error", "Сессия истекла, пожалуйста, начните процесс снова");
             model.addAttribute("redirect", "/auth/reset");
             return "/util/redirect";
         }
+        request.getSession().removeAttribute("userEmail");
         userService.changePassword(email, pas.getNewPassword());
         resetPasswordServise.deleteToken(email);
         return "redirect:/auth/login";
     }
-
-    private String getCookieValue(HttpServletRequest request, String cookieName) {
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookieName.equals(cookie.getName())) {
-                    return cookie.getValue();
-                }
-            }
-        }
-        return null;
-    }
-
 }
