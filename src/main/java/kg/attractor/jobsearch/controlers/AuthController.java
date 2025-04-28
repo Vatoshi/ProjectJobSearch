@@ -57,8 +57,8 @@ public class AuthController {
     }
 
     @GetMapping("reset")
-    public String resetPassword(Model model) {
-        model.addAttribute("email");
+    public String resetPassword(String email, Model model) {
+        model.addAttribute("email", email != null ? email : "");
         return "/login/reset";
     }
 
@@ -106,7 +106,7 @@ public class AuthController {
 
     @GetMapping("change-form")
     public String changeForm(Model model) {
-        // type password не дает сохранять веденные значения ???
+        // type password не дает сохранять веденные значения (spring?) ???
         model.addAttribute("passwordChangeDto", new passwordChangeDto());
         return "/login/new-password";
     }

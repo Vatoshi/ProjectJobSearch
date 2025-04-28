@@ -141,7 +141,7 @@
         </#if>
         <div class="input-group">
             <label for="email">Введите вашу почту</label>
-            <input type="email" id="email" name="email" placeholder="example@mail.com">
+            <input type="email" id="email" name="email" value="${email}" placeholder="example@mail.com">
             <#if error?has_content>
                 <p style="color:#e12e2e;font-size: 14px;">
                     ${error}
