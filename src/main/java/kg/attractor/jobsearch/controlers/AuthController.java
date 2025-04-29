@@ -12,6 +12,8 @@ import kg.attractor.jobsearch.servise.mainServises.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -89,7 +91,12 @@ public class AuthController {
         String email = (String) request.getSession().getAttribute("userEmail");
         model.addAttribute("email", email);
                 if (!resetPasswordServise.checkExistToken(email)) {
-            return "redirect:/auth/login";
+                    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+                    if (auth != null && auth.isAuthenticated() && !(auth.getPrincipal() instanceof String)) {
+                        return "redirect:/profile/edit-password";
+                    } else {
+                        return "redirect:/auth/login";
+                    }
         }
         return "/login/reset-code";
     }
@@ -143,7 +150,12 @@ public class AuthController {
         userService.changePassword(email, pas.getNewPassword());
         resetPasswordServise.deleteToken(email);
         model.addAttribute("error","Пароль успешно изменен");
-        model.addAttribute("redirect", "/auth/login");
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.isAuthenticated() && !(auth.getPrincipal() instanceof String)) {
+            model.addAttribute("redirect", "/profile/edit");
+        } else {
+            model.addAttribute("redirect", "/auth/login");
+        }
         return "/util/redirect";
     }
 }

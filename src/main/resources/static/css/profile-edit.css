@@ -89,6 +89,25 @@ body {
     cursor: not-allowed;
 }
 
+.form-group .input {
+    padding: 12px 15px;
+    border: 1px solid var(--light-gray);
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.3s;
+}
+
+.form-group .input:not([disabled]):focus {
+    border-color: var(--primary);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+}
+
+.form-group .input[disabled] {
+    background-color: #f0f0f0;
+    cursor: not-allowed;
+}
+
 .error {
     color: var(--error);
     font-size: 12px;
@@ -97,7 +116,7 @@ body {
 }
 
 .submit-btn {
-    background: linear-gradient(to right, var(--primary), var(--secondary));
+    background: var(--primary););
     color: white;
     border: none;
     padding: 14px;
@@ -106,7 +125,7 @@ body {
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s;
-    margin-top: 10px;
+    margin-top: 15px;
 }
 
 .submit-btn:hover {
@@ -115,7 +134,8 @@ body {
 }
 
 .password-change {
-    margin-top: 10px;
+    margin-top: 2px;
+    margin-bottom: 10px;
 }
 
 .password-change a {
@@ -178,3 +198,66 @@ body {
     width: 20px;
     height: 20px;
 }
+
+.input-with-button {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-with-button input {
+    flex: 1;
+    padding-right: 90px;
+}
+
+.input-button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    padding: 0 15px;
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: background-color 0.2s;
+}
+
+.input-button:hover {
+    background-color: #7b35db;
+}
+
+.small-btn {
+    padding: 10px;
+    font-size: 14px;
+}
+
+.back-btn-container {
+    margin-top: 15px;
+    text-align: center;
+}
+
+.back-btn {
+    display: inline-block;
+    background-color: #ccc;
+    color: #2d3748;
+    padding: 8px 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.back-btn:hover {
+    background-color: #b4b4b4;
+}
+
+

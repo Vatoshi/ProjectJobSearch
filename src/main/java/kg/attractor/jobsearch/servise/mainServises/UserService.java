@@ -2,6 +2,8 @@ package kg.attractor.jobsearch.servise.mainServises;
 
 import kg.attractor.jobsearch.dto.UserEditDto;
 import kg.attractor.jobsearch.dto.UserFormDto;
+import kg.attractor.jobsearch.dto.mutal.ChangeEmailDto;
+import kg.attractor.jobsearch.dto.mutal.ChangePasswordDto;
 import kg.attractor.jobsearch.dto.mutal.UserProfile;
 import kg.attractor.jobsearch.exeptions.NotFound;
 import kg.attractor.jobsearch.models.Role;
@@ -13,11 +15,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +30,7 @@ public class UserService {
     public final UserRepository userRepository;
     private final FileUtil fileUtil;
     private final RoleServise roleServise;
+    private final UserDetailsService userDetailsService;
 
     public Page<User> getUsersByRoleId(Pageable pageable, long roleId) {
         return userRepository.getUsersByRoleId(pageable, roleId);
@@ -116,6 +122,48 @@ public class UserService {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         user.setPassword(encoder.encode(password));
         userRepository.save(user);
+    }
+
+    public String changeEmailUser(String username, ChangeEmailDto changePasswordDto) {
+        User user = userRepository.findByEmail(username);
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+        if (!encoder.matches(changePasswordDto.getPassword(), user.getPassword())) {
+            return "Неправильный пароль";
+        }
+
+        if (userRepository.existsByEmail(changePasswordDto.getNewEmail())) {
+            return "Пользователь с такой почтой уже существует";
+        }
+
+        if (!changePasswordDto.getNewEmail().equals(changePasswordDto.getConfirmEmail())) {
+            return "почты не совпадают";
+        }
+
+        UsernamePasswordAuthenticationToken newAuth =
+                new UsernamePasswordAuthenticationToken(changePasswordDto.getNewEmail(), null, SecurityContextHolder.getContext().getAuthentication().getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(newAuth);
+
+        user.setEmail(changePasswordDto.getNewEmail());
+        userRepository.save(user);
+        return "Успешно";
+    }
+
+    public String changePasswordUser(ChangePasswordDto changePasswordDto, String username) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        User user = userRepository.findByEmail(username);
+
+        if (!encoder.matches(changePasswordDto.getPassword(), user.getPassword())) {
+            return "Неверный текущий пароль";
+        }
+
+        if (!changePasswordDto.getNewPassword().equals(changePasswordDto.getConfirmPassword())) {
+            return "пароли не совпадают";
+        }
+
+        user.setPassword(encoder.encode(changePasswordDto.getNewPassword().toString()));
+        userRepository.save(user);
+        return "Успешно";
     }
 }
 
