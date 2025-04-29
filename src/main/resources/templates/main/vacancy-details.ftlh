@@ -178,7 +178,7 @@
 
     <div class="info-row">
         <div class="salary">Зарплата: ${vacancy.salary} ₽</div>
-        <#if user.name != vacancy.author>
+        <#if user.role.id != 2 && user.name != vacancy.author>
             <button class="apply-button">Подать заявку</button>
         </#if>
     </div>

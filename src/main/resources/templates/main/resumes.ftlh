@@ -38,9 +38,11 @@
                                 <h3 class="vacancy-title">${resume.name}</h3>
                             </div>
                             <div class="vacancy-date">Последнее обновление: ${resume.updateTime}</div>
+                            <#if user??>
                             <div class="vacancy-actions">
                                 <button class="action-btn">Откликнуться</button>
                             </div>
+                            </#if>
                         </div>
                         <div class="vacancy-company">${resume.author}</div>
                         <div class="vacancy-salary">Хочу зарплату: ${resume.salary!"Договорная"} ₽ </div>
