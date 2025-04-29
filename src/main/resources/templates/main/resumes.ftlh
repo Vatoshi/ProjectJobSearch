@@ -31,6 +31,7 @@
 
             <#if resumes? has_content>
                 <#list resumes.content as resume>
+                    <a href="/resumes/details?id=${resume.id}" style="text-decoration: none; transition: none; animation: none; color: black">
                     <li class="vacancy-item">
                         <div class="vacancy-left">
                             <div class="vacancy-header">
@@ -44,6 +45,7 @@
                         <div class="vacancy-company">${resume.author}</div>
                         <div class="vacancy-salary">Хочу зарплату: ${resume.salary!"Договорная"} ₽ </div>
                     </li>
+                    </a>
                 </#list>
             </#if>
         </ul>

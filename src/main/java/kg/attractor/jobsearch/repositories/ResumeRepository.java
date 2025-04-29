@@ -12,6 +12,8 @@ import java.util.List;
 
 public interface ResumeRepository extends JpaRepository<Resume, Long> {
 
+    Resume getResumeById (Long id);
+
     @Query("select r from Resume r where r.category.name = :name")
     List<Resume> findActiveByCategoryName(@Param("categoryName") String categoryName);
 

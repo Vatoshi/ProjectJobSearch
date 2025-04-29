@@ -11,6 +11,7 @@ import kg.attractor.jobsearch.servise.ResetPasswordServise;
 import kg.attractor.jobsearch.servise.mainServises.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -25,6 +26,14 @@ public class AuthController {
     private final UserService userService;
     private final ResetPasswordServise resetPasswordServise;
     private final EmailService emailService;
+
+    @GetMapping("/403")
+    public String forbidden(Model model, HttpServletRequest request) {
+        model.addAttribute("status",403);
+        model.addAttribute("reason", HttpStatus.FORBIDDEN.getReasonPhrase());
+        model.addAttribute("details", request);
+        return "errors/error";
+    }
 
     @GetMapping("/login")
     public String showLoginForm(@RequestParam(required = false) String error, Model model) {

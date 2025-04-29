@@ -32,10 +32,37 @@ public class ResumeService {
     private final EducationInfoServise educationInfoServise;
     private final WorkExperienceServise workExperienceServise;
 
+    public ResumeDto getResumeById(Long resumeId) {
+        List<EducationInfo> educationInfos = educationInfoServise.getEducationInfoByResumeId(resumeId);
+        List<WorkExperienceInfo> works = workExperienceServise.getWorkExperienceByResumeId(resumeId);
+        Resume resume = resumeRepository.getResumeById(resumeId);
+        return ResumeDto.builder()
+                .name(resume.getName())
+                .categoryId(resume.getCategory().getId())
+                .salary(resume.getSalary())
+                .isActive(resume.getIsActive())
+                .updateTime(LocalDate.from(resume.getUpdateTime()))
+                .createdDate(LocalDate.from(resume.getCreatedDate()))
+                .educationInfo(educationInfos.stream()
+                        .map(educationInfo -> new EducationInfoDto(educationInfo.getInstitution()
+                                ,educationInfo.getProgram()
+                                ,educationInfo.getStartDate()
+                                ,educationInfo.getEndDate()
+                                ,educationInfo.getDegree()))
+                        .toList())
+                .workExperienceInfo(works.stream()
+                        .map(work -> new WorkExperienceInfoDto(work.getYears(),work.getCompanyName(),
+                                work.getPosition(),
+                                work.getResponsibilities()))
+                        .toList())
+                .build();
+    }
+
     public Page<ResumeForWeb> getResumes(Pageable pageable) {
         return resumeRepository.findByIsActiveTrue(pageable)
                 .map(resume -> ResumeForWeb.builder()
                         .name(resume.getName())
+                        .id(resume.getId())
                         .salary(resume.getSalary())
                         .updateTime(LocalDate.from(resume.getUpdateTime()))
                         .categoryId(resume.getCategory().getId())
@@ -43,7 +70,7 @@ public class ResumeService {
                         .build());
     }
 
-    public ResumeDto getResumeById(Long resumeId,String username) {
+    public ResumeDto getResumeByUserIdAndId(Long resumeId,String username) {
         List<EducationInfo> educationInfos = educationInfoServise.getEducationInfoByResumeId(resumeId);
         List<WorkExperienceInfo> works = workExperienceServise.getWorkExperienceByResumeId(resumeId);
         User user = userService.getUserByEmail(username);

@@ -101,7 +101,7 @@ public class ProfileController {
     @GetMapping("edit-resume")
     public String editResumeForm(Model model, Authentication auth, @RequestParam("id") Long id) {
         model.addAttribute("user", userService.getUserByEmail(auth.getName()));
-        model.addAttribute("resumeDto", resumeService.getResumeById(id,auth.getName()));
+        model.addAttribute("resumeDto", resumeService.getResumeByUserIdAndId(id,auth.getName()));
         return "forms/resume-edit";
     }
 
@@ -119,6 +119,13 @@ public class ProfileController {
     public String updateResumeTime(@RequestParam("id") Long id) {
         resumeService.updateTime(id);
         return "redirect:/profile";
+    }
+
+    @GetMapping("view-resume")
+    public String resumesDetails(@RequestParam("id") Long id, Model model, Authentication auth) {
+        model.addAttribute("user", userService.getUserByEmail(auth.getName()));
+        model.addAttribute("resume", resumeService.getResumeByUserIdAndId(id,auth.getName()));
+        return "main/resume-details";
     }
 
     @GetMapping("create-vacancy")
@@ -175,5 +182,12 @@ public class ProfileController {
     public String updateVacancyTime(@RequestParam("id") Long id) {
         vacancyService.updateTime(id);
         return "redirect:/profile";
+    }
+
+    @GetMapping("view-vacancy")
+    public String viewVacancy(@RequestParam("id") Long id, Model model, Authentication auth) {
+        model.addAttribute("user", userService.getUserByEmail(auth.getName()));
+        model.addAttribute("vacancy", vacancyService.getVacancyByIdForProfile(id,auth.getName()));
+    return "main/vacancy-details";
     }
 }

@@ -34,6 +34,27 @@ public class VacancyService {
     private final VacancyRepository vacancyRepository;
     private final ResponseAplicantsServise responseAplicantsServise;
 
+    public VacancyForWebDto getVacancyByIdForProfile(Long vacancyId, String username) {
+        User user = userService.getUserByEmail(username);
+        if (!vacancyRepository.existsByUserIdAndId(user.getId(), vacancyId)) {
+            throw new NotOwnVacancy("Not own Vacancy");
+        }
+        Vacancy vacancy = vacancyRepository.findById(vacancyId)
+                .orElseThrow(() -> new NotFound("Could not find vacancy with id: " + vacancyId));
+        return VacancyForWebDto.builder()
+                .name(vacancy.getName())
+                .description(vacancy.getDescription())
+                .salary(vacancy.getSalary())
+                .isActive(vacancy.getIsActive())
+                .updateTime(LocalDate.from(vacancy.getUpdateTime()))
+                .responses(responseAplicantsServise.getCountResponseToVacancy(vacancyId))
+                .author(vacancy.getUser().getName())
+                .id(vacancy.getId())
+                .category(vacancy.getCategory().getName())
+                .ExpTo(vacancy.getExpTo())
+                .ExpFrom(vacancy.getExpFrom())
+                .build();
+    }
 
     public VacancyEditDto getVacancyById(Long vacancyId,String username) {
         User user = userService.getUserByEmail(username);
@@ -55,8 +76,21 @@ public class VacancyService {
                 .build();
     }
 
-    public Optional<Vacancy> getVacancyById(Long vacancyId) {
-        return vacancyRepository.getVacancyById(vacancyId);
+    public VacancyForWebDto getVacancyById(Long vacancyId) {
+        Vacancy vacancy = vacancyRepository.getVacancyById(vacancyId).orElseThrow(() -> new NotFound("Could not find vacancy with id: " + vacancyId));
+        return VacancyForWebDto.builder()
+                .name(vacancy.getName())
+                .description(vacancy.getDescription())
+                .salary(vacancy.getSalary())
+                .isActive(vacancy.getIsActive())
+                .updateTime(LocalDate.from(vacancy.getUpdateTime()))
+                .responses(responseAplicantsServise.getCountResponseToVacancy(vacancyId))
+                .author(vacancy.getUser().getName())
+                .id(vacancy.getId())
+                .category(vacancy.getCategory().getName())
+                .ExpTo(vacancy.getExpTo())
+                .ExpFrom(vacancy.getExpFrom())
+                .build();
     }
 
     public Page<VacancyForWebDto> getAllVacancies(Pageable pageable) throws NotFound {

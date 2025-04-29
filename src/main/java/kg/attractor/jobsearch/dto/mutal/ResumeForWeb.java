@@ -12,6 +12,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ResumeForWeb {
+    private Long id;
     private String author;
     private String name;
     private Long categoryId;

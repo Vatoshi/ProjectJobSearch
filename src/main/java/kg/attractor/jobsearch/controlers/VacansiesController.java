@@ -48,7 +48,7 @@ public class VacansiesController {
     @GetMapping("details")
     public String getVacancy(@RequestParam("id") Long id,  Model model, Authentication auth) {
         model.addAttribute("user", userService.getUserByEmail(auth.getName()));
-        model.addAttribute("vacancy", vacancyService.getVacancyById(id).orElse(null));
+        model.addAttribute("vacancy", vacancyService.getVacancyById(id));
         return "main/vacancy-details";
     }
 

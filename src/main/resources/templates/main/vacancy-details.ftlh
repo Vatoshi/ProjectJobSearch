@@ -127,10 +127,47 @@
             animation-delay: 1s;
             opacity: 0;
         }
+
+        .back-button-container {
+            position: fixed;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            z-index: 100;
+        }
+
+        .back-button {
+            background: rgba(106, 70, 234, 0.9);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .back-button:hover {
+            background: rgba(106, 70, 234, 1);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        .back-button::before {
+            content: "←";
+            margin-right: 8px;
+            font-weight: bold;
+        }
     </style>
 <div class="container">
     <h1>Frontend Developer</h1>
-    <div class="subtitle">Последняя дата обновления : ${vacancy.updateTime} • Опыт: ${vacancy.expFrom} • Автор: ${vacancy.user.name}</div>
+    <div class="subtitle">Последняя дата обновления : ${vacancy.updateTime} • Опыт: ${vacancy.expFrom} • Автор: ${vacancy.author}</div>
 
     <div class="section">
         <h2>Описание</h2>
@@ -141,10 +178,14 @@
 
     <div class="info-row">
         <div class="salary">Зарплата: ${vacancy.salary} ₽</div>
-        <#if user.name != vacancy.user.name>
+        <#if user.name != vacancy.author>
             <button class="apply-button">Подать заявку</button>
         </#if>
     </div>
 </div>
+
+    <div class="back-button-container">
+        <a href="javascript:history.back()" class="back-button">Вернуться назад</a>
+    </div>
 
 </@main.layout >

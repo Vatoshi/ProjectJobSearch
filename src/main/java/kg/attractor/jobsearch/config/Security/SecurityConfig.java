@@ -22,7 +22,6 @@ import javax.sql.DataSource;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private final DataSource dataSource;
     private final AuthUserDetailsService authUserDetailsService;
     private final CustomSuccesHandler customSuccesHandler;
 
@@ -39,6 +38,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .exceptionHandling(exeption -> exeption
+                        .accessDeniedPage("/auth/403"))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
                 .formLogin(login -> login
                         .loginPage("/auth/login")

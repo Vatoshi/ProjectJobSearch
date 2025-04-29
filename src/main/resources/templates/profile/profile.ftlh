@@ -85,6 +85,7 @@
                                         </form>
                                         <button form="updateTimeResume${resume.id}" type="submit" class="profile-isolated__action-btn">Обновить</button>
                                         <a href="/profile/edit-resume?id=${resume.id}" class="profile-isolated__action-btn profile-isolated__action-btn--outline">Редактировать</a>
+                                        <a href="/profile/view-resume?id=${resume.id}" class="profile-isolated__action-btn profile-isolated__action-btn--view">Посмотреть</a>
                                     </div>
                                 </li>
                             </#list>
@@ -119,7 +120,7 @@
                                         </form>
                                         <button form="updateTime${vacancy.id}" type="submit" class="profile-isolated__action-btn">Обновить</button>
                                         <a href="/profile/edit-vacancy?id=${vacancy.id}" class="profile-isolated__action-btn profile-isolated__action-btn--outline">Редактировать</a>
-                                        <a href="/details?id=${vacancy.id}" class="profile-isolated__action-btn profile-isolated__action-btn--view">Посмотреть</a>
+                                        <a href="/profile/view-vacancy?id=${vacancy.id}" class="profile-isolated__action-btn profile-isolated__action-btn--view">Посмотреть</a>
                                     </div>
                                 </li>
                             </#list>
