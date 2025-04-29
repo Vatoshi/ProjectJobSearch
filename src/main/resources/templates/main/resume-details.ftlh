@@ -238,6 +238,11 @@
                 <p class="cv-resume-subtitle">
                     Желаемая зарплата: <span class="cv-salary-value">${resume.salary?string["#,###"]} ₽</span>
                 </p>
+                <#if resume.author??>
+                <p class="cv-resume-subtitle">
+                    Пользователь: <span class="cv-salary-value">${resume.author}</span>
+                </p>
+                </#if>
             </#if>
 
             <span class="cv-status-badge">
@@ -289,6 +294,12 @@
                     <#if education?has_next><div class="cv-divider"></div></#if>
                 </#list>
             </div>
+        </#if>
+
+        <#if user.id != 1>
+        <a href="#" class="cv-back-button" style="padding: 8px 16px; font-size: 14px; border-radius: 20px;">
+            Откликнуться
+        </a>
         </#if>
     </div>
 

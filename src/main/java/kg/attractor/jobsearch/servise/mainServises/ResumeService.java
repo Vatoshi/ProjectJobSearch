@@ -2,6 +2,7 @@ package kg.attractor.jobsearch.servise.mainServises;
 import kg.attractor.jobsearch.dto.EducationInfoDto;
 import kg.attractor.jobsearch.dto.ResumeDto;
 import kg.attractor.jobsearch.dto.WorkExperienceInfoDto;
+import kg.attractor.jobsearch.dto.mutal.ResumeDetailsDto;
 import kg.attractor.jobsearch.dto.mutal.ResumeForWeb;
 import kg.attractor.jobsearch.exeptions.NotFound;
 import kg.attractor.jobsearch.exeptions.NotOwnVacancy;
@@ -32,12 +33,13 @@ public class ResumeService {
     private final EducationInfoServise educationInfoServise;
     private final WorkExperienceServise workExperienceServise;
 
-    public ResumeDto getResumeById(Long resumeId) {
+    public ResumeDetailsDto getResumeById(Long resumeId) {
         List<EducationInfo> educationInfos = educationInfoServise.getEducationInfoByResumeId(resumeId);
         List<WorkExperienceInfo> works = workExperienceServise.getWorkExperienceByResumeId(resumeId);
         Resume resume = resumeRepository.getResumeById(resumeId);
-        return ResumeDto.builder()
+        return ResumeDetailsDto.builder()
                 .name(resume.getName())
+                .author(resume.getUser().getName())
                 .categoryId(resume.getCategory().getId())
                 .salary(resume.getSalary())
                 .isActive(resume.getIsActive())
