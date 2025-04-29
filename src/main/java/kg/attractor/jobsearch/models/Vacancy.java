@@ -3,8 +3,11 @@ package kg.attractor.jobsearch.models;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.boot.autoconfigure.batch.BatchProperties;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Getter

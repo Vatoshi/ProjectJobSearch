@@ -5,18 +5,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResumeForWeb {
+public class VacancyForProfile {
     private Long id;
-    private String author;
     private String name;
-    private Long categoryId;
-    private Double salary;
-    private Boolean isActive;
-    private LocalDate updateTime;
+    private Date updateTime;
 }

@@ -4,9 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.*;
-
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Data

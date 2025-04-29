@@ -1,11 +1,6 @@
-<#import "navbar.ftlh" as nav>
-<!DOCTYPE html>
-<html lang="ru">
+<#import "../layout.ftlh" as main>
+<@main.layout >
 
-<head>
-    <meta charset="UTF-8">
-    <title>${company.name} – Профиль компании</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -139,9 +134,7 @@
             }
         }
     </style>
-</head>
 
-<body>
 <div class="container">
     <h1>${company.name}</h1>
     <div class="subtitle">
@@ -170,6 +163,4 @@
         <p>Пока что нет доступных вакансий от этой компании.</p>
     </#if>
 </div>
-
-</body>
-</html>
+</@main.layout >

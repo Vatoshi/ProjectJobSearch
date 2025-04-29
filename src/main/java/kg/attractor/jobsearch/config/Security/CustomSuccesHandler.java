@@ -16,7 +16,7 @@ public class CustomSuccesHandler implements AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("APPLICANT"))) {
-            response.sendRedirect("/vacancies");
+            response.sendRedirect("/");
         }else {
             response.sendRedirect("/resumes");
         }

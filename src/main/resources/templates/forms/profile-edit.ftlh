@@ -5,30 +5,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/profile-edit.css">
+    <link rel="icon" href="/image/icon.png" type="image/png">
     <title>Редактирование профиля</title>
 </head>
 <body>
 <div class="profile-edit-container">
 
-        <div class="icon">
-            <div class="circle">
-                <form action="/profile/avatar" method="post" enctype="multipart/form-data" id="avatarForm">
-                    <#if _csrf??><input type="hidden" name="${(_csrf.parameterName)!'csrf-param-name'}"
-                               value="${(_csrf.token)!'csrf-token'}"/></#if>
-                    <input type="file" name="image" id="upload" style="display: none" onchange="document.getElementById('avatarForm').submit();">
-                    <label for="upload" class="plus">
-                        <img class="plus" src="/image/icons8-знак-плюс-30.png" alt="plus">
-                    </label>
-                    <img src="/user/avatars/${user.avatar}"
-                         onerror="this.onerror=null; this.src='/image/Default.png'"
-                         alt="avatar">
-                </form>
-            </div>
+    <div class="icon">
+        <div class="circle">
+            <form action="/profile/avatar" method="post" enctype="multipart/form-data" id="avatarForm">
+                <#if _csrf??><input type="hidden" name="${(_csrf.parameterName)!'csrf-param-name'}"
+                                    value="${(_csrf.token)!'csrf-token'}"/></#if>
+                <input type="file" name="image" id="upload" style="display: none" onchange="document.getElementById('avatarForm').submit();">
+                <label for="upload" class="plus">
+                    <img class="plus" src="/image/icons8-знак-плюс-30.png" alt="plus">
+                </label>
+                <img src="/user/avatars/${user.avatar}"
+                     onerror="this.onerror=null; this.src='/image/Default.png'"
+                     alt="avatar">
+            </form>
         </div>
+    </div>
 
-        <form id="profileForm" method="post" action="/profile/edit" enctype="multipart/form-data">
-            <#if _csrf??><input type="hidden" name="${(_csrf.parameterName)!'csrf-param-name'}"
-                                value="${(_csrf.token)!'csrf-token'}"/></#if>
+    <form id="profileForm" method="post" action="/profile/edit" enctype="multipart/form-data">
+        <#if _csrf??><input type="hidden" name="${(_csrf.parameterName)!'csrf-param-name'}"
+                            value="${(_csrf.token)!'csrf-token'}"/></#if>
+
         <div class="form-group">
             <label for="name">Имя:</label>
             <@spring.formInput "userEditDto.name" 'placeholder="Имя"'/>
@@ -49,7 +51,10 @@
 
         <div class="form-group">
             <label for="email">Email:</label>
-            <@spring.formInput "userEditDto.email" 'placeholder="example@gmail.com" disabled'/>
+            <div class="input-with-button">
+                <@spring.formInput "userEditDto.email" 'placeholder="example@gmail.com" disabled'/>
+                <a href="/profile/edit-email" class="input-button">Изменить</a>
+            </div>
             <@spring.showErrors "<br>" "error"/>
         </div>
 
@@ -61,10 +66,10 @@
 
         <div class="form-group">
             <label for="password">Пароль:</label>
-            <input type="password" id="password" name="password" disabled placeholder="••••••••">
-<#--            <div class="password-change">-->
-<#--                <a href="/change-password">Изменить пароль</a>-->
-<#--            </div>-->
+            <div class="input-with-button">
+                <input type="password" id="password" name="password" disabled placeholder="••••••••">
+                <a href="/profile/edit-password" class="input-button">Изменить</a>
+            </div>
         </div>
 
         <button type="submit" class="submit-btn">Сохранить изменения</button>

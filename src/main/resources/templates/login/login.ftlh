@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/login.css">
+    <link rel="icon" href="/image/icon.png" type="image/png">
     <title>Вход в систему</title>
 </head>
 <body>
@@ -35,7 +36,7 @@
             <button type="submit" class="btn">Войти</button>
             
             <div class="links">
-                <a href="#">Забыли пароль?</a> · <a href="register">Регистрация</a>
+                <a href="/auth/reset">Забыли пароль?</a> · <a href="register">Регистрация</a>
             </div>
         </form>
     </div>

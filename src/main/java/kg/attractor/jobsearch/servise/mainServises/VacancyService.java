@@ -5,6 +5,7 @@ import kg.attractor.jobsearch.dto.VacancyEditDto;
 import kg.attractor.jobsearch.dto.mutal.CompanyDto;
 import kg.attractor.jobsearch.dto.mutal.VacancyForWebDto;
 import kg.attractor.jobsearch.exeptions.NotFound;
+import kg.attractor.jobsearch.exeptions.NotOwnVacancy;
 import kg.attractor.jobsearch.models.Category;
 import kg.attractor.jobsearch.models.User;
 import kg.attractor.jobsearch.models.Vacancy;
@@ -12,6 +13,8 @@ import kg.attractor.jobsearch.repositories.VacancyRepository;
 import kg.attractor.jobsearch.servise.CategoryServise;
 import kg.attractor.jobsearch.servise.ResponseAplicantsServise;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +24,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,10 +34,33 @@ public class VacancyService {
     private final VacancyRepository vacancyRepository;
     private final ResponseAplicantsServise responseAplicantsServise;
 
+    public VacancyForWebDto getVacancyByIdForProfile(Long vacancyId, String username) {
+        User user = userService.getUserByEmail(username);
+        if (!vacancyRepository.existsByUserIdAndId(user.getId(), vacancyId)) {
+            throw new NotOwnVacancy("Not own Vacancy");
+        }
+        Vacancy vacancy = vacancyRepository.findById(vacancyId)
+                .orElseThrow(() -> new NotFound("Could not find vacancy with id: " + vacancyId));
+        return VacancyForWebDto.builder()
+                .name(vacancy.getName())
+                .description(vacancy.getDescription())
+                .salary(vacancy.getSalary())
+                .isActive(vacancy.getIsActive())
+                .updateTime(LocalDate.from(vacancy.getUpdateTime()))
+                .responses(responseAplicantsServise.getCountResponseToVacancy(vacancyId))
+                .author(vacancy.getUser().getName())
+                .id(vacancy.getId())
+                .category(vacancy.getCategory().getName())
+                .ExpTo(vacancy.getExpTo())
+                .ExpFrom(vacancy.getExpFrom())
+                .build();
+    }
 
     public VacancyEditDto getVacancyById(Long vacancyId,String username) {
         User user = userService.getUserByEmail(username);
-        vacancyRepository.exist(user.getId(),vacancyId);
+        if (!vacancyRepository.existsByUserIdAndId(user.getId(), vacancyId)) {
+            throw new NotOwnVacancy("Not own Vacancy");
+        }
         Vacancy vacancy = vacancyRepository.findById(vacancyId)
                 .orElseThrow(() -> new NotFound("Could not find vacancy with id: " + vacancyId));
         return VacancyEditDto.builder()
@@ -49,13 +76,25 @@ public class VacancyService {
                 .build();
     }
 
-    public Optional<Vacancy> getVacancyById(Long vacancyId) {
-        return vacancyRepository.getVacancyById(vacancyId);
+    public VacancyForWebDto getVacancyById(Long vacancyId) {
+        Vacancy vacancy = vacancyRepository.getVacancyById(vacancyId).orElseThrow(() -> new NotFound("Could not find vacancy with id: " + vacancyId));
+        return VacancyForWebDto.builder()
+                .name(vacancy.getName())
+                .description(vacancy.getDescription())
+                .salary(vacancy.getSalary())
+                .isActive(vacancy.getIsActive())
+                .updateTime(LocalDate.from(vacancy.getUpdateTime()))
+                .responses(responseAplicantsServise.getCountResponseToVacancy(vacancyId))
+                .author(vacancy.getUser().getName())
+                .id(vacancy.getId())
+                .category(vacancy.getCategory().getName())
+                .ExpTo(vacancy.getExpTo())
+                .ExpFrom(vacancy.getExpFrom())
+                .build();
     }
 
-    public List<VacancyForWebDto> getAllVacancies(Pageable pageable) throws NotFound {
-        return vacancyRepository.findActiveVacancies(pageable)
-                .stream()
+    public Page<VacancyForWebDto> getAllVacancies(Pageable pageable) throws NotFound {
+        Page<VacancyForWebDto> vacancies = vacancyRepository.findActiveVacancies(pageable)
                 .map(vacancy -> VacancyForWebDto.builder()
                         .id(vacancy.getId())
                         .name(vacancy.getName())
@@ -67,9 +106,17 @@ public class VacancyService {
                         .author(vacancy.getUser().getName())
                         .category(vacancy.getCategory().getName())
                         .responses(responseAplicantsServise.getCountResponseToVacancy(vacancy.getId()))
-                        .build())
+                        .build());
+
+        List<VacancyForWebDto> sortByResponse = vacancies.getContent().stream()
+                .sorted((v1, v2) -> Integer.compare(v2.getResponses(), v1.getResponses()))
                 .toList();
+
+        return new PageImpl<>(sortByResponse, pageable, vacancies.getTotalElements());
     }
+
+
+
 
     public void createVacancy(VacancyDto vacancyDto, String username) throws IllegalArgumentException {
         vacancyDto.setCreatedDate(LocalDateTime.now());
@@ -113,8 +160,7 @@ public class VacancyService {
                 oldVacancy.setIsActive(true);
             }
         }
-        vacancyDto.setCreatedDate(oldVacancy.getCreatedDate());
-        vacancyDto.setUpdateTime(LocalDateTime.now());
+        oldVacancy.setUpdateTime(LocalDateTime.now());
         vacancyRepository.save(oldVacancy);
 
         ResponseEntity.status(HttpStatus.OK).body(vacancyDto);
@@ -126,14 +172,9 @@ public class VacancyService {
         vacancyRepository.save(vacancy);
     }
 
-    public Integer getTotalPages(Integer pageSize) {
-        int totalCount = vacancyRepository.getVacancyCount();
-        return (int) Math.ceil((double) totalCount / pageSize);
-    }
-
-    public List<CompanyDto> getCompanies(Pageable pageable) {
-        List<User> users = userService.getUsersByRoleId(pageable,2L);
-        return  users.stream()
+    public Page<CompanyDto> getCompanies(Pageable pageable) {
+        Page<User> users = userService.getUsersByRoleId(pageable,2L);
+        return  users
                 .map(user -> CompanyDto.builder()
                         .phoneNumber(user.getPhoneNumber())
                         .name(user.getName())
@@ -141,8 +182,7 @@ public class VacancyService {
                         .id(user.getId())
                         .avatar(user.getAvatar())
                         .vacancies(user.getVacancies())
-                        .build())
-                .toList();
+                        .build());
     }
 
     public CompanyDto getCompany(Long id) {

@@ -2,6 +2,8 @@ package kg.attractor.jobsearch.controlers;
 
 import jakarta.validation.Valid;
 import kg.attractor.jobsearch.dto.*;
+import kg.attractor.jobsearch.dto.mutal.ChangeEmailDto;
+import kg.attractor.jobsearch.dto.mutal.ChangePasswordDto;
 import kg.attractor.jobsearch.dto.mutal.UserProfile;
 import kg.attractor.jobsearch.servise.helpers.UserResumeServise;
 import kg.attractor.jobsearch.servise.helpers.UserVacancyServise;
@@ -34,6 +36,7 @@ public class ProfileController {
                           @RequestParam(defaultValue = "0") int page,
                           @RequestParam(defaultValue = "3") int size) {
         Pageable pageable = PageRequest.of(page, size);
+        model.addAttribute("logout","logout");
         model.addAttribute("currentPage", page);
         UserProfile user = userService.getUserForProfile(auth.getName(),pageable);
         model.addAttribute("user", user);
@@ -100,7 +103,7 @@ public class ProfileController {
     @GetMapping("edit-resume")
     public String editResumeForm(Model model, Authentication auth, @RequestParam("id") Long id) {
         model.addAttribute("user", userService.getUserByEmail(auth.getName()));
-        model.addAttribute("resumeDto", resumeService.getResumeById(id,auth.getName()));
+        model.addAttribute("resumeDto", resumeService.getResumeByUserIdAndId(id,auth.getName()));
         return "forms/resume-edit";
     }
 
@@ -118,6 +121,13 @@ public class ProfileController {
     public String updateResumeTime(@RequestParam("id") Long id) {
         resumeService.updateTime(id);
         return "redirect:/profile";
+    }
+
+    @GetMapping("view-resume")
+    public String resumesDetails(@RequestParam("id") Long id, Model model, Authentication auth) {
+        model.addAttribute("user", userService.getUserByEmail(auth.getName()));
+        model.addAttribute("resume", resumeService.getResumeByUserIdAndId(id,auth.getName()));
+        return "main/resume-details";
     }
 
     @GetMapping("create-vacancy")
@@ -174,5 +184,60 @@ public class ProfileController {
     public String updateVacancyTime(@RequestParam("id") Long id) {
         vacancyService.updateTime(id);
         return "redirect:/profile";
+    }
+
+    @GetMapping("view-vacancy")
+    public String viewVacancy(@RequestParam("id") Long id, Model model, Authentication auth) {
+        model.addAttribute("user", userService.getUserByEmail(auth.getName()));
+        model.addAttribute("vacancy", vacancyService.getVacancyByIdForProfile(id,auth.getName()));
+    return "main/vacancy-details";
+    }
+
+    @GetMapping("edit-password")
+    public String editPasswordForm(Authentication auth, Model model) {
+        model.addAttribute("changePasswordDto", new ChangePasswordDto());
+        model.addAttribute("user", userService.getUserByEmail(auth.getName()));
+        return "forms/edit-password";
+    }
+
+    @PostMapping("edit-password")
+    public String editPassword(@Valid ChangePasswordDto changePasswordDto,
+                               BindingResult bindingResult,
+                               Model model,
+                               Authentication auth) {
+        model.addAttribute("changePasswordDto", changePasswordDto);
+        if (bindingResult.hasErrors()) {
+            return "forms/edit-password";
+        }
+        String whenReturn = userService.changePasswordUser(changePasswordDto,auth.getName());
+        if (whenReturn.equals("Успешно")) {
+            return "redirect:/profile/edit";
+        }
+        model.addAttribute("message",whenReturn);
+        return "forms/edit-password";
+    }
+
+    @GetMapping("edit-email")
+    public String editEmailForm(Authentication auth, Model model) {
+        model.addAttribute("user", userService.getUserByEmail(auth.getName()));
+        model.addAttribute("changeEmailDto", new ChangeEmailDto());
+        return "forms/edit-email";
+    }
+
+    @PostMapping("edit-email")
+    public String editEmail(@Valid ChangeEmailDto changeEmailDto,
+                            BindingResult bindingResult,
+                            Model model,
+                            Authentication auth) {
+        model.addAttribute("changeEmailDto", changeEmailDto);
+        if (bindingResult.hasErrors()) {
+            return "forms/edit-email";
+        }
+        String whenReturn = userService.changeEmailUser(auth.getName(),changeEmailDto);
+        if (whenReturn.equals("Успешно")) {
+            return "redirect:/profile/edit";
+        }
+        model.addAttribute("message",whenReturn);
+        return "forms/edit-email";
     }
 }

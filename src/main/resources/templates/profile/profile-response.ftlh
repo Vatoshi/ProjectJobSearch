@@ -4,6 +4,7 @@
 
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" href="/image/icon.png" type="image/png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/profile.css">
     <title>Личный кабинет <#if user.role.id==1> соискателя <#else> работодателя </#if> </title>
@@ -46,7 +47,7 @@
                 </li>
             </#if>
             <li class="nav-item">
-                <a href="/vacancies" class="nav-link" data-target="resumes">
+                <a href="/" class="nav-link" data-target="resumes">
                     <span class="nav-icon">🔄</span>
                     <span> К вакансиям </span>
                 </a>

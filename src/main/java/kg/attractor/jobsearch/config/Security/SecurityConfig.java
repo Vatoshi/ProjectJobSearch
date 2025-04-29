@@ -22,7 +22,6 @@ import javax.sql.DataSource;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private final DataSource dataSource;
     private final AuthUserDetailsService authUserDetailsService;
     private final CustomSuccesHandler customSuccesHandler;
 
@@ -39,6 +38,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .exceptionHandling(exeption -> exeption
+                        .accessDeniedPage("/auth/403"))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
                 .formLogin(login -> login
                         .loginPage("/auth/login")
@@ -52,9 +53,8 @@ public class SecurityConfig {
 //                .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers("/vacancy/create**","/vacancy/edit/**","vacancy/delete/**","resumes").hasAnyAuthority("EMPLOYER")
-                        .requestMatchers("/resume/category/**", "/resume/by-user/**", "/resume/id/**").hasAnyAuthority("APPLICANT","EMPLOYER")
-                        .requestMatchers("/resume/create**","/resume/edit/**","resume/delete/**","vacancies/company","vacancies/company-details").hasAnyAuthority("APPLICANT")
+                        .requestMatchers("resumes").hasAnyAuthority("EMPLOYER")
+                        .requestMatchers("/company","/company-details").hasAnyAuthority("APPLICANT")
                         .requestMatchers("/user/add-avatar**","/user/edit/**","/user/delete/**").hasAnyAuthority("APPLICANT","EMPLOYER")
                         .anyRequest().permitAll());
 

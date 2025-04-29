@@ -3,7 +3,7 @@ package kg.attractor.jobsearch.models;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -29,9 +29,9 @@ public class Resume {
     @Column(name = "is_active")
     private Boolean isActive;
     @Column(name = "created_date")
-    private LocalDate createdDate;
+    private LocalDateTime createdDate;
     @Column(name = "update_time")
-    private LocalDate updateTime;
+    private LocalDateTime updateTime;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

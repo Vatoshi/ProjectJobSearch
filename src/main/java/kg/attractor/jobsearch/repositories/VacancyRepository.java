@@ -12,11 +12,10 @@ import java.util.Optional;
 
 public interface VacancyRepository extends JpaRepository<Vacancy, Long> {
 
-    @Query("select v from Vacancy v where v.user.id = :id and v.id = :id")
-    void exist (@Param("userId") Long userId, @Param("id") Long id);
+    boolean existsByUserIdAndId(Long userId, Long id);
 
     @Query("select v from Vacancy v where v.isActive = true")
-    List<Vacancy> findActiveVacancies(Pageable pageable);
+    Page<Vacancy> findActiveVacancies(Pageable pageable);
 
     @Query("select count(v) from Vacancy v where v.isActive = true")
     Integer getVacancyCount();
