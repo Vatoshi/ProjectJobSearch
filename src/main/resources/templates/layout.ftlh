@@ -22,7 +22,7 @@
                     <ul class="dropdown-menu">
                         <#if user?? && user.role.id == 1><li><a class="dropdown-item" href="/company"><@spring.message "layout.companies"/></a></li></#if>
                         <#if user?? && user.role.id == 2><li><a class="dropdown-item" href="/resumes"><@spring.message "resume"/></a></li></#if>
-                        <li><a class="dropdown-item" href="/">Вакансии</a></li>
+                        <li><a class="dropdown-item" href="/"><@spring.message "vacancies"/></a></li>
 
                     </ul>
                 </div>
