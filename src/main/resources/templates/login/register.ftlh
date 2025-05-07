@@ -7,14 +7,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="/image/icon.png" type="image/png">
     <link rel="stylesheet" href="/css/register.css">
-    <title>Регистрация</title>
+    <title><@spring.message "register.register" /></title>
 </head>
 
 <body>
     <div class="registration-container">
         <div class="registration-header">
-            <h1 class="registration-title">Создайте аккаунт</h1>
-            <p class="registration-subtitle">Заполните форму для регистрации</p>
+            <h1 class="registration-title"><@spring.message "register.createAcc" /></h1>
+            <p class="registration-subtitle"><@spring.message "register.endForm" /></p>
         </div>
 
         <form id="registrationForm" method="POST" action="/auth/register">
@@ -51,11 +51,11 @@
             </div>
 
             <div class="form-group">
-                <label for="accountType">Тип аккаунта:</label>
+                <label for="accountType"><@spring.message "register.accType" /></label>
                 <select name="roleId" id="accountType">
-                    <option value="" disabled selected>Выберите тип</option>
-                    <option value="1">Соискатель</option>
-                    <option value="2">Работодатель</option>
+                    <option value="" disabled selected><@spring.message "register.selectType" /></option>
+                    <option value="1"><@spring.message "applicant" /></option>
+                    <option value="2"><@spring.message "employer" /></option>
                 </select>
                 <#if accountType?has_content>
                     <p style="color:#e12e2e;font-size: 14px;">
@@ -66,11 +66,11 @@
 
             <input type="submit" class="submit-btn" value="Зарегистрироваться">
 
-            <div class="error-message" id="error-message">Ошибка регистрации. Пожалуйста, попробуйте снова.</div>
+            <div class="error-message" id="error-message"><@spring.message "register.errorReg" /></div>
         </form>
 
         <div class="login-link">
-            Уже есть аккаунт? <a href="/auth/login">Войдите</a>
+            <@spring.message "register.alreadyExist"/> <a href="/auth/login"><@spring.message "register.login" /></a>
         </div>
     </div>
 

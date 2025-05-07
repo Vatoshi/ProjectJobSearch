@@ -6,11 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/login.css">
     <link rel="icon" href="/image/icon.png" type="image/png">
-    <title>Вход в систему</title>
+    <title><@spring.message "login.loginInSystem"/></title>
 </head>
 <body>
     <div class="login-container">
-        <h1>Добро пожаловать</h1>
+        <h1><@spring.message "login.welcome"/></h1>
         
         <form method="post" action="/auth/login">
             <#if _csrf??>
@@ -18,12 +18,12 @@
                        value="${(_csrf.token)!'csrf-token'}"/>
             </#if>
             <div class="input-group">
-                <label for="email">Электронная почта</label>
+                <label for="email"><@spring.message "email"/></label>
                 <input type="text" name="username" id="email" placeholder="Введите ваш email" required>
             </div>
             
             <div class="input-group">
-                <label for="password">Пароль</label>
+                <label for="password"><@spring.message "password"/></label>
                 <input type="password" name="password" id="password" placeholder="Введите ваш пароль" required>
             </div>
 
@@ -33,10 +33,10 @@
                 </p>
             </#if>
             
-            <button type="submit" class="btn">Войти</button>
+            <button type="submit" class="btn"><@spring.message "login"/></button>
             
             <div class="links">
-                <a href="/auth/reset">Забыли пароль?</a> · <a href="register">Регистрация</a>
+                <a href="/auth/reset"><@spring.message "login.forgotPassword"/></a> · <a href="register"><@spring.message "register"/></a>
             </div>
         </form>
     </div>

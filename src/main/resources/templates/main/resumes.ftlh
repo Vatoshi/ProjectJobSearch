@@ -1,8 +1,9 @@
 <#import "../layout.ftlh" as main>
+<#import "/spring.ftl" as spring>
 <@main.layout >
 <div class="container">
     <div class="sidebar">
-        <h5>Фильтры</h5>
+        <h5><@spring.message "filters"/></h5>
 
         <div class="pagination">
             <#if (currentPage >= 3)>
@@ -26,7 +27,7 @@
     </div>
 
     <div class="main-content">
-        <h2 class="section-title">Резюме</h2>
+        <h2 class="section-title"><@spring.message "resume"/></h2>
         <ul class="vacancy-list" id="vacancy-list">
 
             <#if resumes? has_content>
@@ -37,15 +38,15 @@
                             <div class="vacancy-header">
                                 <h3 class="vacancy-title">${resume.name}</h3>
                             </div>
-                            <div class="vacancy-date">Последнее обновление: ${resume.updateTime}</div>
+                            <div class="vacancy-date"><@spring.message "resumeList.lastChanges"/> ${resume.updateTime}</div>
                             <#if user??>
                             <div class="vacancy-actions">
-                                <button class="action-btn">Откликнуться</button>
+                                <button class="action-btn"><@spring.message "resumeList.response"/></button>
                             </div>
                             </#if>
                         </div>
                         <div class="vacancy-company">${resume.author}</div>
-                        <div class="vacancy-salary">Хочу зарплату: ${resume.salary!"Договорная"} ₽ </div>
+                        <div class="vacancy-salary"><@spring.message "resumes.ftlh.want"/> ${resume.salary!"Договорная"} ₽ </div>
                     </li>
                     </a>
                 </#list>
