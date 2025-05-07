@@ -151,7 +151,7 @@ public class AuthController {
         resetPasswordServise.deleteToken(email);
         model.addAttribute("error","Пароль успешно изменен");
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null && auth.isAuthenticated() && !(auth.getPrincipal() instanceof String)) {
+            if (auth != null && auth.isAuthenticated() && !(auth.getPrincipal() instanceof String)) {
             model.addAttribute("redirect", "/profile/edit");
         } else {
             model.addAttribute("redirect", "/auth/login");

@@ -1,34 +1,35 @@
 <#import "../layout.ftlh" as main>
+<#import "/spring.ftl" as spring>
 <@main.layout>
     <div class="profile-isolated">
         <div class="profile-isolated__container">
             <div class="profile-isolated__sidebar">
                 <div class="profile-isolated__header">
                     <img src="user/avatars/${user.avatar}" onerror="this.onerror=null; this.src='/image/Default.png'"
-                         alt="Фото профиля" class="profile-isolated__avatar">
+                         alt="<@spring.message "profile.profilePhoto"/>" class="profile-isolated__avatar">
                     <h2 class="profile-isolated__name">${user.name}</h2>
-                    <div class="profile-isolated__age">Возраст: ${user.age}</div>
-                    <a href="/profile/edit" class="profile-isolated__edit-btn">Редактировать</a>
+                    <div class="profile-isolated__age"><@spring.message "profile.age"/> ${user.age}</div>
+                    <a href="/profile/edit" class="profile-isolated__edit-btn"><@spring.message "profile.edit"/></a>
                 </div>
 
                 <ul class="profile-isolated__nav">
                     <li class="profile-isolated__nav-item">
                         <a href="#" class="profile-isolated__nav-link profile-isolated__nav-link--active">
                             <span class="profile-isolated__nav-icon">📄</span>
-                            <span>Мои <#if user.role.id==1> резюме <#else> вакансии </#if></span>
+                            <span><@spring.message "profile.my"/> <#if user.role.id==1><@spring.message "resumel"/> <#else> <@spring.message "vacanciesl"/> </#if></span>
                         </a>
                     </li>
                     <li class="profile-isolated__nav-item">
                         <a <#if user.role.id == 1> href="/profile/create-resume" <#else> href="/profile/create-vacancy" </#if>
                                 class="profile-isolated__nav-link">
                             <span class="profile-isolated__nav-icon">➕</span>
-                            <span>Создать <#if user.role.id==1> резюме <#else> вакансию </#if></span>
+                            <span><@spring.message "profile.create"/> <#if user.role.id==1> <@spring.message "profile.create.resume"/> <#else> <@spring.message "profile.create.vacancy"/> </#if></span>
                         </a>
                     </li>
                     <li class="profile-isolated__nav-item">
                         <a href="#" class="profile-isolated__nav-link">
                             <span class="profile-isolated__nav-icon">✉️</span>
-                            <span>Отклики</span>
+                            <span><@spring.message "profile.responses"/></span>
                         </a>
                     </li>
 <#--                    <#if user.role.id == 2>-->
@@ -56,7 +57,7 @@
             </div>
 
             <div class="profile-isolated__content">
-                <h2 class="profile-isolated__content-title">Ваши <#if user.role.id==1> резюме <#else> вакансии </#if></h2>
+                <h2 class="profile-isolated__content-title"><@spring.message "profile.yours"/> <#if user.role.id==1> <@spring.message "resumel"/>  <#else> <@spring.message "vacanciesl"/> </#if></h2>
 
                 <ul class="profile-isolated__items">
                     <#if user.role.id==1>
@@ -77,20 +78,20 @@
                                 <li class="profile-isolated__item">
                                     <div class="profile-isolated__item-header">
                                         <h3 class="profile-isolated__item-title">${resume.name}</h3>
-                                        <div class="profile-isolated__item-date">Дата обновления: ${resume.updateTime?datetime?string("dd.MM.yyyy HH:mm")}</div>
+                                        <div class="profile-isolated__item-date"><@spring.message "profile.dateOfUpdate"/> ${resume.updateTime?datetime?string("dd.MM.yyyy HH:mm")}</div>
                                     </div>
                                     <div class="profile-isolated__item-actions">
                                         <form id="updateTimeResume${resume.id}" method="get" action="/profile/update-resume-time">
                                             <input type="hidden" name="id" value="${resume.id}">
                                         </form>
-                                        <button form="updateTimeResume${resume.id}" type="submit" class="profile-isolated__action-btn">Обновить</button>
-                                        <a href="/profile/edit-resume?id=${resume.id}" class="profile-isolated__action-btn profile-isolated__action-btn--outline">Редактировать</a>
-                                        <a href="/profile/view-resume?id=${resume.id}" class="profile-isolated__action-btn profile-isolated__action-btn--view">Посмотреть</a>
+                                        <button form="updateTimeResume${resume.id}" type="submit" class="profile-isolated__action-btn"><@spring.message "profile.update"/></button>
+                                        <a href="/profile/edit-resume?id=${resume.id}" class="profile-isolated__action-btn profile-isolated__action-btn--outline"><@spring.message "profile.edit"/></a>
+                                        <a href="/profile/view-resume?id=${resume.id}" class="profile-isolated__action-btn profile-isolated__action-btn--view"><@spring.message "profile.watch"/></a>
                                     </div>
                                 </li>
                             </#list>
                         <#else>
-                            <p class="profile-isolated__empty">На данный момент у вас нет резюме</p>
+                            <p class="profile-isolated__empty"><@spring.message "profile.isNoResume"/></p>
                         </#if>
                     </#if>
 
@@ -112,20 +113,20 @@
                                 <li class="profile-isolated__item">
                                     <div class="profile-isolated__item-header">
                                         <h3 class="profile-isolated__item-title">${vacancy.name}</h3>
-                                        <div class="profile-isolated__item-date">Дата обновления: ${vacancy.updateTime?datetime?string("dd.MM.yyyy HH:mm")}</div>
+                                        <div class="profile-isolated__item-date"><@spring.message "profile.dateOfUpdate"/> ${vacancy.updateTime?datetime?string("dd.MM.yyyy HH:mm")}</div>
                                     </div>
                                     <div class="profile-isolated__item-actions">
                                         <form id="updateTime${vacancy.id}" method="get" action="/profile/update-vacancy-time">
                                             <input type="hidden" name="id" value="${vacancy.id}">
                                         </form>
-                                        <button form="updateTime${vacancy.id}" type="submit" class="profile-isolated__action-btn">Обновить</button>
-                                        <a href="/profile/edit-vacancy?id=${vacancy.id}" class="profile-isolated__action-btn profile-isolated__action-btn--outline">Редактировать</a>
-                                        <a href="/profile/view-vacancy?id=${vacancy.id}" class="profile-isolated__action-btn profile-isolated__action-btn--view">Посмотреть</a>
+                                        <button form="updateTime${vacancy.id}" type="submit" class="profile-isolated__action-btn"><@spring.message "profile.update"/></button>
+                                        <a href="/profile/edit-vacancy?id=${vacancy.id}" class="profile-isolated__action-btn profile-isolated__action-btn--outline"><@spring.message "profile.edit"/></a>
+                                        <a href="/profile/view-vacancy?id=${vacancy.id}" class="profile-isolated__action-btn profile-isolated__action-btn--view"><@spring.message "profile.watch"/></a>
                                     </div>
                                 </li>
                             </#list>
                         <#else>
-                            <p class="profile-isolated__empty">На данный момент у вас нет вакансий</p>
+                            <p class="profile-isolated__empty"><@spring.message "profile.usNoVacancy"/></p>
                         </#if>
                     </#if>
                 </ul>

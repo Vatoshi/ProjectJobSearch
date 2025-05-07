@@ -1,4 +1,5 @@
 <#macro layout>
+    <#import "/spring.ftl" as spring>
     <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -13,19 +14,19 @@
     <nav class="full-width-navbar">
         <div class="navbar-content">
             <div class="nav-links">
-                <a href="/" class="nav-link">Главная</a>
+                <a href="/" class="nav-link"><@spring.message "layout.main"/></a>
                 <div class="dropdown">
                     <input type="checkbox" id="dropdownToggle" class="dropdown-toggle-checkbox" />
-                    <label for="dropdownToggle" class="nav-link dropdown-toggle">Перейти</label>
+                    <label for="dropdownToggle" class="nav-link dropdown-toggle"><@spring.message "layout.goOver"/></label>
 
                     <ul class="dropdown-menu">
-                        <#if user?? && user.role.id == 1><li><a class="dropdown-item" href="/company">Компании</a></li></#if>
-                        <#if user?? && user.role.id == 2><li><a class="dropdown-item" href="/resumes">Резюме</a></li></#if>
+                        <#if user?? && user.role.id == 1><li><a class="dropdown-item" href="/company"><@spring.message "layout.companies"/></a></li></#if>
+                        <#if user?? && user.role.id == 2><li><a class="dropdown-item" href="/resumes"><@spring.message "resume"/></a></li></#if>
                         <li><a class="dropdown-item" href="/">Вакансии</a></li>
 
                     </ul>
                 </div>
-                <#if user??><a href="#" class="nav-link">Ваши отклики</a></#if>
+                <#if user??><a href="#" class="nav-link"><@spring.message "layout.yourResponses"/></a></#if>
             </div>
 
             <#if user?has_content>
@@ -33,17 +34,17 @@
                     <a href="/profile" class="profile-container">
                         <img src="user/avatars/${user.avatar}?t=${.now}"
                              onerror="this.onerror=null; this.src='/image/Default.png'"
-                             alt="Фото профиля"
+                             alt="<@spring.message "layout.profilePhoto"/>"
                              class="profile-avatar">
                     </a>
                     <#if logout?has_content>
-                        <a href="/logout" class="logout-button"><img src="image/logout.png" alt="logout"></a>
+                        <a href="/logout" class="logout-button"><img src="image/logout.png" alt="<@spring.message "layout.logout"/>"></a>
                     </#if>
                 </div>
             <#else>
                 <div class="auth-links">
-                    <a href="auth/login" class="btn-login">Войти</a>
-                    <a href="auth/register" class="btn-register">Зарегистрироваться</a>
+                    <a href="auth/login" class="btn-login"><@spring.message "layout.login"/></a>
+                    <a href="auth/register" class="btn-register"><@spring.message "layout.register"/></a>
                 </div>
             </#if>
         </div>

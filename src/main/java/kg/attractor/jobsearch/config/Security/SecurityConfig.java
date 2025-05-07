@@ -38,7 +38,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .exceptionHandling(exeption -> exeption
+                .exceptionHandling(exception -> exception
                         .accessDeniedPage("/auth/403"))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
                 .formLogin(login -> login
