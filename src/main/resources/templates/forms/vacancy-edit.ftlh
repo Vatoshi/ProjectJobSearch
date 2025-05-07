@@ -7,13 +7,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="/image/icon.png" type="image/png">
     <link rel="stylesheet" href="/css/resume.css">
-    <title>Редактирование вакансии</title>
+    <title><@spring.message "edit.vacancy.vacancyEdit"/></title>
 </head>
 
 <body>
 <div class="resume-container">
     <div class="resume-header">
-        <h1 class="resume-title">Редактирование вакансии</h1>
+        <h1 class="resume-title"><@spring.message "edit.vacancy.vacancyEdit"/></h1>
     </div>
 
     <form id="resumeForm" method="post">
@@ -21,15 +21,15 @@
                             value="${(_csrf.token)!'csrf-token'}"/></#if>
         <div class="form-section">
             <div class="form-group">
-                <label for="name">Название резюме:</label>
+                <label for="name"><@spring.message "edit.vacancy.vacancyName"/></label>
                 <@spring.formInput "vacancyEditDto.name" 'placeholder="Название вакансии"'></@spring.formInput>
                 <@spring.showErrors "<br>" "error"/>
             </div>
 
             <div class="form-group">
-                <label for="categoryId">Категория:</label>
+                <label for="categoryId"><@spring.message "category"/></label>
                 <select id="categoryId" name="categoryId" required>
-                    <option value="" disabled <#if vacancyEditDto.categoryId?? && vacancyEditDto.categoryId?string == "">selected</#if>>Выберите категорию</option>
+                    <option value="" disabled <#if vacancyEditDto.categoryId?? && vacancyEditDto.categoryId?string == "">selected</#if>><@spring.message "selectCategory"/></option>
                     <option value="2" <#if vacancyEditDto.categoryId?? && vacancyEditDto.categoryId == 2>selected</#if>>IT</option>
                     <option value="3" <#if vacancyEditDto.categoryId?? && vacancyEditDto.categoryId == 3>selected</#if>>Маркетинг</option>
                     <option value="4" <#if vacancyEditDto.categoryId?? && vacancyEditDto.categoryId == 4>selected</#if>>Дизайн</option>
@@ -39,24 +39,24 @@
             </div>
 
             <div class="form-group">
-                <label for="salary">уровень оклада:</label>
+                <label for="salary"><@spring.message "edit.vacancy.salaryLevel"/></label>
                 <@spring.formInput "vacancyEditDto.salary" 'placeholder="Зарплата"'></@spring.formInput>
                 <@spring.showErrors "<br>" "error"/>
             </div>
             <div class="form-group">
-                <label for="description">Описание</label>
+                <label for="description"><@spring.message "edit.vacancy.description"/></label>
                 <@spring.formInput "vacancyEditDto.description" 'placeholder="Описание"'></@spring.formInput>
                 <@spring.showErrors "<br>" "error"/>
             </div>
 
             <div class="form-group experience-block">
-                <label>Требуемый опыт:</label>
+                <label><@spring.message "edit.vacancy.requiredExperience"/></label>
                 <div class="experience-range">
-                    <label for="experienceFrom">от</label>
+                    <label for="experienceFrom"><@spring.message "from"/></label>
                     <@spring.formInput "vacancyEditDto.expFrom" 'type="number" id="experienceFrom" name="experienceFrom" min="0" step="1" placeholder="лет"'></@spring.formInput>
                     <@spring.showErrors "<br>" "error"/>
 
-                    <label for="experienceTo">до</label>
+                    <label for="experienceTo"><@spring.message "to"/></label>
                     <@spring.formInput "vacancyEditDto.expTo" 'type="number" id="experienceTo" name="experienceTo" min="0" step="1" placeholder="лет"'></@spring.formInput>
                     <@spring.showErrors "<br>" "error"/>
                 </div>
@@ -72,10 +72,10 @@
                 </#if>
                 <span class="slider"></span>
             </label>
-            <span class="switch-label">Активно</span>
+            <span class="switch-label"><@spring.message "actively"/></span>
         </div>
 
-        <button type="submit" class="submit-btn">Сохранить резюме</button>
+        <button type="submit" class="submit-btn"><@spring.message "edit.vacancy.saveChanges"/></button>
     </form>
 </div>
 </body>
