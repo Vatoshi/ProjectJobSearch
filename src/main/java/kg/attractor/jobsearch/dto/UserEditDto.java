@@ -12,20 +12,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserEditDto {
-    @Pattern(regexp = "^(|\\p{L}+)$", message = "Имя должно содержать только буквы (без пробелов и цифр)")
-    @Size(max = 20, message = "Максимум 20 символов")
+    @Pattern(regexp = "^(|\\p{L}+)$", message = "{valid.asd}")
+    @Size(max = 20, message = "{valid.20}")
     private String name;
-    @Pattern(regexp = "^(|\\p{L}+)$", message = "Фамилия должна содержать только буквы")
-    @Size(max = 20, message = "Максимум 20 символов")
+    @Pattern(regexp = "^(|\\p{L}+)$", message = "{valid.asd2}")
+    @Size(max = 20, message = "{valid.20}")
     private String surname;
-    @Min(value = 14, message = "Минимальный возраст 14 лет")
-    @Max(value = 120, message = "Максимальный возраст 120 лет")
+    @Min(value = 14, message = "{valid.14}")
+    @Max(value = 120, message = "{valid.120}")
     private Integer age;
-    @Email(message = "Неправильный формат email")
+    @Email(message = "{valid.email}")
     private String email;
-    @Pattern(regexp = "^(|(?=.*\\d).{5,})$", message = "содержать минимум 5 символов и хотя бы одну цифру")
+    @Pattern(regexp = "^(|(?=.*\\d).{5,})$", message = "{valid.name}")
     private String password;
     private String avatar;
-    @Pattern(regexp = "^(|\\d{10})$", message = "Телефон должен содержать 10 цифр")
+    @Pattern(regexp = "^(|\\d{10})$", message = "{valid.number}")
     private String phoneNumber;
 }

@@ -15,3 +15,5 @@ databaseChangeLog:
       file: db/changelog/initial/006_add_responded_applicants.yml
   - include:
       file: db/changelog/initial/007_createTableForReset.yml
+  - include:
+      file: db/changelog/initial/008.add.userlanguage.yml

@@ -12,9 +12,9 @@ import java.time.LocalDate;
 public class EducationInfoDto {
     private String institution;
     private String program;
-    @Past(message = "укажите действительную дату")
+    @Past(message = "{valid.realdata}")
     private LocalDate startDate;
-    @Past(message = "укажите действительную дату")
+    @Past(message = "{valid.realdata}")
     private LocalDate endDate;
     private String degree;
 }

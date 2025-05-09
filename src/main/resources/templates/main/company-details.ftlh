@@ -1,4 +1,5 @@
 <#import "../layout.ftlh" as main>
+<#import "/spring.ftl" as spring>
 <@main.layout >
 
     <style>
@@ -138,29 +139,29 @@
 <div class="container">
     <h1>${company.name}</h1>
     <div class="subtitle">
-        Контактный телефон: <strong>${company.phoneNumber}</strong>
+        <@spring.message "company.contactNumber"/> <strong>${company.phoneNumber}</strong>
     </div>
 
     <div class="company-avatar">
-        <img src="/user/avatars/${company.avatar}" alt="Аватар компании" onerror="this.onerror=null; this.src='/image/Default.png'">
+        <img src="/user/avatars/${company.avatar}" alt="<@spring.message "company.avatar"/>" onerror="this.onerror=null; this.src='/image/Default.png'">
     </div>
 
     <#if company.vacancies?has_content>
-        <h2>Открытые вакансии</h2>
+        <h2><@spring.message "company.openVacancy"/></h2>
         <div class="vacancy-list">
             <#list company.vacancies as vacancy>
                 <div class="vacancy-card">
                     <div class="vacancy-title">${vacancy.description}</div>
                     <div class="vacancy-details">
-                        📅 Обновлено: ${vacancy.updateTime}<br>
-                        🧳 Опыт: ${vacancy.expFrom}<br>
-                        🧑‍💼 Автор: ${vacancy.user.name}
+                        📅 <@spring.message "company.update"/> ${vacancy.updateTime}<br>
+                        🧳 <@spring.message "company.exp"/> ${vacancy.expFrom}<br>
+                        🧑‍💼 <@spring.message "company.author"/> ${vacancy.user.name}
                     </div>
                 </div>
             </#list>
         </div>
     <#else>
-        <p>Пока что нет доступных вакансий от этой компании.</p>
+        <p><@spring.message "company.notFound"/></p>
     </#if>
 </div>
 </@main.layout >

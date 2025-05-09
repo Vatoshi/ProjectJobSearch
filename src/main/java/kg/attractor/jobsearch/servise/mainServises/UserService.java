@@ -30,7 +30,6 @@ public class UserService {
     public final UserRepository userRepository;
     private final FileUtil fileUtil;
     private final RoleServise roleServise;
-    private final UserDetailsService userDetailsService;
 
     public Page<User> getUsersByRoleId(Pageable pageable, long roleId) {
         return userRepository.getUsersByRoleId(pageable, roleId);
@@ -164,6 +163,12 @@ public class UserService {
         user.setPassword(encoder.encode(changePasswordDto.getNewPassword().toString()));
         userRepository.save(user);
         return "Успешно";
+    }
+
+    public void saveLanguage(String language, String username) {
+        User user = userRepository.findByEmail(username);
+        user.setLanguage(language);
+        userRepository.save(user);
     }
 }
 

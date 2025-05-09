@@ -26,6 +26,7 @@ public class User {
     private String phoneNumber;
     private String avatar;
     private Boolean enabled;
+    private String language;
     @JoinColumn(name = "role_id")
     @ManyToOne(fetch = FetchType.EAGER)
     private Role role;

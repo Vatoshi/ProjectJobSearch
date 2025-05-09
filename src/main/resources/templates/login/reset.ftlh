@@ -1,11 +1,11 @@
-
+<#import "/spring.ftl" as spring>
 <!DOCTYPE html>
 <html lang="ru">
 
 <head>
     <meta charset="UTF-8">
     <link rel="icon" href="/image/icon.png" type="image/png">
-    <title>Сброс пароля</title>
+    <title><@spring.message "reset.resetPassword" /></title>
     <style>
         * {
             margin: 0;
@@ -132,7 +132,7 @@
 
 <div class="login-container">
 
-    <h1>Сброс пароля</h1>
+    <h1><@spring.message "reset.resetPassword" /></h1>
 
     <form action="/auth/reset" method="post">
         <#if _csrf??>
@@ -140,7 +140,7 @@
                    value="${(_csrf.token)!'csrf-token'}"/>
         </#if>
         <div class="input-group">
-            <label for="email">Введите вашу почту</label>
+            <label for="email"><@spring.message "reset.putEmail" /></label>
             <input type="email" id="email" name="email" value="${email}" placeholder="example@mail.com">
             <#if error?has_content>
                 <p style="color:#e12e2e;font-size: 14px;">
@@ -148,11 +148,11 @@
                 </p>
             </#if>
         </div>
-        <button type="submit" class="btn">Отправить код</button>
+        <button type="submit" class="btn"><@spring.message "reset.sentCode" /></button>
     </form>
 
     <div class="links">
-        <a href="/auth/login">Вернуться к входу</a>
+        <a href="/auth/login"><@spring.message "reset.back" /></a>
     </div>
 </div>
 

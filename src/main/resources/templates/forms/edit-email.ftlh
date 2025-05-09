@@ -3,7 +3,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Смена почты</title>
+    <title><@spring.message "edit.email.title"/></title>
     <link rel="stylesheet" href="/css/profile-edit.css">
     <link rel="icon" href="/image/icon.png" type="image/png">
 </head>
@@ -14,19 +14,19 @@
                             value="${(_csrf.token)!'csrf-token'}"/></#if>
 
         <div class="form-group">
-            <label for="newEmail">Подтвердите пароль:</label>
+            <label for="newEmail"><@spring.message "edit.email.confirmPassword"/></label>
             <@spring.formInput "changeEmailDto.password" 'class="input"' 'password'></@spring.formInput>
             <@spring.showErrors "<br>" "error"/>
         </div>
 
         <div class="form-group">
-            <label for="newEmail">Новая почта:</label>
+            <label for="newEmail"><@spring.message "edit.email.newEmail"/></label>
             <@spring.formInput "changeEmailDto.newEmail" 'placeholder="newEmail.com", class="input"'></@spring.formInput>
             <@spring.showErrors "<br>" "error"/>
         </div>
 
         <div class="form-group">
-            <label for="confirmEmail">Подтвердите почту:</label>
+            <label for="confirmEmail"><@spring.message "edit.email.confirmEmail"/></label>
             <@spring.formInput "changeEmailDto.confirmEmail" 'placeholder="newEmail.com", class="input"'></@spring.formInput>
             <@spring.showErrors "<br>" "error"/>
         </div>
@@ -37,11 +37,11 @@
             </p>
         </#if>
 
-        <button type="submit" class="submit-btn small-btn">Сменить почту</button>
+        <button type="submit" class="submit-btn small-btn"><@spring.message "edit.email.changeEmail"/></button>
     </form>
 
     <div class="back-btn-container">
-        <a href="/profile/edit" class="back-btn">Назад</a>
+        <a href="/profile/edit" class="back-btn"><@spring.message "edit.email.back"/></a>
     </div>
 </div>
 </body>

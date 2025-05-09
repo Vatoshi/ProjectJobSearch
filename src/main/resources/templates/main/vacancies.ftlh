@@ -1,20 +1,21 @@
 <#import "../layout.ftlh" as main>
+<#import "/spring.ftl" as spring>
 <@main.layout >
 
 <div class="container">
     <div class="sidebar">
-        <h5>Фильтры</h5>
+        <h5><@spring.message "filters"/></h5>
 
         <form id="page" action="/">
         <div class="filter-section">
-            <label for="category">Отсортировать по</label>
+            <label for="category"><@spring.message "sortBy"/></label>
             <select id="category" name="order">
-                <option value="updateTime" <#if order?string == "updateTime"> selected </#if>>Дате публикации</option>
-                <option value="responses" <#if order?string == "responses"> selected </#if>>Количеству откликов</option>
+                <option value="updateTime" <#if order?string == "updateTime"> selected </#if>><@spring.message "vacancies.ftlh.data"/></option>
+                <option value="responses" <#if order?string == "responses"> selected </#if>><@spring.message "vacancies.flth.response"/></option>
             </select>
         </div>
         </form>
-            <button class="action-btn" form="page" type="submit">Применить фильтры</button>
+            <button class="action-btn" form="page" type="submit"><@spring.message "vacancies.ftlh.takeFilter"/></button>
 
 
         <div class="pagination">
@@ -40,7 +41,7 @@
     </div>
 
     <div class="main-content">
-        <h2 class="section-title">Вакансии</h2>
+        <h2 class="section-title"><@spring.message "vacancies"/></h2>
         <ul class="vacancy-list" id="vacancy-list">
 
             <#if vacancies? has_content>
@@ -51,16 +52,16 @@
                         <div class="vacancy-header">
                             <h3 class="vacancy-title">${vacancy.name!"Unknown"}</h3>
                         </div>
-                        <div class="vacancy-date">Последнее обновление: ${vacancy.updateTime}</div>
-                        <div class="vacancy-experience">Опыт работы: ${vacancy.expFrom} года</div>
+                        <div class="vacancy-date"><@spring.message "resumeList.lastChanges"/> ${vacancy.updateTime}</div>
+                        <div class="vacancy-experience"><@spring.message "resumeList.workExp"/>: ${vacancy.expFrom} года</div>
                         <p class="vacancy-description">${vacancy.description!"-"}</p>
                         <#if user?? && user.id == 1><div class="vacancy-actions">
-                            <button class="action-btn">Подать заявку</button>
+                            <button class="action-btn"><@spring.message "vacancies.ftlh.makeResponse"/></button>
                         </div></#if>
                     </div>
                     <div class="vacancy-company">${vacancy.name}</div>
-                    <div class="vacancy-responses">Откликнувшихся пользователей: ${vacancy.responses!"0"}</div>
-                    <div class="vacancy-salary">Зарплата: ${vacancy.salary!"Договорная"} ₽ </div>
+                    <div class="vacancy-responses"><@spring.message "vacancies.ftlh.respondedUsers"/> ${vacancy.responses!"0"}</div>
+                    <div class="vacancy-salary"><@spring.message "vacancies.ftlh.salary"/> ${vacancy.salary!"Договорная"} ₽ </div>
                 </li>
                 </a>
             </#list>

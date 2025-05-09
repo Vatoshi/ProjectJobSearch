@@ -11,27 +11,27 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserFormDto {
-    @Pattern(regexp = "^\\p{L}+$", message = "Имя должно содержать только буквы")
-    @NotNull(message = "Имя не должно быть пустым")
-    @Size(min = 1,max = 20, message = "символы от 1 до 20")
+    @Pattern(regexp = "^\\p{L}+$", message = "{valid.asd}")
+    @NotNull
+    @Size(min = 1,max = 20)
     private String name;
-    @NotNull(message = "Фамилия не должна быть пустой")
-    @Pattern(regexp = "^\\p{L}+$", message = "Имя должно содержать только буквы")
-    @Size(min = 1,max = 20, message = "символы от 1 до 20")
+    @NotNull
+    @Pattern(regexp = "^\\p{L}+$", message = "{valid.asd}")
+    @Size(min = 1,max = 20)
     private String surname;
-    @NotNull(message = "возраст не может быть 0")
-    @Min(value = 14, message = "возраст должен быть от 14")
-    @Max(value = 120, message = "слишком стары")
+    @NotNull
+    @Min(value = 14, message = "{valid.14}")
+    @Max(value = 120, message = "{valid.120}")
     private Integer age;
-    @NotEmpty(message = "Ведите почту")
-    @Email(message = "неправильный формат")
+    @NotEmpty
+    @Email(message = "{valid.email}")
     private String email;
-    @Pattern(regexp = "^(?=.*\\d).{5,}$", message = "длина должна быть минимум 5 символов и иметь хотя бы одну цифру")
+    @Pattern(regexp = "^(?=.*\\d).{5,}$", message = "{valid.name}")
     private String password;
     private String avatar;
-    @NotNull(message = "ввод телефона обязателен")
-    @Pattern(regexp = "^\\d{10}$", message = "10 цифр")
+    @NotNull
+    @Pattern(regexp = "^\\d{10}$", message = "{valid.number}")
     private String phoneNumber;
-    @NotNull(message = "Выберите тип аккаунта")
+    @NotNull(message = "{valid.acctype}")
     private Long roleId;
 }

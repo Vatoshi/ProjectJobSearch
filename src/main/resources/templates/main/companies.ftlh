@@ -1,8 +1,9 @@
 <#import "../layout.ftlh" as main>
+<#import "/spring.ftl" as spring>
 <@main.layout >
 <div class="container">
     <div class="sidebar">
-        <h5>Фильтры</h5>
+        <h5><@spring.message "filters"/></h5>
 
         <div class="pagination">
             <#if (currentPage >= 3)>
@@ -26,7 +27,7 @@
     </div>
 
     <div class="main-content">
-        <h2 class="section-title">Компании</h2>
+        <h2 class="section-title"><@spring.message "companies"/></h2>
         <ul class="vacancy-list" id="vacancy-list">
 
             <#if companies? has_content>

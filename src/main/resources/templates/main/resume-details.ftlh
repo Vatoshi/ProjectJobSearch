@@ -1,4 +1,5 @@
 <#import "../layout.ftlh" as main>
+<#import "/spring.ftl" as spring>
 <@main.layout>
     <style>
         :root {
@@ -236,11 +237,11 @@
 
             <#if resume.salary??>
                 <p class="cv-resume-subtitle">
-                    Желаемая зарплата: <span class="cv-salary-value">${resume.salary?string["#,###"]} ₽</span>
+                    <@spring.message "resumeList.salaryExpected"/> <span class="cv-salary-value">${resume.salary?string["#,###"]} ₽</span>
                 </p>
                 <#if resume.author??>
                 <p class="cv-resume-subtitle">
-                    Пользователь: <span class="cv-salary-value">${resume.author}</span>
+                    <@spring.message "resumeList.user"/> <span class="cv-salary-value">${resume.author}</span>
                 </p>
                 </#if>
             </#if>
@@ -251,10 +252,10 @@
         </div>
 
         <div class="cv-form-section">
-            <h2 class="cv-section-title">Основная информация</h2>
+            <h2 class="cv-section-title"><@spring.message "resumeList.mainInfo"/></h2>
             <div class="cv-info-item">
-                <p><strong>Дата создания резюме:</strong> ${(resume.createdDate!''?string["dd.MM.yyyy"])!''}</p><br>
-                <p><strong>Последнее обновление:</strong> ${(resume.updateTime!''?string["dd.MM.yyyy"])!''}</p>
+                <p><strong><@spring.message "resumeList.dateOfCreate"/></strong> ${(resume.createdDate!''?string["dd.MM.yyyy"])!''}</p><br>
+                <p><strong><@spring.message "resumeList.lastChanges"/></strong> ${(resume.updateTime!''?string["dd.MM.yyyy"])!''}</p>
             </div>
         </div>
 
@@ -262,14 +263,14 @@
 
         <#if resume.workExperienceInfo?? && resume.workExperienceInfo?size gt 0>
             <div class="cv-form-section">
-                <h2 class="cv-section-title">Опыт работы</h2>
+                <h2 class="cv-section-title"><@spring.message "resumeList.workExp"/></h2>
                 <#list resume.workExperienceInfo as experience>
                     <div class="cv-info-item">
                         <h3><span class="cv-company">${experience.companyName!''}</span></h3>
-                        <p><strong>Должность:</strong> ${experience.position!''}</p>
+                        <p><strong><@spring.message "resumeList.position"/></strong> ${experience.position!''}</p>
                         <#if experience.responsibilities??>
                             <div class="cv-description">
-                                <strong>Обязанности:</strong>
+                                <strong><@spring.message "resumeList.responsobilities"/></strong>
                                 <p>${experience.responsibilities!''}</p>
                             </div>
                         </#if>
@@ -281,14 +282,14 @@
 
         <#if resume.educationInfo?? && resume.educationInfo?size gt 0>
             <div class="cv-form-section">
-                <h2 class="cv-section-title">Образование</h2>
+                <h2 class="cv-section-title"><@spring.message "resumeList.educ"/></h2>
                 <#list resume.educationInfo as education>
                     <div class="cv-info-item">
                         <h3><span class="cv-company">${education.institution!''}</span></h3>
-                        <p><strong>Специальность:</strong> ${education.program!''}</p>
-                        <p><strong>Степень:</strong> ${education.degree!''}</p>
+                        <p><strong><@spring.message "resumeList.speciality"/></strong> ${education.program!''}</p>
+                        <p><strong><@spring.message "resumeList.level"/></strong> ${education.degree!''}</p>
                         <div class="cv-period">
-                            Год окончания: ${(education.endDate!'')}
+                            <@spring.message "resumeList.yearOf"/> ${(education.endDate!'')}
                         </div>
                     </div>
                     <#if education?has_next><div class="cv-divider"></div></#if>
@@ -298,13 +299,13 @@
 
         <#if user.id != 1>
         <a href="#" class="cv-back-button" style="padding: 8px 16px; font-size: 14px; border-radius: 20px;">
-            Откликнуться
+            <@spring.message "resumeList.response"/>
         </a>
         </#if>
     </div>
 
     <div class="cv-back-button-container">
-        <a href="javascript:history.back()" class="cv-back-button">Вернуться назад</a>
+        <a href="javascript:history.back()" class="cv-back-button"><@spring.message "resumeList.back"/></a>
     </div>
 </div>
 </@main.layout>

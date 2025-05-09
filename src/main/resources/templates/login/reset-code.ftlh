@@ -1,10 +1,11 @@
+<#import "/spring.ftl" as spring>
 <!DOCTYPE html>
 <html lang="ru">
 
 <head>
     <link rel="icon" href="/image/icon.png" type="image/png">
     <meta charset="UTF-8">
-    <title>Ввод кода для сброса пароля</title>
+    <title><@spring.message "code.title"/></title>
     <style>
         * {
             margin: 0;
@@ -121,7 +122,7 @@
 <body>
 
 <div class="container">
-    <h1>Введите код</h1>
+    <h1><@spring.message "code.put"/></h1>
     <h4 style="margin-bottom: 15px; color: gray;">${email}</h4>
     <form action="/auth/reset-code" method="post" onsubmit="return combineCode()">
         <#if _csrf??>
@@ -142,7 +143,7 @@
             </p>
         </#if>
         <input type="hidden" name="fullCode" id="fullCode">
-        <button class="btn" type="submit">Подтвердить код</button>
+        <button class="btn" type="submit"><@spring.message "code.confirm"/></button>
     </form>
 </div>
 

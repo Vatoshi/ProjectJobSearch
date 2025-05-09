@@ -5,7 +5,7 @@
 <head>
     <link rel="icon" href="/image/icon.png" type="image/png">
     <meta charset="UTF-8">
-    <title>Смена пароля</title>
+    <title><@spring.message "new-password.changingPassword"/></title>
     <style>
         * {
             margin: 0;
@@ -96,7 +96,7 @@
 <body>
 
     <div class="container">
-        <h1>Смена пароля</h1>
+        <h1><@spring.message "new-password.changingPassword"/></h1>
         <form action="/auth/change-form" method="post">
             <#if _csrf??>
                 <input type="hidden" name="${(_csrf.parameterName)!'csrf-param-name'}"
@@ -109,7 +109,7 @@
                     ${error}
                 </p>
             </#if>
-            <button class="btn" type="submit">Сменить пароль</button>
+            <button class="btn" type="submit"><@spring.message "new-password.changePassword"/></button>
         </form>
     </div>
 

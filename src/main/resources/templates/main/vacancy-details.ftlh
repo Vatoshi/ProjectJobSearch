@@ -1,4 +1,5 @@
 <#import "../layout.ftlh" as main>
+<#import "/spring.ftl" as spring>
 <@main.layout >
     <style>
         body {
@@ -167,10 +168,10 @@
     </style>
 <div class="container">
     <h1>Frontend Developer</h1>
-    <div class="subtitle">Последняя дата обновления : ${vacancy.updateTime} • Опыт: ${vacancy.expFrom} • Автор: ${vacancy.author}</div>
+    <div class="subtitle"><@spring.message "resumeList.lastChanges"/> ${vacancy.updateTime} • <@spring.message "company.exp"/> ${vacancy.expFrom} • <@spring.message "company.author"/> ${vacancy.author}</div>
 
     <div class="section">
-        <h2>Описание</h2>
+        <h2><@spring.message "description"/></h2>
         <p>
             ${vacancy.description}
         </p>
@@ -179,13 +180,13 @@
     <div class="info-row">
         <div class="salary">Зарплата: ${vacancy.salary} ₽</div>
         <#if user.role.id != 2 && user.name != vacancy.author>
-            <button class="apply-button">Подать заявку</button>
+            <button class="apply-button"><@spring.message "vacancies.ftlh.makeResponse"/></button>
         </#if>
     </div>
 </div>
 
     <div class="back-button-container">
-        <a href="javascript:history.back()" class="back-button">Вернуться назад</a>
+        <a href="javascript:history.back()" class="back-button"><@spring.message "resumeList.back"/></a>
     </div>
 
 </@main.layout >
