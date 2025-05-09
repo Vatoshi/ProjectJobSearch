@@ -12,9 +12,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ResumeDto {
-    @NotNull(message = "Имя не должно быть пустым")
-    @Size(min = 1, max = 30, message = "Название от 1 до 30")
-    @Pattern(regexp = ".*\\p{L}.*", message = "Название не может состоять только из цифр")
+    @NotNull
+    @Size(min = 1, max = 30)
+    @Pattern(regexp = ".*\\p{L}.*", message = "{valid.withoutc}")
     private String name;
     private Long categoryId;
     @PositiveOrZero

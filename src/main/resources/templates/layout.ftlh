@@ -23,30 +23,68 @@
                         <#if user?? && user.role.id == 1><li><a class="dropdown-item" href="/company"><@spring.message "layout.companies"/></a></li></#if>
                         <#if user?? && user.role.id == 2><li><a class="dropdown-item" href="/resumes"><@spring.message "resume"/></a></li></#if>
                         <li><a class="dropdown-item" href="/"><@spring.message "vacancies"/></a></li>
-
                     </ul>
                 </div>
                 <#if user??><a href="#" class="nav-link"><@spring.message "layout.yourResponses"/></a></#if>
             </div>
 
-            <#if user?has_content>
-                <div class="profile-logout-container">
-                    <a href="/profile" class="profile-container">
-                        <img src="user/avatars/${user.avatar}?t=${.now}"
-                             onerror="this.onerror=null; this.src='/image/Default.png'"
-                             alt="<@spring.message "layout.profilePhoto"/>"
-                             class="profile-avatar">
-                    </a>
-                    <#if logout?has_content>
-                        <a href="/logout" class="logout-button"><img src="image/logout.png" alt="<@spring.message "layout.logout"/>"></a>
-                    </#if>
+            <div class="right-section">
+                <div class="language-switcher">
+                    <input type="checkbox" id="languageToggle" class="language-toggle-checkbox" />
+                    <label for="languageToggle" class="language-toggle">
+                        <#if .locale == 'en'>
+                            <img src="/image/en.png" alt="English" class="language-flag">
+                        <#else>
+                            <img src="/image/ru.png" alt="Русский" class="language-flag">
+                        </#if>
+                    </label>
+                    <ul class="language-menu">
+                        <li style="all: unset">
+                            <form action="/user/changeLang" method="post" style="display: inline;">
+                                <#if _csrf??>
+                                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                                </#if>
+                                <input type="hidden" name="lang" value="en"/>
+                                <button type="submit" style="background: none; border: none;">
+                                    <img src="/image/en.png" alt="English" class="language-flag">
+                                    <span>English</span>
+                                </button>
+                            </form>
+
+                            <form action="/user/changeLang" method="post" style="display: inline;">
+                                <#if _csrf??>
+                                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                                </#if>
+                                <input type="hidden" name="lang" value="ru"/>
+                                <button type="submit" style="background: none; border: none;">
+                                    <img src="/image/ru.png" alt="Русский" class="language-flag">
+                                    <span>Русский</span>
+                                </button>
+                            </form>
+                        </li>
+
+                    </ul>
                 </div>
-            <#else>
-                <div class="auth-links">
-                    <a href="auth/login" class="btn-login"><@spring.message "layout.login"/></a>
-                    <a href="auth/register" class="btn-register"><@spring.message "layout.register"/></a>
-                </div>
-            </#if>
+
+                <#if user?has_content>
+                    <div class="profile-logout-container">
+                        <a href="/profile" class="profile-container">
+                            <img src="user/avatars/${user.avatar}?t=${.now}"
+                                 onerror="this.onerror=null; this.src='/image/Default.png'"
+                                 alt="<@spring.message "layout.profilePhoto"/>"
+                                 class="profile-avatar">
+                        </a>
+                        <#if logout?has_content>
+                            <a href="/logout" class="logout-button"><img src="image/logout.png" alt="<@spring.message "layout.logout"/>"></a>
+                        </#if>
+                    </div>
+                <#else>
+                    <div class="auth-links">
+                        <a href="auth/login" class="btn-login"><@spring.message "layout.login"/></a>
+                        <a href="auth/register" class="btn-register"><@spring.message "layout.register"/></a>
+                    </div>
+                </#if>
+            </div>
         </div>
     </nav>
 
@@ -77,6 +115,12 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+        }
+
+        .right-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
         }
 
         .nav-links {
@@ -264,7 +308,73 @@
             box-shadow: 0 2px 6px rgba(135, 57, 251, 0.1);
         }
 
+        /* Language switcher styles */
+        .language-switcher {
+            position: relative;
+            display: inline-block;
+        }
 
+        .language-toggle-checkbox {
+            display: none;
+        }
+
+        .language-toggle {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            padding: 5px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .language-toggle:hover {
+            background-color: rgba(135, 57, 251, 0.1);
+        }
+
+        .language-flag {
+            width: 24px;
+            height: 16px;
+            object-fit: cover;
+            border-radius: 2px;
+        }
+
+        .language-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background-color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 8px 0;
+            min-width: 120px;
+            z-index: 1000;
+            margin-top: 5px;
+        }
+
+        .language-toggle-checkbox:checked ~ .language-menu {
+            display: block;
+        }
+
+        .language-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .language-item:hover {
+            background-color: rgba(135, 57, 251, 0.1);
+            color: var(--primary);
+        }
+
+        .language-item span {
+            font-size: 14px;
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     </body>

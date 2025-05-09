@@ -10,11 +10,11 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class ChangePasswordDto {
-    @NotEmpty(message = "введите пароль")
+    @NotEmpty(message = "{valid.ps}")
     private String password;
-    @NotNull(message = "введите новый пароль")
-    @Pattern(regexp = "^(?=.*\\d).{5,}$", message = "длина должна быть минимум 5 символов и иметь хотя бы одну цифру")
+    @NotNull(message = "{valid.newps}")
+    @Pattern(regexp = "^(?=.*\\d).{5,}$", message = "{valid.name}")
     private String newPassword;
-    @NotNull(message = "подтвердите новый пароль")
+    @NotNull(message = "{valid.confps}")
     private String confirmPassword;
 }

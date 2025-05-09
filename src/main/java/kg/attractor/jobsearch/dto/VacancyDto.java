@@ -12,21 +12,21 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class VacancyDto {
-    @NotNull(message = "имя не должно быть пустым")
-    @Size(min = 3, max = 30, message = "имя должно содержать от 1 - 30 символов")
-    @Pattern(regexp = ".*\\p{L}.*", message = "Название не может состоять только из цифр")
+    @NotNull
+    @Size(min = 3, max = 30, message = "{valid.130}")
+    @Pattern(regexp = ".*\\p{L}.*", message = "{valid.withoutc}")
     private String name;
-    @Size(min = 5, message = "минимум 5 символов")
+    @Size(min = 5)
     private String description;
     private Long categoryId;
     @PositiveOrZero
     private Double salary;
     @PositiveOrZero
-    @NotNull(message = "укажите от")
+    @NotNull(message = "{valid.from}")
     private Integer expFrom;
     @PositiveOrZero
-    @NotNull(message = "укажите до")
-    @Max(value = 50, message = "Максимум 50 лет")
+    @NotNull(message = "{valid.to}")
+    @Max(value = 50, message = "{valid.50}")
     private Integer expTo;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Boolean isActive;

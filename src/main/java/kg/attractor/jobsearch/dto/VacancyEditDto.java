@@ -10,8 +10,8 @@ import java.time.LocalDateTime;
 @Setter
 @Builder
 public class VacancyEditDto {
-    @Size(min = 3, max = 30, message = "имя должно содержать от 1 - 30 символов")
-    @Pattern(regexp = ".*\\p{L}.*", message = "Название не может состоять только из цифр")
+    @Size(min = 3, max = 30)
+    @Pattern(regexp = ".*\\p{L}.*", message = "{valid.withoutc}")
     private String name;
     private String description;
     private Long categoryId;

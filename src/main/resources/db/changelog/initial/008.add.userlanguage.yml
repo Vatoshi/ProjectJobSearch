@@ -1,0 +1,12 @@
+﻿databaseChangeLog:
+  - changeSet:
+      id: add-user-language
+      author: eric
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: language
+                  type: varchar(10)
+                  defaultValue: 'ru'

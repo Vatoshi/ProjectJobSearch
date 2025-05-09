@@ -11,7 +11,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ChangeEmailDto {
-    @NotEmpty(message = "ведите пароль")
+    @NotEmpty(message = "{valid.ps}")
     private String password;
     @NotEmpty
     @Email
