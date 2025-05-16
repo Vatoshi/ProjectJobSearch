@@ -146,10 +146,10 @@ public class ProfileController {
             model.addAttribute("user", userService.getUserByEmail(auth.getName()));
             model.addAttribute("vacancyDto", vacancyDto);
             model.addAttribute("errorVacancy", "Выберите категорию");
+            if (vacancyDto.getExpFrom() != null && vacancyDto.getExpTo() != null && vacancyDto.getExpFrom() > vacancyDto.getExpTo()) {
+                bindingResult.rejectValue("expFrom", "error.expFrom","От не может быть больше чем до");
+            }
             return "forms/vacancy-form";
-        }
-        if (vacancyDto.getExpFrom() > vacancyDto.getExpTo()) {
-            bindingResult.rejectValue("expFrom", "error.expFrom","От не может быть больше чем до");
         }
         vacancyService.createVacancy(vacancyDto, auth.getName());
         return "redirect:/profile";

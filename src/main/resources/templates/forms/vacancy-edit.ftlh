@@ -39,12 +39,12 @@
             </div>
 
             <div class="form-group">
-                <label for="salary"><@spring.message "edit.vacancy.salaryLevel"/></label>
+                <label for="salary"><@spring.message "edit.resume.salaryLevel"/></label>
                 <@spring.formInput "vacancyEditDto.salary" 'placeholder="Зарплата"'></@spring.formInput>
                 <@spring.showErrors "<br>" "error"/>
             </div>
             <div class="form-group">
-                <label for="description"><@spring.message "edit.vacancy.description"/></label>
+                <label for="description"><@spring.message "description"/></label>
                 <@spring.formInput "vacancyEditDto.description" 'placeholder="Описание"'></@spring.formInput>
                 <@spring.showErrors "<br>" "error"/>
             </div>
