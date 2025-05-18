@@ -205,12 +205,13 @@
             <label for="educationInfo[`+educCount+`].degree"><@spring.message "form.resume.level"/></label>
             <input type="text" name="educationInfo[`+educCount+`].degree" placeholder="Степень образования">
         </div>
+        <button type="button" class="remove-btn" onclick="this.parentElement.remove()">Удалить</button>
     `;
         addToEduc.insertBefore(div, addEduc);
         div.querySelector('.remove-btn').addEventListener('click', function() {
             div.remove();
         });
-        educCount++;
+        educCount = educCount + 1
     }
 
     function addExpFunc() {
@@ -233,12 +234,13 @@
             <label for="workExperienceInfo[`+expCount+`].responsibilities"><@spring.message "form.resume.responsibilities"/></label>
             <textarea name="workExperienceInfo[`+expCount+`].responsibilities" placeholder="Опишите свои обязанности"></textarea>
         </div>
+        <button type="button" class="remove-btn" onclick="this.parentElement.remove()">Удалить</button>
     `;
         addToExp.insertBefore(div, addExp);
         div.querySelector('.remove-btn').addEventListener('click', function() {
             div.remove();
         });
-        expCount++;
+        expCount = expCount + 1
     }
 </script>
 </body>
