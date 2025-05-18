@@ -135,6 +135,7 @@ body {
 .add-btn {
     background: rgba(102, 126, 234, 0.1);
     color: var(--primary);
+    width: 100%;
     border: 1px dashed var(--primary);
     padding: 10px 15px;
     border-radius: 8px;
@@ -260,3 +261,5 @@ input:checked+.slider:before {
     margin-top: 0.25rem;
     display: block;
 }
+
+
