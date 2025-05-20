@@ -51,70 +51,78 @@
         </div>
 
         <div class="form-section" id="experienceInfoSection">
-<#--            <h3 class="section-title"><@spring.message "form.resume.exp"/></h3>-->
+<#--            <#list (resumeDto.educationInfo![]) as edu>-->
+<#--                <#assign i = edu_index>-->
+<#--                <h3 class="section-title"><@spring.message "form.resume.exp"/></h3>-->
+<#--                <button type="button" class="close-btn" onclick="this.parentElement.remove(); checkIfSectionsEmpty(); " title="Удалить">&#x2715;</button>-->
 <#--                <div class="experience-item">-->
 <#--                    <div class="form-group">-->
-<#--                        <label for="workExperienceInfo[0].years"><@spring.message "form.resume.expTo"/></label>-->
-<#--                        <@spring.formInput "resumeDto.workExperienceInfo[0].years" 'placeholder="Сколько лет вы отработали"'></@spring.formInput>-->
+<#--                        <label for="workExperienceInfo[${i}].years"><@spring.message "form.resume.expTo"/></label>-->
+<#--                        <@spring.formInput "resumeDto.workExperienceInfo[${i}].years" 'placeholder="Сколько лет вы отработали"'></@spring.formInput>-->
 <#--                        <@spring.showErrors "<br>" "error"/>-->
 <#--                    </div>-->
 
 <#--                    <div class="form-group">-->
-<#--                        <label for="workExperienceInfo[0].companyName"><@spring.message "form.resume.companyName"/></label>-->
-<#--                        <@spring.formInput "resumeDto.workExperienceInfo[0].companyName" 'placeholder="Введите название компании"'></@spring.formInput>-->
+<#--                        <label for="workExperienceInfo[${i}].companyName"><@spring.message "form.resume.companyName"/></label>-->
+<#--                        <@spring.formInput "resumeDto.workExperienceInfo[${i}].companyName" 'placeholder="Введите название компании"'></@spring.formInput>-->
 <#--                        <@spring.showErrors "<br>" "error"/>-->
 <#--                    </div>-->
 
 <#--                    <div class="form-group">-->
-<#--                        <label for="workExperienceInfo[0].position"><@spring.message "form.resume.position"/></label>-->
-<#--                        <@spring.formInput "resumeDto.workExperienceInfo[0].position" 'placeholder="Ваша должность"'></@spring.formInput>-->
+<#--                        <label for="workExperienceInfo[${i}].position"><@spring.message "form.resume.position"/></label>-->
+<#--                        <@spring.formInput "resumeDto.workExperienceInfo[${i}].position" 'placeholder="Ваша должность"'></@spring.formInput>-->
 <#--                        <@spring.showErrors "<br>" "error"/>-->
 <#--                    </div>-->
 
 <#--                    <div class="form-group">-->
-<#--                        <label for="workExperienceInfo[0].responsibilities"><@spring.message "form.resume.responsibilities"/></label>-->
-<#--                        <@spring.formTextarea "resumeDto.workExperienceInfo[0].responsibilities" 'placeholder="Опишите свои обязанности"'></@spring.formTextarea>-->
+<#--                        <label for="workExperienceInfo[${i}].responsibilities"><@spring.message "form.resume.responsibilities"/></label>-->
+<#--                        <@spring.formTextarea "resumeDto.workExperienceInfo[${i}].responsibilities" 'placeholder="Опишите свои обязанности"'></@spring.formTextarea>-->
 <#--                        <@spring.showErrors "<br>" "error"/>-->
 <#--                    </div>-->
 <#--                </div>-->
+<#--            </#list>-->
             <a id="addExperience" class="add-btn">
                 <@spring.message "form.resume.addWorkExp"/>
             </a>
         </div>
 
         <div class="form-section" id="educationInfoSection">
-<#--            <h3 class="section-title"><@spring.message "form.resume.education"/></h3>-->
+<#--            <#list (resumeDto.getWorkExperienceInfo()![]) as edu>-->
+<#--                <#assign i = loop.index>-->
+<#--                <h3 class="section-title"><@spring.message "form.resume.education"/></h3>-->
+<#--                <button type="button" class="close-btn" onclick="this.parentElement.remove(); checkIfSectionsEmpty(); " title="Удалить">&#x2715;</button>-->
 <#--                <div class="education-item">-->
 <#--                    <div class="form-group">-->
-<#--                        <label for="educationInfo[0].institution"><@spring.message "form.resume.educationInstitution"/></label>-->
-<#--                        <@spring.formInput "resumeDto.educationInfo[0].institution" 'placeholder="Учебное заведение"'></@spring.formInput>-->
+<#--                        <label for="educationInfo[v].institution"><@spring.message "form.resume.educationInstitution"/></label>-->
+<#--                        <@spring.formInput "resumeDto.educationInfo[${i}].institution" 'placeholder="Учебное заведение"'></@spring.formInput>-->
 <#--                        <@spring.showErrors "<br>" "error"/>-->
 <#--                    </div>-->
 
 <#--                    <div class="form-group">-->
-<#--                        <label for="educationInfo[0].program"><@spring.message "form.resume.educationProgram"/></label>-->
-<#--                        <@spring.formInput "resumeDto.educationInfo[0].program" 'placeholder="Программа обучения"'/>-->
+<#--                        <label for="educationInfo[${i}].program"><@spring.message "form.resume.educationProgram"/></label>-->
+<#--                        <@spring.formInput "resumeDto.educationInfo[${i}].program" 'placeholder="Программа обучения"'/>-->
 <#--                        <@spring.showErrors "<br>" "error"/>-->
 <#--                    </div>-->
 
 <#--                    <div class="form-group">-->
-<#--                        <label for="educationInfo[0].startDate"><@spring.message "form.resume.dateStart"/></label>-->
-<#--                        <@spring.formInput "resumeDto.educationInfo[0].startDate" 'type="date"' 'date'></@spring.formInput>-->
+<#--                        <label for="educationInfo[${i}].startDate"><@spring.message "form.resume.dateStart"/></label>-->
+<#--                        <@spring.formInput "resumeDto.educationInfo[${i}].startDate" 'type="date"' 'date'></@spring.formInput>-->
 <#--                        <@spring.showErrors "<br>" "error"/>-->
 <#--                    </div>-->
 
 <#--                    <div class="form-group">-->
-<#--                        <label for="educationInfo[0].endDate"><@spring.message "form.resume.dateEnd"/></label>-->
-<#--                        <@spring.formInput "resumeDto.educationInfo[0].endDate" 'type="date"' 'date'></@spring.formInput>-->
+<#--                        <label for="educationInfo[${i}].endDate"><@spring.message "form.resume.dateEnd"/></label>-->
+<#--                        <@spring.formInput "resumeDto.educationInfo[${i}].endDate" 'type="date"' 'date'></@spring.formInput>-->
 <#--                        <@spring.showErrors "<br>" "error"/>-->
 <#--                    </div>-->
 
 <#--                    <div class="form-group">-->
-<#--                        <label for="educationInfo[0].degree"><@spring.message "form.resume.level"/></label>-->
-<#--                        <@spring.formInput "resumeDto.educationInfo[0].degree" 'placeholder="Степень образования"'></@spring.formInput>-->
+<#--                        <label for="educationInfo[${i}].degree"><@spring.message "form.resume.level"/></label>-->
+<#--                        <@spring.formInput "resumeDto.educationInfo[${i}].degree" 'placeholder="Степень образования"'></@spring.formInput>-->
 <#--                        <@spring.showErrors "<br>" "error"/>-->
 <#--                    </div>-->
 <#--                </div>-->
+<#--            </#list>-->
             <a id="addEduc" class="add-btn">
                 <@spring.message "form.resume.addEduc"/>
             </a>
@@ -250,6 +258,7 @@
         <div class="form-group">
             <label for="workExperienceInfo[`+expCount+`].responsibilities"><@spring.message "form.resume.responsibilities"/></label>
             <textarea name="workExperienceInfo[`+expCount+`].responsibilities" placeholder="Опишите свои обязанности"></textarea>
+
         </div>
 
     `;
