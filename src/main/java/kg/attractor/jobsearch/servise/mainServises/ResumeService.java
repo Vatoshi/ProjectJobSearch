@@ -120,26 +120,29 @@ public class ResumeService {
                 .build();
             resumeRepository.saveAndFlush(resume);
 
-            List<WorkExperienceInfo> works = (resumeDto.getWorkExperienceInfo().stream().map(dto -> WorkExperienceInfo.builder()
-                    .years(dto.getYears())
-                    .responsibilities(dto.getResponsibilities())
-                    .position(dto.getPosition())
-                    .companyName(dto.getCompanyName())
-                    .resume(resume)
-                    .build())
-                    .toList());
-            workExperienceServise.saveAll(works);
+            if (resumeDto.getWorkExperienceInfo() != null) {
+                List<WorkExperienceInfo> works = (resumeDto.getWorkExperienceInfo().stream().map(dto -> WorkExperienceInfo.builder()
+                                .years(dto.getYears())
+                                .responsibilities(dto.getResponsibilities())
+                                .position(dto.getPosition())
+                                .companyName(dto.getCompanyName())
+                                .resume(resume)
+                                .build())
+                        .toList());
+                workExperienceServise.saveAll(works);
+            }
 
-            List<EducationInfo> educ = (resumeDto.getEducationInfo().stream().map(dto -> EducationInfo.builder()
-                    .degree(dto.getDegree())
-                    .endDate(dto.getEndDate())
-                    .institution(dto.getInstitution())
-                    .program(dto.getProgram())
-                    .startDate(dto.getStartDate())
-                    .resume(resume)
-                    .build()).toList());
-            educationInfoServise.saveEducationInfo(educ);
-        ResponseEntity.status(HttpStatus.CREATED).body(resumeDto);
+            if (resumeDto.getEducationInfo() != null) {
+                List<EducationInfo> educ = (resumeDto.getEducationInfo().stream().map(dto -> EducationInfo.builder()
+                        .degree(dto.getDegree())
+                        .endDate(dto.getEndDate())
+                        .institution(dto.getInstitution())
+                        .program(dto.getProgram())
+                        .startDate(dto.getStartDate())
+                        .resume(resume)
+                        .build()).toList());
+                educationInfoServise.saveEducationInfo(educ);
+            }
     }
 
         public void updateResume(Long resumeId, ResumeDto resumeDto) {

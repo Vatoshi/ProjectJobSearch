@@ -64,10 +64,6 @@ body {
     gap: 25px;
 }
 
-.form-section {
-    margin-bottom: 15px;
-}
-
 .section-title {
     font-size: 18px;
     font-weight: 600;
@@ -135,6 +131,7 @@ body {
 .add-btn {
     background: rgba(102, 126, 234, 0.1);
     color: var(--primary);
+    width: 100%;
     border: 1px dashed var(--primary);
     padding: 10px 15px;
     border-radius: 8px;
@@ -260,3 +257,29 @@ input:checked+.slider:before {
     margin-top: 0.25rem;
     display: block;
 }
+
+.close-btn {
+    justify-items: end;
+    background: var(--light-gray);
+    border: none;
+    color: var(--primary);
+    font-size: 17px;
+    font-weight: bold;
+    border-radius: 15%;
+    width: 28px;
+    height: 28px;
+    line-height: 28px;
+    text-align: center;
+    cursor: pointer;
+    float: right;
+    margin-top: -10px;
+    margin-right: -10px;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.close-btn:hover {
+    background: var(--error);
+    color: white;
+}
+
+
