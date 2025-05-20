@@ -78,7 +78,7 @@
 <#--                    </div>-->
 <#--                </div>-->
             <a id="addExperience" class="add-btn">
-                Добавить дополнительную информацию опыта работы
+                <@spring.message "form.resume.addWorkExp"/>
             </a>
         </div>
 
@@ -116,7 +116,7 @@
 <#--                    </div>-->
 <#--                </div>-->
             <a id="addEduc" class="add-btn">
-                Добавить дополнительную информацию об образовании
+                <@spring.message "form.resume.addEduc"/>
             </a>
         </div>
 
@@ -181,10 +181,26 @@
         addExpFunc();
     };
 
+    function checkIfSectionsEmpty() {
+
+        if (addToEduc.querySelectorAll('.education-item').length === 0) {
+            let educTitle = addToEduc.querySelector('.section-title');
+            if (educTitle) educTitle.remove();
+            hasEducationTitle = false;
+        }
+
+        if (addToExp.querySelectorAll('.experience-item').length === 0) {
+            let expTitle = addToExp.querySelector('.section-title');
+            if (expTitle) expTitle.remove();
+            hasExperienceTitle = false;
+        }
+    }
+
     function addEducFunc() {
         let div = document.createElement("div");
         div.className = "education-item";
         div.innerHTML = `
+        <button type="button" class="close-btn" onclick="this.parentElement.remove(); checkIfSectionsEmpty(); " title="Удалить">&#x2715;</button>
         <div class="form-group">
             <label for="educationInfo[`+educCount+`].institution"><@spring.message "form.resume.educationInstitution"/></label>
             <input type="text" name="educationInfo[`+educCount+`].institution" placeholder="Учебное заведение">
@@ -205,7 +221,7 @@
             <label for="educationInfo[`+educCount+`].degree"><@spring.message "form.resume.level"/></label>
             <input type="text" name="educationInfo[`+educCount+`].degree" placeholder="Степень образования">
         </div>
-        <button type="button" class="remove-btn" onclick="this.parentElement.remove()">Удалить</button>
+
     `;
         addToEduc.insertBefore(div, addEduc);
         div.querySelector('.remove-btn').addEventListener('click', function() {
@@ -218,6 +234,7 @@
         let div = document.createElement("div");
         div.className = "experience-item";
         div.innerHTML = `
+        <button type="button" class="close-btn" onclick="this.parentElement.remove(); checkIfSectionsEmpty();" title="Удалить">&#x2715;</button>
         <div class="form-group">
             <label for="workExperienceInfo[`+expCount+`].years"><@spring.message "form.resume.expTo"/></label>
             <input type="text" name="workExperienceInfo[`+expCount+`].years" placeholder="Сколько лет вы отработали">
@@ -234,7 +251,7 @@
             <label for="workExperienceInfo[`+expCount+`].responsibilities"><@spring.message "form.resume.responsibilities"/></label>
             <textarea name="workExperienceInfo[`+expCount+`].responsibilities" placeholder="Опишите свои обязанности"></textarea>
         </div>
-        <button type="button" class="remove-btn" onclick="this.parentElement.remove()">Удалить</button>
+
     `;
         addToExp.insertBefore(div, addExp);
         div.querySelector('.remove-btn').addEventListener('click', function() {
