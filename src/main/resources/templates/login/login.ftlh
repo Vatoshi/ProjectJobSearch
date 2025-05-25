@@ -32,9 +32,7 @@
                 ${error}
                 </p>
             </#if>
-            
             <button type="submit" class="btn"><@spring.message "login"/></button>
-            
             <div class="links">
                 <a href="/auth/reset"><@spring.message "login.forgotPassword"/></a> · <a href="register"><@spring.message "register"/></a>
             </div>
