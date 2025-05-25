@@ -6,7 +6,7 @@
     <div class="sidebar">
         <h5><@spring.message "filters"/></h5>
 
-        <form id="page" action="/">
+        <form id="filter" action="/">
         <div class="filter-section">
             <label for="category"><@spring.message "sortBy"/></label>
             <select id="category" name="order">
@@ -15,7 +15,7 @@
             </select>
         </div>
         </form>
-            <button class="action-btn" form="page" type="submit"><@spring.message "vacancies.ftlh.takeFilter"/></button>
+            <button class="action-btn" form="filter" type="submit"><@spring.message "vacancies.ftlh.takeFilter"/></button>
 
 
         <div class="pagination">
@@ -381,5 +381,42 @@
         margin-bottom: 20px;
     }
 </style>
+    <script>
+        const form = document.getElementById('filter');
+
+        function saveFilters(filters) {
+            localStorage.setItem('postFilters', JSON.stringify(filters));
+        }
+
+        function restoreFilters() {
+            const data = localStorage.getItem('postFilters');
+            return data ? JSON.parse(data) : {};
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedFilters = restoreFilters();
+            for (let [key, value] of Object.entries(savedFilters)) {
+                const input = form.elements[key];
+                if (input) {
+                    input.value = value;
+                }
+            }
+            const urlParams = new URLSearchParams(window.location.search);
+            if (!urlParams.has('order') && savedFilters.order) {
+                urlParams.set('order', savedFilters.order);
+                window.location.search = urlParams.toString();
+            }
+        });
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const formData = new FormData(form);
+            const filters = Object.fromEntries(formData);
+            saveFilters(filters);
+            const params = new URLSearchParams(filters).toString();
+            window.location.search = params;
+        });
+    </script>
+
 </@main.layout>
 

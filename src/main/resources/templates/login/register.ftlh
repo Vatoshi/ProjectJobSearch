@@ -36,7 +36,7 @@
             </div>
 
             <div class="form-group">
-                <@spring.formInput "userFormDto.password" 'placeholder="Пароль"'/>
+                <@spring.formInput "userFormDto.password" 'placeholder="Пароль"' 'password'/>
                 <@spring.showErrors "<br>" "error"/>
             </div>
 
